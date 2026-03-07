@@ -1,0 +1,79 @@
+'use client';
+
+import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+
+export default function Footer() {
+  const { t } = useLanguage();
+
+  return (
+    <footer className="bg-slate-950 pt-20 pb-10 border-t-4 border-primary mt-auto">
+      <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-2 mb-6">
+              <span className="material-symbols-outlined text-primary text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+              <span className="text-3xl font-black tracking-tighter text-white">Notch<span className="text-primary">Maroc</span></span>
+            </div>
+            <p className="text-slate-400 leading-relaxed mb-8">
+              {t.footer.description}
+            </p>
+            <div className="flex items-center gap-4">
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-primary transition-colors">
+                <span className="material-symbols-outlined">share</span>
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-primary transition-colors">
+                <span className="material-symbols-outlined">photo_camera</span>
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-primary transition-colors">
+                <span className="material-symbols-outlined">play_arrow</span>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4 className="text-white font-bold text-lg mb-6">{t.footer.quickLinks}</h4>
+            <ul className="space-y-4">
+              <li><Link href="/about" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.header.about}</Link></li>
+              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.newProducts}</Link></li>
+              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.specialOffers}</Link></li>
+              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.orderTracking}</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold text-lg mb-6">{t.footer.policies}</h4>
+            <ul className="space-y-4">
+              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.shippingPolicy}</Link></li>
+              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.returnPolicy}</Link></li>
+              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.terms}</Link></li>
+              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.privacy}</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold text-lg mb-6">{t.footer.contactUs}</h4>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-slate-400">
+                <span className="material-symbols-outlined text-primary mt-0.5">location_on</span>
+                <span>{t.footer.address}</span>
+              </li>
+              <li className="flex items-center gap-3 text-slate-400">
+                <span className="material-symbols-outlined text-primary">call</span>
+                <span dir="ltr">+212 5 12 34 56 78</span>
+              </li>
+              <li className="flex items-center gap-3 text-slate-400">
+                <span className="material-symbols-outlined text-primary">mail</span>
+                <span>contact@notchmaroc.ma</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-slate-500 text-sm font-medium">{t.footer.rights}</p>
+          <div className="flex items-center gap-4 text-slate-500">
+            <span className="material-symbols-outlined text-3xl">credit_card</span>
+            <span className="material-symbols-outlined text-3xl">account_balance_wallet</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}

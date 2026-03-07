@@ -1,0 +1,282 @@
+'use client';
+
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+
+export default function Home() {
+  const { t } = useLanguage();
+
+  return (
+    <>
+      <Header />
+      <main className="flex-grow">
+        <section className="relative w-full h-[500px] lg:h-[600px] overflow-hidden bg-slate-950 flex items-center">
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkGl-5rC2EZpGUTMTnmRZZR-J837V8RUD4OqDE_CXhYKHS6TRCANb-PCTK2D65OHFecUcRCBnlzESqi5UPSPb6Wj2cUzThsjPQ6MFlf6sQiaW2qF4xeC1sGPvn0tOAWy04_HoLyOXqsVsObPj6ZLfwEFMzeMyiEP19OeQtvxTDSdINlIqdG2HPlYox5E4_5aJ_sqCC-WwxXhqz6fMVw0aQ9kgc32C57UBleMBHH2Iv0_ZRcz1Bl8P4qtof5X3RtvcxbYdXTKgL5XcF')" }}></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
+          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 lg:px-12 flex flex-col md:flex-row items-center justify-between">
+            <div className="flex flex-col gap-6 max-w-2xl pt-10 md:pt-0">
+              <div className="inline-block bg-primary/20 border border-primary/30 text-primary px-4 py-1.5 rounded-full text-sm font-bold w-fit mb-2 backdrop-blur-sm">
+                {t.home.limitedOffer}
+              </div>
+              <h1 className="text-white text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight">
+                {t.home.heroTitle1} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-300">{t.home.heroTitle2}</span>
+              </h1>
+              <p className="text-slate-300 text-lg lg:text-xl font-medium leading-relaxed max-w-xl">
+                {t.home.heroDesc}
+              </p>
+              <div className="mt-4">
+                <Link href="/product/1" className="bg-primary hover:bg-amber-500 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center gap-3 w-fit">
+                  {t.home.buyNow}
+                  <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                </Link>
+              </div>
+            </div>
+            <div className="hidden md:block w-1/2 relative h-[500px]">
+              <div className="absolute inset-0 bg-contain bg-center bg-no-repeat drop-shadow-2xl scale-110" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcjE3d3CjD6i2E0XIvPZUVdgE0O5PvMnAWj45MK19UAOQNXZCfVbWvXttS1Ni6zStfyVB4pU_J4P7j2FRdQeYflGq_D-I5wlId8b_z8O-T3TJogBvRN6S9L-M4BhlgAL8Yfp1wO6cf8ko9rYoZu11Hoger7FxqEJCM1qjgIziwjTVsOJYFJM5c0rPqg75KmGYS-LFSYjfVl4b67urTeW2g9NacFd6xhrNrZINHeYk3gCWw0Xf9Wtekj8QcsNnU2ZKA-ikHRUzcsAfG')" }}></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-[1440px] mx-auto px-4 lg:px-8 -mt-10 relative z-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-800/50 shadow-xl">
+            <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary/30 transition-colors group">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-3xl">local_shipping</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <h2 className="text-slate-900 dark:text-white text-lg font-bold">{t.home.fastDelivery}</h2>
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{t.home.fastDeliveryDesc}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary/30 transition-colors group">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-3xl">payments</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <h2 className="text-slate-900 dark:text-white text-lg font-bold">{t.home.cod}</h2>
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{t.home.codDesc}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary/30 transition-colors group">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-3xl">verified</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <h2 className="text-slate-900 dark:text-white text-lg font-bold">{t.home.quality}</h2>
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{t.home.qualityDesc}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-20">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <h2 className="text-slate-900 dark:text-white text-3xl md:text-4xl font-black tracking-tight mb-2">{t.home.latestPromos}</h2>
+              <p className="text-slate-500 text-lg font-medium">{t.home.latestPromosDesc}</p>
+            </div>
+            <Link href="#" className="hidden md:flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+              {t.home.seeAll}
+              <span className="material-symbols-outlined">arrow_forward</span>
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Product 1 */}
+            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+              <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
+                -30%
+              </div>
+              <Link href="/product/1" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 p-6 overflow-hidden flex items-center justify-center block">
+                <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD')" }}></div>
+              </Link>
+              <div className="p-6 flex flex-col flex-grow gap-4">
+                <div>
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.8</span>
+                    <span className="text-slate-400 text-sm">(124)</span>
+                  </div>
+                  <Link href="/product/1">
+                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors">Chargeur NOTCH 65W GaN Ultra Rapide</h3>
+                  </Link>
+                </div>
+                <div className="flex items-end gap-3 mt-auto pt-2">
+                  <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">249 DH</span>
+                  <span className="text-slate-400 line-through text-sm font-medium mb-1.5">349 DH</span>
+                </div>
+                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                  {t.home.buy}
+                </button>
+              </div>
+            </div>
+
+            {/* Product 2 */}
+            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+              <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
+                -20%
+              </div>
+              <Link href="/product/2" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 p-6 overflow-hidden flex items-center justify-center block">
+                <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb')" }}></div>
+              </Link>
+              <div className="p-6 flex flex-col flex-grow gap-4">
+                <div>
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.9</span>
+                    <span className="text-slate-400 text-sm">(89)</span>
+                  </div>
+                  <Link href="/product/2">
+                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors">Powerbank NOTCH 20000mAh Fast Charge</h3>
+                  </Link>
+                </div>
+                <div className="flex items-end gap-3 mt-auto pt-2">
+                  <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">399 DH</span>
+                  <span className="text-slate-400 line-through text-sm font-medium mb-1.5">499 DH</span>
+                </div>
+                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                  {t.home.buy}
+                </button>
+              </div>
+            </div>
+
+            {/* Product 3 */}
+            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+              <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
+                -35%
+              </div>
+              <Link href="/product/3" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 p-6 overflow-hidden flex items-center justify-center block">
+                <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D')" }}></div>
+              </Link>
+              <div className="p-6 flex flex-col flex-grow gap-4">
+                <div>
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.6</span>
+                    <span className="text-slate-400 text-sm">(210)</span>
+                  </div>
+                  <Link href="/product/3">
+                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors">Câble Type-C NOTCH 100W Tressé</h3>
+                  </Link>
+                </div>
+                <div className="flex items-end gap-3 mt-auto pt-2">
+                  <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">99 DH</span>
+                  <span className="text-slate-400 line-through text-sm font-medium mb-1.5">149 DH</span>
+                </div>
+                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                  {t.home.buy}
+                </button>
+              </div>
+            </div>
+
+            {/* Product 4 */}
+            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+              <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
+                -25%
+              </div>
+              <Link href="/product/4" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 p-6 overflow-hidden flex items-center justify-center block">
+                <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWlut6sOSGm2cooiTBkNpZBCKlJPcaYL2kS1vUVC73ilSi66yIYSH8whcEQrDUecXT8m3bkJo_3qNXtyRG9K84gZ00ZlviqjPTiKW8p4PV_Ona3yHeGGYcp8AEqnTChusAHJmLoGFvWNHX8pgfOKHBBDCWqqeuaMDj2dWPCws7xdsALaj6q2PpZcMNnDk1AnGoK1iJ7vQUAMQYSyRNRDTst0ip7jgD8G3M_9V-m9FlQK6xeqZ0wVquvBuTbbfPaqr926BMEwROMkAQ')" }}></div>
+              </Link>
+              <div className="p-6 flex flex-col flex-grow gap-4">
+                <div>
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.7</span>
+                    <span className="text-slate-400 text-sm">(56)</span>
+                  </div>
+                  <Link href="/product/4">
+                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors">Écouteurs Sans Fil NOTCH Pro ANC</h3>
+                  </Link>
+                </div>
+                <div className="flex items-end gap-3 mt-auto pt-2">
+                  <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">299 DH</span>
+                  <span className="text-slate-400 line-through text-sm font-medium mb-1.5">399 DH</span>
+                </div>
+                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                  {t.home.buy}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-slate-50 dark:bg-slate-900/30 border-y border-slate-200 dark:border-slate-800 py-20">
+          <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-slate-900 dark:text-white text-3xl md:text-4xl font-black tracking-tight mb-4">{t.home.reviewsTitle}</h2>
+              <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.home.reviewsDesc}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative">
+                <span className="material-symbols-outlined absolute top-6 left-6 text-slate-200 dark:text-slate-700 text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
+                <div className="relative z-10">
+                  <div className="flex gap-1 mb-6 text-amber-400">
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  </div>
+                  <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-8">&quot;Le chargeur 65W a vraiment changé ma vie, il charge mon ordinateur portable et mon téléphone à une vitesse incroyable. La livraison a été très rapide et le produit est original et excellent.&quot;</p>
+                  <div className="flex items-center gap-4 border-t border-slate-100 dark:border-slate-700 pt-6">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300">A.M</div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 dark:text-white">Abdo</h4>
+                      <span className="text-sm text-slate-500">{t.home.verifiedCustomer}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative">
+                <span className="material-symbols-outlined absolute top-6 left-6 text-slate-200 dark:text-slate-700 text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
+                <div className="relative z-10">
+                  <div className="flex gap-1 mb-6 text-amber-400">
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  </div>
+                  <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-8">&quot;Le power bank est de très haute qualité et suffit pour des jours de charge. L&apos;emballage était professionnel et l&apos;expérience d&apos;achat sur le site est facile et pratique.&quot;</p>
+                  <div className="flex items-center gap-4 border-t border-slate-100 dark:border-slate-700 pt-6">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300">A.E</div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 dark:text-white">Ahlam</h4>
+                      <span className="text-sm text-slate-500">{t.home.verifiedCustomer}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative">
+                <span className="material-symbols-outlined absolute top-6 left-6 text-slate-200 dark:text-slate-700 text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
+                <div className="relative z-10">
+                  <div className="flex gap-1 mb-6 text-amber-400">
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="material-symbols-outlined text-slate-200 dark:text-slate-700" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  </div>
+                  <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-8">&quot;Le câble est très solide et a l&apos;air de durer. Leur service client est excellent et a répondu à mes questions rapidement. Je recommande vivement de faire affaire avec eux.&quot;</p>
+                  <div className="flex items-center gap-4 border-t border-slate-100 dark:border-slate-700 pt-6">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300">K.B</div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 dark:text-white">Karim Bennani</h4>
+                      <span className="text-sm text-slate-500">{t.home.verifiedCustomer}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
