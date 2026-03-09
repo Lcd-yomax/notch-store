@@ -24,6 +24,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
           </Link>
           <nav className="hidden md:flex items-center gap-10">
             <Link href="/" className="text-primary font-bold text-[15px] relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-full after:h-0.5 after:bg-primary">{t.header.home}</Link>
+            <Link href="/shop" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold text-[15px] transition-colors">{t.header.shop}</Link>
             <Link href="/categories" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold text-[15px] transition-colors">{t.header.categories}</Link>
             <Link href="/about" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold text-[15px] transition-colors">{t.header.about}</Link>
             <Link href="/contact" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold text-[15px] transition-colors">{t.header.contact}</Link>

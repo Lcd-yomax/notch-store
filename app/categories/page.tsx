@@ -65,21 +65,22 @@ export default function Categories() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {categories.map((category) => (
-              <Link key={category.id} href={`/categories/${category.id}`} className="group flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300">
-                <div className="relative w-full aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center p-8">
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                  <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: `url('${category.image}')` }}></div>
-                  <div className="absolute bottom-4 right-4 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm text-slate-900 dark:text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    {category.itemCount} {t.categories.products}
+              <Link key={category.id} href={`/categories/${category.id}`} className="group relative flex flex-col bg-slate-900 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 aspect-[4/3]">
+                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url('${category.image}')` }}></div>
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-500 z-10"></div>
+                
+                <div className="relative z-20 flex flex-col items-center justify-center h-full p-8 text-center">
+                  <h2 className="text-3xl font-black text-white mb-3 group-hover:text-primary transition-colors duration-300 tracking-tight drop-shadow-lg">{category.name}</h2>
+                  <p className="text-white/90 font-medium leading-relaxed mb-6 max-w-sm drop-shadow-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">{category.description}</p>
+                  
+                  <div className="flex items-center gap-2 bg-white/20 hover:bg-primary text-white backdrop-blur-md border border-white/30 font-bold px-6 py-3 rounded-full transition-all duration-300 transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 delay-200 shadow-lg">
+                    {t.categories.explore}
+                    <span className="material-symbols-outlined rtl:rotate-180 text-sm">arrow_forward</span>
                   </div>
                 </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">{category.name}</h2>
-                  <p className="text-slate-500 dark:text-slate-400 leading-relaxed mb-4 flex-grow">{category.description}</p>
-                  <div className="flex items-center gap-2 text-primary font-bold mt-auto group-hover:gap-3 transition-all">
-                    {t.categories.explore}
-                    <span className="material-symbols-outlined rtl:rotate-180">arrow_forward</span>
-                  </div>
+                
+                <div className="absolute top-6 right-6 z-20 bg-black/40 backdrop-blur-md text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg border border-white/20">
+                  {category.itemCount} {t.categories.products}
                 </div>
               </Link>
             ))}

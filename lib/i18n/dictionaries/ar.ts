@@ -2,6 +2,7 @@ export const ar = {
   header: {
     promo: "توصيل مجاني في جميع أنحاء المغرب للطلبات التي تزيد عن 300 درهم",
     home: "الرئيسية",
+    shop: "المتجر",
     categories: "الفئات",
     about: "من نحن",
     contact: "اتصل بنا",

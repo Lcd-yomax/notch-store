@@ -2,6 +2,7 @@ export const fr = {
   header: {
     promo: "LIVRAISON GRATUITE PARTOUT AU MAROC POUR TOUTE COMMANDE SUPÉRIEURE À 300 DH",
     home: "Accueil",
+    shop: "Boutique",
     categories: "Catégories",
     about: "À Propos",
     contact: "Contactez-nous",

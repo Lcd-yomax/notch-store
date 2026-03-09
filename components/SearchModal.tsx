@@ -36,8 +36,13 @@ const mockProducts = [
 export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { t, language } = useLanguage();
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState(mockProducts);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const results = query.trim() === '' 
+    ? [] 
+    : mockProducts.filter(product => 
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
 
   useEffect(() => {
     if (isOpen) {
@@ -45,29 +50,22 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
-      setQuery('');
     }
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    if (query.trim() === '') {
-      setResults([]);
-    } else {
-      const filtered = mockProducts.filter(product => 
-        product.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setResults(filtered);
-    }
-  }, [query]);
+  const handleClose = () => {
+    setQuery('');
+    onClose();
+  };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4 sm:px-6">
-      <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onClick={onClose} />
+      <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onClick={handleClose} />
       
       <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center border-b border-slate-200 dark:border-slate-800 p-4">
@@ -81,7 +79,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
             onChange={(e) => setQuery(e.target.value)}
           />
           <button 
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <span className="material-symbols-outlined">close</span>
@@ -104,7 +102,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   <Link 
                     key={product.id} 
                     href={`/product/${product.id}`}
-                    onClick={onClose}
+                    onClick={handleClose}
                     className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
                   >
                     <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden relative flex-shrink-0">
@@ -129,7 +127,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                 ))}
               </div>
               <div className="pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
-                <button className="text-primary font-bold hover:underline text-sm" onClick={onClose}>
+                <button className="text-primary font-bold hover:underline text-sm" onClick={handleClose}>
                   {t.header.viewAll}
                 </button>
               </div>

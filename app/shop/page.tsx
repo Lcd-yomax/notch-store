@@ -2,10 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
-export default async function CategoryDetails({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const categoryName = id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
+export default function Shop() {
   const products = [
     {
       id: '1',
@@ -72,6 +69,39 @@ export default async function CategoryDetails({ params }: { params: Promise<{ id
       reviews: 145,
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb',
       hoverImage: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=800&auto=format&fit=crop'
+    },
+    {
+      id: '7',
+      name: 'Câble Lightning NOTCH 20W',
+      price: 79,
+      originalPrice: 119,
+      discount: 33,
+      rating: 4.7,
+      reviews: 312,
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D',
+      hoverImage: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?q=80&w=800&auto=format&fit=crop'
+    },
+    {
+      id: '8',
+      name: 'Chargeur Sans Fil Magnétique 15W',
+      price: 199,
+      originalPrice: 249,
+      discount: 20,
+      rating: 4.6,
+      reviews: 94,
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD',
+      hoverImage: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=800&auto=format&fit=crop'
+    },
+    {
+      id: '9',
+      name: 'Powerbank Mini 10000mAh',
+      price: 249,
+      originalPrice: 299,
+      discount: 16,
+      rating: 4.8,
+      reviews: 156,
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb',
+      hoverImage: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=800&auto=format&fit=crop'
     }
   ];
 
@@ -84,15 +114,13 @@ export default async function CategoryDetails({ params }: { params: Promise<{ id
           <nav className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-8">
             <Link href="/" className="hover:text-primary transition-colors">Accueil</Link>
             <span className="material-symbols-outlined text-sm">chevron_right</span>
-            <Link href="/categories" className="hover:text-primary transition-colors">Catégories</Link>
-            <span className="material-symbols-outlined text-sm">chevron_right</span>
-            <span className="text-slate-900 dark:text-white">{categoryName}</span>
+            <span className="text-slate-900 dark:text-white">Boutique</span>
           </nav>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">{categoryName}</h1>
-              <p className="text-slate-500 text-lg font-medium">Découvrez notre sélection de produits dans cette catégorie.</p>
+              <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Tous les Produits</h1>
+              <p className="text-slate-500 text-lg font-medium">Découvrez notre sélection complète de produits de haute qualité.</p>
             </div>
             <div className="flex items-center gap-4">
               <select className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer">
@@ -116,6 +144,28 @@ export default async function CategoryDetails({ params }: { params: Promise<{ id
                   <button className="text-sm font-medium text-primary hover:underline">Réinitialiser</button>
                 </div>
                 
+                <div className="mb-8">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">Catégories</h4>
+                  <div className="flex flex-col gap-3">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Chargeurs (12)</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Câbles (8)</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Power Banks (5)</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Audio (6)</span>
+                    </label>
+                  </div>
+                </div>
+
                 <div className="mb-8">
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">Prix</h4>
                   <div className="flex items-center gap-2">
@@ -207,10 +257,19 @@ export default async function CategoryDetails({ params }: { params: Promise<{ id
                   <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                     <span className="material-symbols-outlined">chevron_left</span>
                   </button>
-                  <button className="w-10 h-10 rounded-xl bg-primary text-white font-bold flex items-center justify-center shadow-md shadow-primary/20">1</button>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">2</button>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">3</button>
-                  <span className="text-slate-400 px-2">...</span>
+                  <button className="w-10 h-10 rounded-xl bg-primary text-white font-bold flex items-center justify-center shadow-lg shadow-primary/30">
+                    1
+                  </button>
+                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">
+                    2
+                  </button>
+                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">
+                    3
+                  </button>
+                  <span className="text-slate-400 px-1">...</span>
+                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">
+                    8
+                  </button>
                   <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors">
                     <span className="material-symbols-outlined">chevron_right</span>
                   </button>
