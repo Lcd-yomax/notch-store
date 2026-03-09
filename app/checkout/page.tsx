@@ -82,7 +82,7 @@ export default function Checkout() {
                     <input type="radio" name="payment" value="card" className="w-5 h-5 text-primary focus:ring-primary" disabled />
                     <div className="flex flex-col">
                       <span className="font-bold text-slate-900 dark:text-white">{t.checkout.creditCard} ({t.checkout.comingSoon})</span>
-                      <span className="text-sm text-slate-500">Paiement sécurisé par carte de crédit ou débit</span>
+                      <span className="text-sm text-slate-500">{t.checkout.creditCardDesc}</span>
                     </div>
                     <span className="material-symbols-outlined ml-auto text-slate-400 text-3xl">credit_card</span>
                   </label>
@@ -97,7 +97,7 @@ export default function Checkout() {
                 
                 <div className="flex flex-col gap-4 mb-6 border-b border-slate-200 dark:border-slate-800 pb-6">
                   <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 font-medium">
-                    <span>{t.cart.subtotal} (3 articles)</span>
+                    <span>{t.cart.subtotal} (3 {t.checkout.items})</span>
                     <span className="text-slate-900 dark:text-white font-bold">447 DH</span>
                   </div>
                   <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 font-medium">
@@ -118,7 +118,7 @@ export default function Checkout() {
                 
                 <div className="flex items-center justify-center gap-2 text-sm text-slate-500 font-medium">
                   <span className="material-symbols-outlined text-slate-400 text-lg">lock</span>
-                  Vos données sont sécurisées
+                  {t.checkout.secureData}
                 </div>
               </div>
             </div>

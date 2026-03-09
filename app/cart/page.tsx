@@ -11,14 +11,14 @@ export default function Cart() {
   const cartItems = [
     {
       id: '1',
-      name: 'Chargeur NOTCH 65W GaN Ultra Rapide',
+      name: t.productDetails.name,
       price: 249,
       quantity: 1,
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD'
     },
     {
       id: '2',
-      name: 'Câble Type-C NOTCH 100W Tressé',
+      name: t.shop.products.p3,
       price: 99,
       quantity: 2,
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D'
@@ -101,7 +101,7 @@ export default function Cart() {
                 
                 <div className="flex items-center justify-center gap-2 text-sm text-slate-500 font-medium">
                   <span className="material-symbols-outlined text-slate-400 text-lg">lock</span>
-                  Paiement 100% sécurisé
+                  {t.cart.securePayment}
                 </div>
               </div>
             </div>

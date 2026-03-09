@@ -87,6 +87,23 @@ export const fr = {
       bs2: { name: "Montre connectée Fitness Series 5", price: "1990 DH", originalPrice: null },
       bs3: { name: "Sac de week-end en cuir premium", price: "1490 DH", originalPrice: "1990 DH" },
       bs4: { name: "Tasse à café en céramique minimaliste", price: "240 DH", originalPrice: null }
+    },
+    reviews: {
+      r1: {
+        text: "Le chargeur 65W a vraiment changé ma vie, il charge mon ordinateur portable et mon téléphone à une vitesse incroyable. La livraison a été très rapide et le produit est original et excellent.",
+        author: "Abdo",
+        initials: "A.M"
+      },
+      r2: {
+        text: "Le power bank est de très haute qualité et suffit pour des jours de charge. L'emballage était professionnel et l'expérience d'achat sur le site est facile et pratique.",
+        author: "Ahlam",
+        initials: "A.E"
+      },
+      r3: {
+        text: "Le câble est très solide et a l'air de durer. Leur service client est excellent et a répondu à mes questions rapidement. Je recommande vivement de faire affaire avec eux.",
+        author: "Karim Bennani",
+        initials: "K.B"
+      }
     }
   },
   categories: {
@@ -224,6 +241,7 @@ export const fr = {
     free: "Gratuit",
     total: "Total",
     checkout: "Passer la commande",
+    securePayment: "Paiement 100% sécurisé",
   },
   checkout: {
     title: "Finaliser la commande",
@@ -240,9 +258,29 @@ export const fr = {
     cod: "Paiement à la livraison",
     codDesc: "Payez en espèces à la réception de votre commande.",
     creditCard: "Carte Bancaire",
+    creditCardDesc: "Paiement sécurisé par carte de crédit ou débit",
     comingSoon: "Bientôt disponible",
     confirmOrder: "Confirmer la commande",
     orderSummary: "Résumé de la commande",
+    items: "articles",
+    secureData: "Vos données sont sécurisées",
+  },
+  about: {
+    title: "À Propos de NotchMaroc",
+    subtitle: "Votre partenaire de confiance pour les accessoires technologiques premium au Maroc.",
+    storyTitle: "Notre Histoire",
+    storyP1: "Fondée en 2020, NotchMaroc est née d'une passion pour la technologie et d'un désir de rendre les accessoires électroniques de haute qualité accessibles à tous les Marocains. Nous avons commencé comme une petite boutique en ligne et avons rapidement grandi grâce à notre engagement envers l'excellence et la satisfaction client.",
+    storyP2: "Aujourd'hui, nous sommes fiers d'être l'une des principales destinations pour les chargeurs, câbles, écouteurs et autres accessoires indispensables. Notre équipe travaille sans relâche pour sélectionner les meilleurs produits des marques les plus fiables, tout en développant notre propre gamme de produits Notch, conçus pour répondre aux besoins spécifiques de nos clients.",
+    valuesTitle: "Nos Valeurs Fondamentales",
+    value1Title: "Qualité Sans Compromis",
+    value1Desc: "Nous testons rigoureusement chaque produit avant de l'ajouter à notre catalogue pour garantir sa durabilité et ses performances.",
+    value2Title: "Service Client Dévoué",
+    value2Desc: "Votre satisfaction est notre priorité absolue. Notre équipe est toujours prête à vous aider, avant et après votre achat.",
+    value3Title: "Innovation Continue",
+    value3Desc: "Nous restons à l'affût des dernières tendances technologiques pour vous proposer les produits les plus innovants du marché.",
+    ctaTitle: "Prêt à améliorer votre expérience technologique ?",
+    ctaDesc: "Découvrez notre collection d'accessoires premium et profitez de la livraison gratuite sur les commandes de plus de 300 DH.",
+    ctaButton: "Explorer la boutique"
   },
   contact: {
     title: "Contactez-nous",
