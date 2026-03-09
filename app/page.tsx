@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import HeroSlider from '@/components/HeroSlider';
 
 export default function Home() {
   const { t } = useLanguage();
@@ -12,32 +13,7 @@ export default function Home() {
     <>
       <Header />
       <main className="flex-grow">
-        <section className="relative w-full h-[500px] lg:h-[600px] overflow-hidden bg-slate-950 flex items-center">
-          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkGl-5rC2EZpGUTMTnmRZZR-J837V8RUD4OqDE_CXhYKHS6TRCANb-PCTK2D65OHFecUcRCBnlzESqi5UPSPb6Wj2cUzThsjPQ6MFlf6sQiaW2qF4xeC1sGPvn0tOAWy04_HoLyOXqsVsObPj6ZLfwEFMzeMyiEP19OeQtvxTDSdINlIqdG2HPlYox5E4_5aJ_sqCC-WwxXhqz6fMVw0aQ9kgc32C57UBleMBHH2Iv0_ZRcz1Bl8P4qtof5X3RtvcxbYdXTKgL5XcF')" }}></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
-          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 lg:px-12 flex flex-col md:flex-row items-center justify-between">
-            <div className="flex flex-col gap-6 max-w-2xl pt-10 md:pt-0">
-              <div className="inline-block bg-primary/20 border border-primary/30 text-primary px-4 py-1.5 rounded-full text-sm font-bold w-fit mb-2 backdrop-blur-sm">
-                {t.home.limitedOffer}
-              </div>
-              <h1 className="text-white text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight">
-                {t.home.heroTitle1} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-300">{t.home.heroTitle2}</span>
-              </h1>
-              <p className="text-slate-300 text-lg lg:text-xl font-medium leading-relaxed max-w-xl">
-                {t.home.heroDesc}
-              </p>
-              <div className="mt-4">
-                <Link href="/product/1" className="bg-primary hover:bg-amber-500 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center gap-3 w-fit">
-                  {t.home.buyNow}
-                  <span className="material-symbols-outlined text-xl">arrow_forward</span>
-                </Link>
-              </div>
-            </div>
-            <div className="hidden md:block w-1/2 relative h-[500px]">
-              <div className="absolute inset-0 bg-contain bg-center bg-no-repeat drop-shadow-2xl scale-110" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcjE3d3CjD6i2E0XIvPZUVdgE0O5PvMnAWj45MK19UAOQNXZCfVbWvXttS1Ni6zStfyVB4pU_J4P7j2FRdQeYflGq_D-I5wlId8b_z8O-T3TJogBvRN6S9L-M4BhlgAL8Yfp1wO6cf8ko9rYoZu11Hoger7FxqEJCM1qjgIziwjTVsOJYFJM5c0rPqg75KmGYS-LFSYjfVl4b67urTeW2g9NacFd6xhrNrZINHeYk3gCWw0Xf9Wtekj8QcsNnU2ZKA-ikHRUzcsAfG')" }}></div>
-            </div>
-          </div>
-        </section>
+        <HeroSlider />
 
         <section className="max-w-[1440px] mx-auto px-4 lg:px-8 -mt-10 relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-800/50 shadow-xl">

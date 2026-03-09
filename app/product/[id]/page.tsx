@@ -4,12 +4,66 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { use } from 'react';
+import { use, useState } from 'react';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { t } = useLanguage();
   
+  const [rating, setRating] = useState(5);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [comment, setComment] = useState('');
+  const [image, setImage] = useState<string | null>(null);
+
+  const [reviewsList, setReviewsList] = useState<{ id: number; name: string; rating: number; date: string; comment: string; image: string | null; }[]>([
+    {
+      id: 1,
+      name: 'Ahmed B.',
+      rating: 5,
+      date: '12 Oct 2023',
+      comment: 'Excellent produit, charge très rapidement mon MacBook et mon téléphone en même temps.',
+      image: null
+    },
+    {
+      id: 2,
+      name: 'Sara M.',
+      rating: 4,
+      date: '05 Nov 2023',
+      comment: 'Très bon chargeur, un peu lourd mais la qualité est au rendez-vous.',
+      image: null
+    }
+  ]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImage(event.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleSubmitReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newReview = {
+      id: Date.now(),
+      name,
+      rating,
+      date: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }),
+      comment,
+      image
+    };
+    setReviewsList([newReview, ...reviewsList]);
+    setName('');
+    setEmail('');
+    setComment('');
+    setRating(5);
+    setImage(null);
+  };
+
   // Mock product data based on ID
   const product = {
     id: id,
@@ -140,6 +194,89 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     {t.product.warranty}
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Reviews Section */}
+          <div className="mt-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 lg:p-10 shadow-sm">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">{t.reviewsSection.title}</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Reviews List */}
+              <div>
+                {reviewsList.length === 0 ? (
+                  <p className="text-slate-500">{t.reviewsSection.noReviews}</p>
+                ) : (
+                  <div className="space-y-6">
+                    {reviewsList.map(review => (
+                      <div key={review.id} className="border-b border-slate-100 dark:border-slate-800 pb-6 last:border-0">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-bold text-slate-900 dark:text-white">{review.name}</span>
+                          <span className="text-sm text-slate-500">{review.date}</span>
+                        </div>
+                        <div className="flex text-amber-400 mb-3">
+                          {[1,2,3,4,5].map(star => (
+                            <span key={star} className="material-symbols-outlined text-sm" style={{ fontVariationSettings: star <= review.rating ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                          ))}
+                        </div>
+                        <p className="text-slate-600 dark:text-slate-400">{review.comment}</p>
+                        {review.image && (
+                          <img src={review.image} alt="Review" className="mt-4 rounded-lg max-w-[200px] max-h-[200px] object-cover border border-slate-200 dark:border-slate-700" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Leave a Review Form */}
+              <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t.reviewsSection.leaveReview}</h3>
+                <form onSubmit={handleSubmitReview} className="flex flex-col gap-4">
+                  {/* Rating */}
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.rating}</label>
+                    <div className="flex gap-1">
+                      {[1,2,3,4,5].map(star => (
+                        <button 
+                          type="button" 
+                          key={star}
+                          onClick={() => setRating(star)}
+                          onMouseEnter={() => setHoverRating(star)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          className="text-amber-400 focus:outline-none"
+                        >
+                          <span className="material-symbols-outlined text-2xl transition-all" style={{ fontVariationSettings: star <= (hoverRating || rating) ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="reviewName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.fullName}</label>
+                      <input required type="text" id="reviewName" value={name} onChange={e => setName(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="reviewEmail" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.email}</label>
+                      <input required type="email" id="reviewEmail" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="reviewComment" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.comment}</label>
+                    <textarea required id="reviewComment" rows={4} value={comment} onChange={e => setComment(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"></textarea>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="reviewImage" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.image}</label>
+                    <input type="file" id="reviewImage" accept="image/*" onChange={handleImageChange} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                  </div>
+
+                  <button type="submit" className="mt-2 w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.5)]">
+                    {t.reviewsSection.submit}
+                  </button>
+                </form>
               </div>
             </div>
           </div>

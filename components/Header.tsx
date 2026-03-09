@@ -1,10 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import SearchModal from './SearchModal';
 
 export default function Header({ showPromo = true }: { showPromo?: boolean }) {
   const { t, language, setLanguage } = useLanguage();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <>
@@ -26,11 +29,10 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
             <Link href="/contact" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold text-[15px] transition-colors">{t.header.contact}</Link>
           </nav>
           <div className="flex items-center gap-6">
-            <div className="hidden lg:flex relative items-center">
-              <span className="material-symbols-outlined absolute left-3 text-slate-400">search</span>
-              <input className="bg-slate-100 dark:bg-slate-800 border-none rounded-full py-2.5 pl-10 pr-4 w-64 text-sm focus:ring-2 focus:ring-primary/20 outline-none text-slate-900 dark:text-white placeholder:text-slate-500" placeholder={t.header.searchPlaceholder} type="text" />
-            </div>
-            <button className="lg:hidden text-slate-700 dark:text-slate-200 hover:text-primary transition-colors">
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className="text-slate-700 dark:text-slate-200 hover:text-primary transition-colors flex items-center justify-center"
+            >
               <span className="material-symbols-outlined text-2xl">search</span>
             </button>
             <Link href="/cart" className="relative text-slate-700 dark:text-slate-200 hover:text-primary transition-colors flex items-center justify-center">
@@ -46,6 +48,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
           </div>
         </div>
       </header>
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }
