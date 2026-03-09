@@ -20,18 +20,18 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [reviewsList, setReviewsList] = useState<{ id: number; name: string; rating: number; date: string; comment: string; image: string | null; }[]>([
     {
       id: 1,
-      name: 'Ahmed B.',
+      name: t.productDetails.reviews[0].name,
       rating: 5,
-      date: '12 Oct 2023',
-      comment: 'Excellent produit, charge très rapidement mon MacBook et mon téléphone en même temps.',
+      date: t.productDetails.reviews[0].date,
+      comment: t.productDetails.reviews[0].comment,
       image: null
     },
     {
       id: 2,
-      name: 'Sara M.',
+      name: t.productDetails.reviews[1].name,
       rating: 4,
-      date: '05 Nov 2023',
-      comment: 'Très bon chargeur, un peu lourd mais la qualité est au rendez-vous.',
+      date: t.productDetails.reviews[1].date,
+      comment: t.productDetails.reviews[1].comment,
       image: null
     }
   ]);
@@ -67,20 +67,14 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   // Mock product data based on ID
   const product = {
     id: id,
-    name: 'Chargeur NOTCH 65W GaN Ultra Rapide',
+    name: t.productDetails.name,
     price: 249,
     originalPrice: 349,
     discount: 30,
     rating: 4.8,
     reviews: 124,
-    description: 'Chargeur mural ultra-rapide avec technologie GaN. Équipé de 2 ports USB-C et 1 port USB-A pour charger simultanément votre ordinateur portable, tablette et smartphone. Design compact et léger, idéal pour les voyages.',
-    features: [
-      'Technologie GaN (Nitrure de Gallium) pour une charge plus efficace et moins de chaleur',
-      'Puissance maximale de 65W via le port USB-C principal',
-      "Charge intelligente qui s'adapte aux besoins de votre appareil",
-      'Protections multiples contre les surtensions, surchauffes et courts-circuits',
-      'Compatible avec MacBook, iPhone, Samsung, iPad et autres appareils USB-C'
-    ],
+    description: t.productDetails.description,
+    features: t.productDetails.features,
     images: [
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD',
       'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb',

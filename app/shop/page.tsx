@@ -1,12 +1,17 @@
+'use client';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function Shop() {
+  const { t } = useLanguage();
+
   const products = [
     {
       id: '1',
-      name: 'Chargeur NOTCH 65W GaN Ultra Rapide',
+      name: t.shop.products.p1,
       price: 249,
       originalPrice: 349,
       discount: 30,
@@ -17,7 +22,7 @@ export default function Shop() {
     },
     {
       id: '2',
-      name: 'Powerbank NOTCH 20000mAh Fast Charge',
+      name: t.shop.products.p2,
       price: 399,
       originalPrice: 499,
       discount: 20,
@@ -28,7 +33,7 @@ export default function Shop() {
     },
     {
       id: '3',
-      name: 'Câble Type-C NOTCH 100W Tressé',
+      name: t.shop.products.p3,
       price: 99,
       originalPrice: 149,
       discount: 35,
@@ -39,7 +44,7 @@ export default function Shop() {
     },
     {
       id: '4',
-      name: 'Écouteurs Sans Fil NOTCH Pro ANC',
+      name: t.shop.products.p4,
       price: 299,
       originalPrice: 399,
       discount: 25,
@@ -50,7 +55,7 @@ export default function Shop() {
     },
     {
       id: '5',
-      name: 'Chargeur Voiture NOTCH 38W Dual Port',
+      name: t.shop.products.p5,
       price: 149,
       originalPrice: 199,
       discount: 25,
@@ -61,7 +66,7 @@ export default function Shop() {
     },
     {
       id: '6',
-      name: 'Support Téléphone Voiture Magnétique',
+      name: t.shop.products.p6,
       price: 89,
       originalPrice: 129,
       discount: 30,
@@ -72,7 +77,7 @@ export default function Shop() {
     },
     {
       id: '7',
-      name: 'Câble Lightning NOTCH 20W',
+      name: t.shop.products.p7,
       price: 79,
       originalPrice: 119,
       discount: 33,
@@ -83,7 +88,7 @@ export default function Shop() {
     },
     {
       id: '8',
-      name: 'Chargeur Sans Fil Magnétique 15W',
+      name: t.shop.products.p8,
       price: 199,
       originalPrice: 249,
       discount: 20,
@@ -94,7 +99,7 @@ export default function Shop() {
     },
     {
       id: '9',
-      name: 'Powerbank Mini 10000mAh',
+      name: t.shop.products.p9,
       price: 249,
       originalPrice: 299,
       discount: 16,
@@ -112,22 +117,22 @@ export default function Shop() {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-8">
-            <Link href="/" className="hover:text-primary transition-colors">Accueil</Link>
-            <span className="material-symbols-outlined text-sm">chevron_right</span>
-            <span className="text-slate-900 dark:text-white">Boutique</span>
+            <Link href="/" className="hover:text-primary transition-colors">{t.header.home}</Link>
+            <span className="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+            <span className="text-slate-900 dark:text-white">{t.header.shop}</span>
           </nav>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Tous les Produits</h1>
-              <p className="text-slate-500 text-lg font-medium">Découvrez notre sélection complète de produits de haute qualité.</p>
+              <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">{t.shop.title}</h1>
+              <p className="text-slate-500 text-lg font-medium">{t.shop.desc}</p>
             </div>
             <div className="flex items-center gap-4">
               <select className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer">
-                <option value="popular">Les plus populaires</option>
-                <option value="newest">Nouveautés</option>
-                <option value="price-low">Prix croissant</option>
-                <option value="price-high">Prix décroissant</option>
+                <option value="popular">{t.shop.sort.popular}</option>
+                <option value="newest">{t.shop.sort.newest}</option>
+                <option value="price-low">{t.shop.sort.priceLow}</option>
+                <option value="price-high">{t.shop.sort.priceHigh}</option>
               </select>
               <button className="md:hidden w-11 h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-300">
                 <span className="material-symbols-outlined">tune</span>
@@ -140,12 +145,12 @@ export default function Shop() {
             <aside className="hidden md:block w-64 flex-shrink-0">
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sticky top-24">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-bold text-slate-900 dark:text-white text-lg">Filtres</h3>
-                  <button className="text-sm font-medium text-primary hover:underline">Réinitialiser</button>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-lg">{t.shop.filters.title}</h3>
+                  <button className="text-sm font-medium text-primary hover:underline">{t.shop.filters.reset}</button>
                 </div>
                 
                 <div className="mb-8">
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">Catégories</h4>
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.categories}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
@@ -167,16 +172,16 @@ export default function Shop() {
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">Prix</h4>
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.price}</h4>
                   <div className="flex items-center gap-2">
-                    <input type="number" placeholder="Min" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
+                    <input type="number" placeholder={t.shop.filters.min} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
                     <span className="text-slate-400">-</span>
-                    <input type="number" placeholder="Max" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
+                    <input type="number" placeholder={t.shop.filters.max} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
                   </div>
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">Marque</h4>
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.brand}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" defaultChecked />
@@ -194,15 +199,15 @@ export default function Shop() {
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">Disponibilité</h4>
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.availability}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" defaultChecked />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">En stock (32)</span>
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.inStock} (32)</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">En rupture (3)</span>
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.outOfStock} (3)</span>
                     </label>
                   </div>
                 </div>
@@ -244,7 +249,7 @@ export default function Shop() {
                       </div>
                       <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
                         <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                        Acheter
+                        {t.shop.buy}
                       </button>
                     </div>
                   </div>
@@ -255,7 +260,7 @@ export default function Shop() {
               <div className="flex justify-center mt-12">
                 <div className="flex items-center gap-2">
                   <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <span className="material-symbols-outlined">chevron_left</span>
+                    <span className="material-symbols-outlined rtl:rotate-180">chevron_left</span>
                   </button>
                   <button className="w-10 h-10 rounded-xl bg-primary text-white font-bold flex items-center justify-center shadow-lg shadow-primary/30">
                     1
@@ -271,7 +276,7 @@ export default function Shop() {
                     8
                   </button>
                   <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors">
-                    <span className="material-symbols-outlined">chevron_right</span>
+                    <span className="material-symbols-outlined rtl:rotate-180">chevron_right</span>
                   </button>
                 </div>
               </div>

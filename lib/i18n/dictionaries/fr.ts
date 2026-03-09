@@ -54,7 +54,129 @@ export const fr = {
     buy: "Acheter",
     reviewsTitle: "Avis de nos clients",
     reviewsDesc: "Nous sommes fiers de la confiance de nos clients et cherchons toujours à fournir les meilleurs produits technologiques et le plus haut niveau de service.",
-    verifiedCustomer: "Client vérifié"
+    verifiedCustomer: "Client vérifié",
+    shopByCategory: "Acheter par catégorie",
+    featuredProducts: "Produits en vedette",
+    bestSellingProducts: "Meilleures ventes",
+    bestSellingDesc: "Découvrez nos articles les plus populaires appréciés par nos clients.",
+    viewAllProducts: "Voir tous les produits",
+    badges: {
+      bestSeller: "Meilleure vente",
+      popular: "Populaire",
+      sale: "Solde"
+    },
+    categoryNames: {
+      women: "Femmes",
+      watch: "Montres",
+      sunglass: "Lunettes de soleil",
+      sports: "Sports",
+      sneakers: "Baskets",
+      men: "Hommes",
+      kids: "Enfants",
+      bags: "Sacs"
+    },
+    featuredProductsList: {
+      f1: { name: "Nike Comfy Vapor Maxpro", price: "2200 DH - 2500 DH" },
+      f2: { name: "Addidas FuelCell Propel...", price: "450 DH - 500 DH" },
+      f3: { name: "Tuma Grey", price: "4000 DH - 10000 DH" },
+      f4: { name: "Pissot Super Dry", price: "2500 DH" },
+      f5: { name: "Zara Army Bag", price: "2600 DH" }
+    },
+    bestSellingProductsList: {
+      bs1: { name: "Casque sans fil à réduction de bruit", price: "2990 DH", originalPrice: "3490 DH" },
+      bs2: { name: "Montre connectée Fitness Series 5", price: "1990 DH", originalPrice: null },
+      bs3: { name: "Sac de week-end en cuir premium", price: "1490 DH", originalPrice: "1990 DH" },
+      bs4: { name: "Tasse à café en céramique minimaliste", price: "240 DH", originalPrice: null }
+    }
+  },
+  categories: {
+    title: "Nos Catégories",
+    desc: "Découvrez notre large gamme de produits électroniques et accessoires de haute qualité, conçus pour faciliter votre quotidien.",
+    explore: "Explorer",
+    products: "Produits",
+    items: {
+      powerBanks: {
+        name: "Power Banks",
+        desc: "Batteries externes haute capacité pour ne jamais manquer d'énergie."
+      },
+      chargeurs: {
+        name: "Chargeurs",
+        desc: "Chargeurs muraux et sans fil ultra-rapides pour tous vos appareils."
+      },
+      cables: {
+        name: "Câbles",
+        desc: "Câbles de charge et de synchronisation robustes et durables."
+      },
+      audio: {
+        name: "Audio",
+        desc: "Écouteurs sans fil, casques et enceintes Bluetooth de haute qualité."
+      },
+      accessoiresVoiture: {
+        name: "Accessoires Auto",
+        desc: "Chargeurs allume-cigare et supports de téléphone pour voiture."
+      },
+      protection: {
+        name: "Protection",
+        desc: "Coques de téléphone et verres trempés pour protéger vos appareils."
+      }
+    }
+  },
+  productDetails: {
+    name: "Chargeur NOTCH 65W GaN Ultra Rapide",
+    description: "Chargeur mural ultra-rapide avec technologie GaN. Équipé de 2 ports USB-C et 1 port USB-A pour charger simultanément votre ordinateur portable, tablette et smartphone. Design compact et léger, idéal pour les voyages.",
+    features: [
+      "Technologie GaN (Nitrure de Gallium) pour une charge plus efficace et moins de chaleur",
+      "Puissance maximale de 65W via le port USB-C principal",
+      "Charge intelligente qui s'adapte aux besoins de votre appareil",
+      "Protections multiples contre les surtensions, surchauffes et courts-circuits",
+      "Compatible avec MacBook, iPhone, Samsung, iPad et autres appareils USB-C"
+    ],
+    reviews: [
+      {
+        name: "Ahmed B.",
+        date: "12 Oct 2023",
+        comment: "Excellent produit, charge très rapidement mon MacBook et mon téléphone en même temps."
+      },
+      {
+        name: "Sara M.",
+        date: "05 Nov 2023",
+        comment: "Très bon chargeur, un peu lourd mais la qualité est au rendez-vous."
+      }
+    ]
+  },
+  shop: {
+    title: "Tous les Produits",
+    desc: "Découvrez notre sélection complète de produits de haute qualité.",
+    sort: {
+      popular: "Les plus populaires",
+      newest: "Nouveautés",
+      priceLow: "Prix croissant",
+      priceHigh: "Prix décroissant"
+    },
+    filters: {
+      title: "Filtres",
+      reset: "Réinitialiser",
+      categories: "Catégories",
+      price: "Prix",
+      min: "Min",
+      max: "Max",
+      brand: "Marque",
+      availability: "Disponibilité",
+      inStock: "En stock",
+      outOfStock: "En rupture"
+    },
+    buy: "Acheter",
+    products: {
+      p1: "Chargeur NOTCH 65W GaN Ultra Rapide",
+      p2: "Powerbank NOTCH 20000mAh Fast Charge",
+      p3: "Câble Type-C NOTCH 100W Tressé",
+      p4: "Écouteurs Sans Fil NOTCH Pro ANC",
+      p5: "Chargeur Voiture NOTCH 38W Dual Port",
+      p6: "Support Téléphone Voiture Magnétique",
+      p7: "Câble Lightning NOTCH 20W",
+      p8: "Chargeur Sans Fil Magnétique 15W",
+      p9: "Powerbank Mini 10000mAh"
+    }
   },
   categories: {
     title: "Catégories de Produits",
