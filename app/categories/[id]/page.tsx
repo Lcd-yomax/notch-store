@@ -135,7 +135,7 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.brands}</h4>
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.brand}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" defaultChecked />
@@ -203,7 +203,7 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                       </div>
                       <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
                         <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                        {t.shop.addToCart}
+                        {t.product.addToCart}
                       </button>
                     </div>
                   </div>

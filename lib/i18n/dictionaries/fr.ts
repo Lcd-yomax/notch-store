@@ -107,8 +107,8 @@ export const fr = {
     }
   },
   categories: {
-    title: "Nos Catégories",
-    desc: "Découvrez notre large gamme de produits électroniques et accessoires de haute qualité, conçus pour faciliter votre quotidien.",
+    title: "Catégories de Produits",
+    desc: "Parcourez notre large sélection d'accessoires technologiques et trouvez exactement ce dont vous avez besoin.",
     explore: "Explorer",
     products: "Produits",
     allProducts: "Tous les produits",
@@ -209,7 +209,6 @@ export const fr = {
       p9: "Powerbank Mini 10000mAh"
     }
   },
-
   product: {
     addToCart: "Ajouter au panier",
     inStock: "En stock",
@@ -290,7 +289,6 @@ export const fr = {
     messageLabel: "Message",
     sendButton: "Envoyer le message",
   },
-
   reviewsSection: {
     title: "Avis clients",
     leaveReview: "Laisser un avis",
