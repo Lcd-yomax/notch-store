@@ -106,6 +106,11 @@ export const ar = {
       }
     }
   },
+  success: {
+    title: "تم الطلب بنجاح!",
+    message: "لقد تم تمرير طلبك بنجاح. سنتصل بك قريباً من أجل التوصيل.",
+    backHome: "العودة إلى الرئيسية"
+  },
   categories: {
     title: "فئات المنتجات",
     desc: "تصفح مجموعتنا الواسعة من الملحقات التكنولوجية واعثر على ما تحتاجه بالضبط.",
@@ -211,6 +216,13 @@ export const ar = {
   },
   product: {
     addToCart: "أضف إلى السلة",
+    orderNow: "اطلب الآن",
+    orderForm: {
+      fullName: "الاسم الكامل",
+      address: "العنوان الكامل",
+      city: "المدينة",
+      phone: "رقم الهاتف",
+    },
     inStock: "متوفر",
     outOfStock: "غير متوفر",
     reviews: "تقييمات",

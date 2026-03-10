@@ -5,10 +5,12 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { use, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { t } = useLanguage();
+  const router = useRouter();
   
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
@@ -16,6 +18,17 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [email, setEmail] = useState('');
   const [comment, setComment] = useState('');
   const [image, setImage] = useState<string | null>(null);
+
+  // Order form state
+  const [orderName, setOrderName] = useState('');
+  const [orderAddress, setOrderAddress] = useState('');
+  const [orderCity, setOrderCity] = useState('');
+  const [orderPhone, setOrderPhone] = useState('');
+
+  const handleOrderSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push('/success');
+  };
 
   const [reviewsList, setReviewsList] = useState<{ id: number; name: string; rating: number; date: string; comment: string; image: string | null; }[]>([
     {
@@ -162,21 +175,54 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   </ul>
                 </div>
 
-                <div className="mt-auto flex flex-col sm:flex-row gap-4">
-                  <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 w-fit">
-                    <button className="w-12 h-12 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                      <span className="material-symbols-outlined">remove</span>
-                    </button>
-                    <span className="w-12 text-center font-bold text-lg text-slate-900 dark:text-white">1</span>
-                    <button className="w-12 h-12 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                      <span className="material-symbols-outlined">add</span>
-                    </button>
+                <form onSubmit={handleOrderSubmit} className="mt-auto flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.fullName || 'Nom complet'}</label>
+                      <input 
+                        type="text" 
+                        required
+                        value={orderName}
+                        onChange={(e) => setOrderName(e.target.value)}
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.phone || 'Téléphone'}</label>
+                      <input 
+                        type="tel" 
+                        required
+                        value={orderPhone}
+                        onChange={(e) => setOrderPhone(e.target.value)}
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                      />
+                    </div>
                   </div>
-                  <button className="flex-grow bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3">
-                    <span className="material-symbols-outlined">shopping_cart</span>
-                    {t.product.addToCart}
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.address || 'Adresse'}</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={orderAddress}
+                      onChange={(e) => setOrderAddress(e.target.value)}
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.city || 'Ville'}</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={orderCity}
+                      onChange={(e) => setOrderCity(e.target.value)}
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <button type="submit" className="w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3 mt-2">
+                    <span className="material-symbols-outlined">local_shipping</span>
+                    {t.product.orderNow || 'Commander'}
                   </button>
-                </div>
+                </form>
                 
                 <div className="mt-6 flex items-center justify-center gap-6 text-sm font-medium text-slate-500">
                   <div className="flex items-center gap-2">

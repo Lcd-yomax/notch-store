@@ -106,6 +106,11 @@ export const fr = {
       }
     }
   },
+  success: {
+    title: "Commande réussie !",
+    message: "Votre commande a été passée avec succès. Nous vous contacterons bientôt pour la livraison.",
+    backHome: "Retour à l'accueil"
+  },
   categories: {
     title: "Catégories de Produits",
     desc: "Parcourez notre large sélection d'accessoires technologiques et trouvez exactement ce dont vous avez besoin.",
@@ -211,6 +216,13 @@ export const fr = {
   },
   product: {
     addToCart: "Ajouter au panier",
+    orderNow: "Commander directement",
+    orderForm: {
+      fullName: "Nom complet",
+      address: "Adresse complète",
+      city: "Ville",
+      phone: "Numéro de téléphone",
+    },
     inStock: "En stock",
     outOfStock: "Rupture de stock",
     reviews: "avis",
