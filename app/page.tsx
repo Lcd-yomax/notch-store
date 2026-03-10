@@ -18,7 +18,7 @@ export default function Home() {
       <main className="flex-grow">
         <HeroSlider />
 
-        <section className="max-w-[1440px] mx-auto px-4 lg:px-8 -mt-10 relative z-20">
+        <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-8 relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-800/50 shadow-xl">
             <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary/30 transition-colors group">
               <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
