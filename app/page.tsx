@@ -18,7 +18,7 @@ export default function Home() {
       <main className="flex-grow">
         <HeroSlider />
 
-        <section className="max-w-[1440px] mx-auto px-4 lg:px-8 -mt-10 relative z-20">
+        <section className="max-w-[1440px] mx-auto px-4 lg:px-8 mt-10 relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-800/50 shadow-xl">
             <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary/30 transition-colors group">
               <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -207,8 +207,8 @@ export default function Home() {
               <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.home.reviewsDesc}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative">
-                <span className="material-symbols-outlined absolute top-6 left-6 text-slate-200 dark:text-slate-700 text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
+              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <span className="material-symbols-outlined absolute -top-2 -right-2 text-slate-100 dark:text-slate-700/30 text-8xl rotate-12 pointer-events-none" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
                 <div className="relative z-10">
                   <div className="flex gap-1 mb-6 text-amber-400">
                     <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
@@ -227,8 +227,8 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative">
-                <span className="material-symbols-outlined absolute top-6 left-6 text-slate-200 dark:text-slate-700 text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
+              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <span className="material-symbols-outlined absolute -top-2 -right-2 text-slate-100 dark:text-slate-700/30 text-8xl rotate-12 pointer-events-none" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
                 <div className="relative z-10">
                   <div className="flex gap-1 mb-6 text-amber-400">
                     <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
@@ -247,8 +247,8 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative">
-                <span className="material-symbols-outlined absolute top-6 left-6 text-slate-200 dark:text-slate-700 text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
+              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <span className="material-symbols-outlined absolute -top-2 -right-2 text-slate-100 dark:text-slate-700/30 text-8xl rotate-12 pointer-events-none" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
                 <div className="relative z-10">
                   <div className="flex gap-1 mb-6 text-amber-400">
                     <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>

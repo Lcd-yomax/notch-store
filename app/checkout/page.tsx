@@ -25,17 +25,9 @@ export default function Checkout() {
                   {t.checkout.personalInfo}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="firstName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.firstName}</label>
-                    <input type="text" id="firstName" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.firstName} />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="lastName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.lastName}</label>
-                    <input type="text" id="lastName" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.lastName} />
-                  </div>
                   <div className="flex flex-col gap-2 sm:col-span-2">
-                    <label htmlFor="email" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.email}</label>
-                    <input type="email" id="email" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="votre@email.com" />
+                    <label htmlFor="fullName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.product.orderForm?.fullName || 'Nom complet'}</label>
+                    <input type="text" id="fullName" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.product.orderForm?.fullName || 'Nom complet'} />
                   </div>
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="phone" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.phone}</label>
@@ -62,13 +54,9 @@ export default function Checkout() {
                     <label htmlFor="address" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.address}</label>
                     <input type="text" id="address" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.address} />
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="city" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.city}</label>
                     <input type="text" id="city" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.city} />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="zip" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.postalCode}</label>
-                    <input type="text" id="zip" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="20000" />
                   </div>
                 </div>
               </div>
