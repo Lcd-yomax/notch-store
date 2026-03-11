@@ -17,8 +17,9 @@ export default function Checkout() {
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Checkout Form */}
-            <div className="lg:col-span-2 flex flex-col gap-6">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+            <div className="lg:col-span-2 flex flex-col gap-10">
+              {/* Informations personnelles */}
+              <div>
                 <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">person</span>
                   {t.checkout.personalInfo}
@@ -26,24 +27,32 @@ export default function Checkout() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="firstName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.firstName}</label>
-                    <input type="text" id="firstName" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.firstName} />
+                    <input type="text" id="firstName" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.firstName} />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="lastName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.lastName}</label>
-                    <input type="text" id="lastName" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.lastName} />
+                    <input type="text" id="lastName" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.lastName} />
                   </div>
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="email" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.email}</label>
-                    <input type="email" id="email" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="votre@email.com" />
+                    <input type="email" id="email" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="votre@email.com" />
                   </div>
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="phone" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.phone}</label>
-                    <input type="tel" id="phone" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="+212 6 XX XX XX XX" />
+                    <input 
+                      type="tel" 
+                      id="phone" 
+                      pattern="^0[678][0-9]{8}$"
+                      title="Le numéro doit commencer par 06, 07 ou 08 et contenir 10 chiffres (ex: 0612345678)"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" 
+                      placeholder="06 XX XX XX XX" 
+                    />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+              {/* Adresse de livraison */}
+              <div>
                 <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">local_shipping</span>
                   {t.checkout.shippingAddress}
@@ -51,20 +60,21 @@ export default function Checkout() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="address" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.address}</label>
-                    <input type="text" id="address" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.address} />
+                    <input type="text" id="address" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.address} />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="city" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.city}</label>
-                    <input type="text" id="city" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.city} />
+                    <input type="text" id="city" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.city} />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="zip" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.postalCode}</label>
-                    <input type="text" id="zip" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="20000" />
+                    <input type="text" id="zip" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="20000" />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+              {/* Méthode de paiement */}
+              <div>
                 <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">payments</span>
                   {t.checkout.paymentMethod}
@@ -77,14 +87,6 @@ export default function Checkout() {
                       <span className="text-sm text-slate-500">{t.checkout.codDesc}</span>
                     </div>
                     <span className="material-symbols-outlined ml-auto text-primary text-3xl">money</span>
-                  </label>
-                  <label className="flex items-center gap-4 p-4 border border-slate-200 dark:border-slate-700 hover:border-primary/50 rounded-xl cursor-pointer transition-colors opacity-50">
-                    <input type="radio" name="payment" value="card" className="w-5 h-5 text-primary focus:ring-primary" disabled />
-                    <div className="flex flex-col">
-                      <span className="font-bold text-slate-900 dark:text-white">{t.checkout.creditCard} ({t.checkout.comingSoon})</span>
-                      <span className="text-sm text-slate-500">{t.checkout.creditCardDesc}</span>
-                    </div>
-                    <span className="material-symbols-outlined ml-auto text-slate-400 text-3xl">credit_card</span>
                   </label>
                 </div>
               </div>

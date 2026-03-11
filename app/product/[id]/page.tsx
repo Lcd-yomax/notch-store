@@ -192,6 +192,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       <input 
                         type="tel" 
                         required
+                        pattern="^0[678][0-9]{8}$"
+                        title="Le numéro doit commencer par 06, 07 ou 08 et contenir 10 chiffres (ex: 0612345678)"
                         value={orderPhone}
                         onChange={(e) => setOrderPhone(e.target.value)}
                         className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
