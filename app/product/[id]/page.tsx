@@ -24,6 +24,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [orderAddress, setOrderAddress] = useState('');
   const [orderCity, setOrderCity] = useState('');
   const [orderPhone, setOrderPhone] = useState('');
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,15 +115,19 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Product Images */}
               <div className="flex flex-col gap-4">
-                <div className="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center p-8 border border-slate-200 dark:border-slate-700">
+                <div className="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-200 dark:border-slate-700">
                   <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-sm font-black px-4 py-2 rounded-full shadow-lg">
                     -{product.discount}%
                   </div>
-                  <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${product.images[0]}')` }}></div>
+                  <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${product.images[activeImageIndex]}')` }}></div>
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                   {product.images.map((img, idx) => (
-                    <button key={idx} className={`relative aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border-2 ${idx === 0 ? 'border-primary' : 'border-transparent'} hover:border-primary/50 transition-colors p-2`}>
+                    <button 
+                      key={idx} 
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border-2 ${idx === activeImageIndex ? 'border-primary' : 'border-transparent'} hover:border-primary/50 transition-colors p-2`}
+                    >
                       <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${img}')` }}></div>
                     </button>
                   ))}
@@ -156,26 +161,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{product.originalPrice} DH</span>
                 </div>
 
-                <div className="mb-8">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{t.product.description}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {product.description}
-                  </p>
-                </div>
-
-                <div className="mb-10">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">{t.product.features}</h3>
-                  <ul className="space-y-3">
-                    {product.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-slate-600 dark:text-slate-400">
-                        <span className="material-symbols-outlined text-primary mt-0.5 text-xl">check</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <form onSubmit={handleOrderSubmit} className="mt-auto flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <form onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.fullName || 'Nom complet'}</label>
@@ -225,8 +211,27 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     {t.product.orderNow || 'Commander'}
                   </button>
                 </form>
-                
-                <div className="mt-6 flex items-center justify-center gap-6 text-sm font-medium text-slate-500">
+
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{t.product.description}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {product.description}
+                  </p>
+                </div>
+
+                <div className="mb-10">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">{t.product.features}</h3>
+                  <ul className="space-y-3">
+                    {product.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-slate-600 dark:text-slate-400">
+                        <span className="material-symbols-outlined text-primary mt-0.5 text-xl">check</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-auto pt-6 flex items-center justify-center gap-6 text-sm font-medium text-slate-500">
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-slate-400">local_shipping</span>
                     {t.product.freeShipping}
