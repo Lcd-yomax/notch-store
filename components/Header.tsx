@@ -24,8 +24,20 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
   return (
     <>
       {showPromo && (
-        <div className="bg-slate-900 text-white text-center py-2.5 px-4 text-sm font-bold tracking-wide">
-          {t.header.promo}
+        <div className="bg-slate-900 text-white py-2.5 text-sm font-bold tracking-wide overflow-hidden">
+          <div className="animate-marquee flex whitespace-nowrap w-max">
+            {/* We render the items twice to create the seamless infinite loop */}
+            {[...Array(2)].map((_, loopIdx) => (
+              <div key={loopIdx} className="flex items-center">
+                {(t.header.promoItems || [t.header.promo]).map((item: string, idx: number) => (
+                  <span key={idx} className="flex items-center">
+                    <span className="px-8 lg:px-12">{item}</span>
+                    <span className="text-primary text-xs">✦</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       )}
       <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">

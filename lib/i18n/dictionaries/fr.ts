@@ -1,6 +1,12 @@
 export const fr = {
   header: {
     promo: "LIVRAISON GRATUITE PARTOUT AU MAROC POUR TOUTE COMMANDE SUPÉRIEURE À 300 DH",
+    promoItems: [
+      "🔥 LIVRAISON GRATUITE PARTOUT AU MAROC DÈS 300 DH",
+      "⚡ EXPÉDITION RAPIDE EN 24/48H",
+      "💳 PAIEMENT SÉCURISÉ À LA LIVRAISON (COD)",
+      "🛡️ GARANTIE JUSQU'À 1 AN SUR NOS PRODUITS"
+    ],
     home: "Accueil",
     shop: "Boutique",
     categories: "Catégories",
