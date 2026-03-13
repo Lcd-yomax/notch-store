@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { use } from 'react';
+import { use, useState, useMemo } from 'react';
 import { useCart } from '@/lib/CartContext';
 import { shopProducts } from '@/lib/dummyData';
 
@@ -33,6 +33,71 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
     return { ...p, name: typeof currentName === 'string' ? currentName : p.nameKey };
   });
 
+  // Filter States
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [inStockOnly, setInStockOnly] = useState<boolean>(false);
+  const [outOfStockOnly, setOutOfStockOnly] = useState<boolean>(false);
+  const [sortOrder, setSortOrder] = useState<string>('popular');
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+  // Filter and Sort Logic
+  const filteredProducts = useMemo(() => {
+    // First map to category
+    let result = products.filter(p => p.category === id);
+
+    if (selectedBrands.length > 0) {
+      result = result.filter(p => selectedBrands.includes(p.brand || ''));
+    }
+
+    if (minPrice) {
+      result = result.filter(p => p.price >= Number(minPrice));
+    }
+
+    if (maxPrice) {
+      result = result.filter(p => p.price <= Number(maxPrice));
+    }
+
+    if (inStockOnly && !outOfStockOnly) {
+      result = result.filter(p => p.inStock);
+    } else if (outOfStockOnly && !inStockOnly) {
+      result = result.filter(p => !p.inStock);
+    }
+
+    switch (sortOrder) {
+      case 'price-low':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'newest':
+        result.reverse();
+        break;
+      case 'popular':
+      default:
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+    }
+
+    return result;
+  }, [products, id, selectedBrands, minPrice, maxPrice, inStockOnly, outOfStockOnly, sortOrder]);
+
+  const handleBrandChange = (brand: string) => {
+    setSelectedBrands(prev => 
+      prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
+    );
+  };
+
+  const clearFilters = () => {
+    setSelectedBrands([]);
+    setMinPrice('');
+    setMaxPrice('');
+    setInStockOnly(false);
+    setOutOfStockOnly(false);
+  };
+
   return (
     <>
       <Header />
@@ -53,13 +118,20 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
               <p className="text-slate-500 text-lg font-medium">{t.shop.desc}</p>
             </div>
             <div className="flex items-center gap-4">
-              <select className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer">
+              <select 
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+              >
                 <option value="popular">{t.shop.sort.popular}</option>
                 <option value="newest">{t.shop.sort.newest}</option>
                 <option value="price-low">{t.shop.sort.priceLow}</option>
                 <option value="price-high">{t.shop.sort.priceHigh}</option>
               </select>
-              <button className="md:hidden w-11 h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-300">
+              <button 
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="md:hidden w-11 h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-300"
+              >
                 <span className="material-symbols-outlined">tune</span>
               </button>
             </div>
@@ -71,33 +143,44 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sticky top-24">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-bold text-slate-900 dark:text-white text-lg">{t.shop.filters.title}</h3>
-                  <button className="text-sm font-medium text-primary hover:underline">{t.shop.filters.reset}</button>
+                  <button onClick={clearFilters} className="text-sm font-medium text-primary hover:underline">{t.shop.filters.reset}</button>
                 </div>
                 
                 <div className="mb-8">
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.price}</h4>
                   <div className="flex items-center gap-2">
-                    <input type="number" placeholder="Min" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
+                    <input 
+                      type="number" 
+                      placeholder={t.shop.filters.min} 
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" 
+                    />
                     <span className="text-slate-400">-</span>
-                    <input type="number" placeholder="Max" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
+                    <input 
+                      type="number" 
+                      placeholder={t.shop.filters.max} 
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" 
+                    />
                   </div>
                 </div>
 
                 <div className="mb-8">
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.brand}</h4>
                   <div className="flex flex-col gap-3">
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" defaultChecked />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Notch (15)</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Anker (8)</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Baseus (12)</span>
-                    </label>
+                    {['Notch', 'Anker', 'Baseus'].map((brand) => (
+                      <label key={brand} className="flex items-center gap-3 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedBrands.includes(brand)}
+                          onChange={() => handleBrandChange(brand)}
+                          className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                        />
+                        <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{brand}</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
 
@@ -105,12 +188,22 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.availability}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" defaultChecked />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.inStock} (32)</span>
+                      <input 
+                        type="checkbox" 
+                        checked={inStockOnly}
+                        onChange={(e) => setInStockOnly(e.target.checked)}
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                      />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.inStock}</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.outOfStock} (3)</span>
+                      <input 
+                        type="checkbox" 
+                        checked={outOfStockOnly}
+                        onChange={(e) => setOutOfStockOnly(e.target.checked)}
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                      />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.outOfStock}</span>
                     </label>
                   </div>
                 </div>
@@ -120,8 +213,18 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
             {/* Product Grid */}
             <div className="flex-grow">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                {filteredProducts.length === 0 ? (
+                  <div className="col-span-full py-12 flex flex-col items-center justify-center text-center">
+                    <span className="material-symbols-outlined text-6xl text-slate-200 dark:text-slate-700 mb-4">search_off</span>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Aucun produit trouvé</h3>
+                    <p className="text-slate-500 max-w-md">Essayez de modifier vos filtres pour trouver ce que vous cherchez.</p>
+                    <button onClick={clearFilters} className="mt-6 px-6 py-2 bg-primary text-white rounded-xl font-medium hover:bg-amber-500 transition-colors">
+                      Réinitialiser les filtres
+                    </button>
+                  </div>
+                ) : (
+                  filteredProducts.map((product) => (
+                    <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
                     {product.discount > 0 && (
                       <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
                         -{product.discount}%
@@ -168,7 +271,7 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                       </button>
                     </div>
                   </div>
-                ))}
+                )))}
               </div>
               
               {/* Pagination */}

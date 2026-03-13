@@ -151,11 +151,11 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             <span className="text-slate-900 dark:text-white truncate max-w-[200px] sm:max-w-none">{product.name}</span>
           </nav>
 
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 lg:p-10 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 lg:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Product Images */}
               <div className="flex flex-col gap-4">
-                <div className="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                <div className="relative w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center">
                   <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-sm font-black px-4 py-2 rounded-full shadow-lg">
                     -{product.discount}%
                   </div>
@@ -196,12 +196,12 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   </div>
                 </div>
 
-                <div className="flex items-end gap-4 mb-8 pb-8 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-end gap-4 mb-8 pb-8">
                   <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">{product.price} <span className="text-2xl">DH</span></span>
                   <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{product.originalPrice} DH</span>
                 </div>
 
-                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.fullName || 'Nom complet'}</label>
@@ -306,7 +306,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
           </div>
 
           {/* Reviews Section */}
-          <div className="mt-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 lg:p-10 shadow-sm">
+          <div className="mt-16 bg-white dark:bg-slate-900 rounded-3xl p-6 lg:p-10">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">{t.reviewsSection.title}</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Reviews List */}
@@ -416,7 +416,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           <div className="hidden sm:flex items-center gap-4 flex-1">
             <div 
-              className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg bg-cover bg-center border border-slate-200 dark:border-slate-700" 
+              className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg bg-cover bg-center" 
               style={{ backgroundImage: `url('${product.images[0]}')` }}
             ></div>
             <div className="flex flex-col">
