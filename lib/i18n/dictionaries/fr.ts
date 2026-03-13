@@ -216,7 +216,7 @@ export const fr = {
   },
   product: {
     addToCart: "Ajouter au panier",
-    orderNow: "Commander directement",
+    orderNow: "Acheter maintenant",
     orderForm: {
       fullName: "Nom complet",
       address: "Adresse complète",
@@ -312,6 +312,8 @@ export const fr = {
     submit: "Envoyer l'avis",
     noReviews: "Aucun avis pour le moment. Soyez le premier à donner votre avis !",
     basedOn: "Basé sur",
-    reviewsCount: "avis"
+    reviewsCount: "avis",
+    successTitle: "Merci pour votre avis !",
+    successMessage: "Votre avis a été soumis avec succès et sera visible sous peu."
   }
 };

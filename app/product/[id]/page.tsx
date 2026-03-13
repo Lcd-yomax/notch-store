@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
-import { use, useState } from 'react';
+import { use, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
@@ -13,13 +13,50 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const { t } = useLanguage();
   const { addToCart } = useCart();
   const router = useRouter();
-  
+
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [comment, setComment] = useState('');
   const [image, setImage] = useState<string | null>(null);
+  const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
+
+  // Sticky button state and refs
+  const formRef = useRef<HTMLFormElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const [showStickyButton, setShowStickyButton] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Show sticky button if the trigger element is above the viewport (user scrolled past the form)
+        // boundingClientRect.top < 0 means the element's top edge is above the top of the window.
+        setShowStickyButton(entry.boundingClientRect.top < 0 && !entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    if (triggerRef.current) {
+      observer.observe(triggerRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToForm = () => {
+    if (formRef.current) {
+      // Scroll slightly above the form to ensure it's not hidden under any fixed headers
+      const y = formRef.current.getBoundingClientRect().top + window.scrollY - 120;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      
+      // Focus the first input (Nom complet) after a small delay to let scrolling finish
+      setTimeout(() => {
+        const firstInput = formRef.current?.querySelector('input');
+        if (firstInput) (firstInput as HTMLElement).focus();
+      }, 600);
+    }
+  };
 
   // Order form state
   const [orderName, setOrderName] = useState('');
@@ -78,6 +115,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
     setComment('');
     setRating(5);
     setImage(null);
+    setIsReviewSubmitted(true);
   };
 
   // Mock product data based on ID
@@ -125,8 +163,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                   {product.images.map((img, idx) => (
-                    <button 
-                      key={idx} 
+                    <button
+                      key={idx}
                       onClick={() => setActiveImageIndex(idx)}
                       className={`relative aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border-2 ${idx === activeImageIndex ? 'border-primary' : 'border-transparent'} hover:border-primary/50 transition-colors p-2`}
                     >
@@ -163,12 +201,12 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{product.originalPrice} DH</span>
                 </div>
 
-                <form onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.fullName || 'Nom complet'}</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         required
                         value={orderName}
                         onChange={(e) => setOrderName(e.target.value)}
@@ -177,8 +215,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     </div>
                     <div>
                       <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.phone || 'Téléphone'}</label>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         required
                         pattern="^0[678][0-9]{8}$"
                         title="Le numéro doit commencer par 06, 07 ou 08 et contenir 10 chiffres (ex: 0612345678)"
@@ -190,8 +228,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.address || 'Adresse'}</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       required
                       value={orderAddress}
                       onChange={(e) => setOrderAddress(e.target.value)}
@@ -200,17 +238,21 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.city || 'Ville'}</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       required
                       value={orderCity}
                       onChange={(e) => setOrderCity(e.target.value)}
                       className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                   </div>
-                  <div className="flex gap-4 mt-2">
-                    <button 
-                      type="button" 
+                  <div className="flex flex-col sm:flex-row gap-4 mt-2">
+                    <button type="submit" className="flex-1 w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3 cursor-pointer">
+                      <span className="material-symbols-outlined">local_shipping</span>
+                      {t.product.orderNow || 'Acheter maintenant'}
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => {
                         addToCart({
                           id: product.id,
@@ -220,17 +262,15 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                           image: product.images[0]
                         });
                       }}
-                      className="flex-1 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 group/btn"
+                      className="flex-1 w-full bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 group/btn cursor-pointer"
                     >
                       <span className="material-symbols-outlined group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                       {t.product.addToCart || 'Ajouter au panier'}
                     </button>
-                    <button type="submit" className="flex-1 bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3">
-                      <span className="material-symbols-outlined">local_shipping</span>
-                      {t.product.orderNow || 'Commander'}
-                    </button>
                   </div>
                 </form>
+                {/* Scroll Trigger for Sticky Button */}
+                <div ref={triggerRef} className="h-1 w-full" aria-hidden="true" />
 
                 <div className="mb-8">
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{t.product.description}</h3>
@@ -282,7 +322,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                           <span className="text-sm text-slate-500">{review.date}</span>
                         </div>
                         <div className="flex text-amber-400 mb-3">
-                          {[1,2,3,4,5].map(star => (
+                          {[1, 2, 3, 4, 5].map(star => (
                             <span key={star} className="material-symbols-outlined text-sm" style={{ fontVariationSettings: star <= review.rating ? "'FILL' 1" : "'FILL' 0" }}>star</span>
                           ))}
                         </div>
@@ -297,16 +337,32 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
               </div>
 
               {/* Leave a Review Form */}
-              <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t.reviewsSection.leaveReview}</h3>
-                <form onSubmit={handleSubmitReview} className="flex flex-col gap-4">
+              <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl relative overflow-hidden">
+                {isReviewSubmitted ? (
+                  <div className="flex flex-col items-center justify-center text-center py-12 animate-in fade-in zoom-in duration-500">
+                    <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(16,185,129,0.3)]">
+                      <span className="material-symbols-outlined text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">{t.reviewsSection.successTitle || "Merci !"}</h3>
+                    <p className="text-slate-600 dark:text-slate-400 max-w-[300px] mb-8">{t.reviewsSection.successMessage || "Votre avis a été soumis avec succès."}</p>
+                    <button 
+                      onClick={() => setIsReviewSubmitted(false)}
+                      className="px-6 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold transition-colors cursor-pointer"
+                    >
+                      Ajouter un autre avis
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t.reviewsSection.leaveReview}</h3>
+                    <form onSubmit={handleSubmitReview} className="flex flex-col gap-4">
                   {/* Rating */}
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.rating}</label>
                     <div className="flex gap-1">
-                      {[1,2,3,4,5].map(star => (
-                        <button 
-                          type="button" 
+                      {[1, 2, 3, 4, 5].map(star => (
+                        <button
+                          type="button"
                           key={star}
                           onClick={() => setRating(star)}
                           onMouseEnter={() => setHoverRating(star)}
@@ -340,16 +396,44 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     <input type="file" id="reviewImage" accept="image/*" onChange={handleImageChange} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
                   </div>
 
-                  <button type="submit" className="mt-2 w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.5)]">
+                  <button type="submit" className="mt-2 w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.5)] cursor-pointer">
                     {t.reviewsSection.submit}
                   </button>
                 </form>
+                </>
+                )}
               </div>
             </div>
           </div>
         </div>
       </main>
       <Footer />
+
+      {/* Sticky Bottom Buy Button */}
+      <div 
+        className={`fixed bottom-0 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-4 z-50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.3)] ${showStickyButton ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}
+      >
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+          <div className="hidden sm:flex items-center gap-4 flex-1">
+            <div 
+              className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg bg-cover bg-center border border-slate-200 dark:border-slate-700" 
+              style={{ backgroundImage: `url('${product.images[0]}')` }}
+            ></div>
+            <div className="flex flex-col">
+              <span className="text-sm text-slate-900 dark:text-white font-bold truncate max-w-[300px] lg:max-w-[500px]">{product.name}</span>
+              <span className="text-sm font-black text-primary">{product.price} DH <span className="text-xs text-slate-500 line-through font-medium ml-1">{product.originalPrice} DH</span></span>
+            </div>
+          </div>
+          <button 
+            type="button"
+            onClick={scrollToForm}
+            className="flex-1 sm:flex-none w-full sm:w-auto bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.4)] flex items-center justify-center gap-3 cursor-pointer group"
+          >
+            <span className="material-symbols-outlined group-hover:-translate-y-1 transition-transform duration-300">local_shipping</span>
+            {t.product.orderNow || 'Acheter maintenant'}
+          </button>
+        </div>
+      </div>
     </>
   );
 }

@@ -4,28 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-const featuredProducts = [
-  {
-    id: 'f1',
-    image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'f2',
-    image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=400&auto=format&fit=crop'
-  },
-  {
-    id: 'f3',
-    image: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=400&auto=format&fit=crop'
-  },
-  {
-    id: 'f4',
-    image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=400&auto=format&fit=crop'
-  },
-  {
-    id: 'f5',
-    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=400&auto=format&fit=crop'
-  }
-];
+import { featuredProducts } from '@/lib/dummyData';
 
 export default function FeaturedProducts() {
   const { t } = useLanguage();

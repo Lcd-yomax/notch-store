@@ -9,6 +9,7 @@ import HeroSlider from '@/components/HeroSlider';
 import CategorySlider from '@/components/CategorySlider';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import BestSellingProducts from '@/components/BestSellingProducts';
+import { shopProducts } from '@/lib/dummyData';
 
 export default function Home() {
   const { t } = useLanguage();
@@ -68,185 +69,72 @@ export default function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Product 1 */}
-            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-              <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
-                -30%
-              </div>
-              <Link href="/product/1" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 group-hover:opacity-0" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD')" }}></div>
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-110" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=800&auto=format&fit=crop')" }}></div>
-              </Link>
-              <div className="p-6 flex flex-col flex-grow gap-4">
-                <div>
-                  <Link href="/product/1">
-                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">Chargeur NOTCH 65W GaN Ultra Rapide</h3>
-                  </Link>
-                </div>
-                <div className="flex flex-col gap-2 mt-auto">
-                  <div className="flex items-end gap-3">
-                    <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">249 DH</span>
-                    <span className="text-slate-400 line-through text-sm font-medium mb-1.5">349 DH</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.8</span>
-                    <span className="text-slate-400 text-sm">(124)</span>
-                  </div>
-                </div>
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    addToCart({
-                      id: '1',
-                      name: 'Écouteurs Sans Fil NOTCH Pro',
-                      price: 249,
-                      quantity: 1,
-                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD'
-                    });
-                  }}
-                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                  {t.home.buy}
-                </button>
-              </div>
-            </div>
+            {shopProducts.slice(0, 4).map((product) => {
+              // Resolve localized names for the products
+              const keys = product.nameKey.split('.');
+              let currentName: any = t;
+              for (const key of keys) {
+                if (currentName && currentName[key] !== undefined) {
+                  currentName = currentName[key];
+                } else {
+                  currentName = product.nameKey;
+                  break;
+                }
+              }
+              const productName = typeof currentName === 'string' ? currentName : product.nameKey;
 
-            {/* Product 2 */}
-            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-              <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
-                -20%
-              </div>
-              <Link href="/product/2" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 group-hover:opacity-0" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb')" }}></div>
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-110" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=800&auto=format&fit=crop')" }}></div>
-              </Link>
-              <div className="p-6 flex flex-col flex-grow gap-4">
-                <div>
-                  <Link href="/product/2">
-                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">Powerbank NOTCH 20000mAh Fast Charge</h3>
+              return (
+                <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                  {product.discount > 0 && (
+                    <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
+                      -{product.discount}%
+                    </div>
+                  )}
+                  <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
+                    <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 group-hover:opacity-0" style={{ backgroundImage: `url('${product.image}')` }}></div>
+                    {product.hoverImage && (
+                      <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-110" style={{ backgroundImage: `url('${product.hoverImage}')` }}></div>
+                    )}
                   </Link>
-                </div>
-                <div className="flex flex-col gap-2 mt-auto">
-                  <div className="flex items-end gap-3">
-                    <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">399 DH</span>
-                    <span className="text-slate-400 line-through text-sm font-medium mb-1.5">499 DH</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.9</span>
-                    <span className="text-slate-400 text-sm">(89)</span>
-                  </div>
-                </div>
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    addToCart({
-                      id: '2',
-                      name: 'Powerbank NOTCH 20000mAh Fast Charge',
-                      price: 399,
-                      quantity: 1,
-                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb'
-                    });
-                  }}
-                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                  {t.home.buy}
-                </button>
-              </div>
-            </div>
-
-            {/* Product 3 */}
-            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-              <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
-                -35%
-              </div>
-              <Link href="/product/3" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 group-hover:opacity-0" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D')" }}></div>
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-110" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1583863788434-e58a36330cf0?q=80&w=800&auto=format&fit=crop')" }}></div>
-              </Link>
-              <div className="p-6 flex flex-col flex-grow gap-4">
-                <div>
-                  <Link href="/product/3">
-                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">Câble Type-C NOTCH 100W Tressé</h3>
-                  </Link>
-                </div>
-                <div className="flex flex-col gap-2 mt-auto">
-                  <div className="flex items-end gap-3">
-                    <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">99 DH</span>
-                    <span className="text-slate-400 line-through text-sm font-medium mb-1.5">149 DH</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.7</span>
-                    <span className="text-slate-400 text-sm">(210)</span>
+                  <div className="p-6 flex flex-col flex-grow gap-4">
+                    <div>
+                      <Link href={`/product/${product.id}`}>
+                        <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{productName}</h3>
+                      </Link>
+                    </div>
+                    <div className="flex flex-col gap-2 mt-auto">
+                      <div className="flex items-end gap-3">
+                        <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{product.price} DH</span>
+                        {product.originalPrice && (
+                          <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{product.originalPrice} DH</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                        <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">{product.rating}</span>
+                        <span className="text-slate-400 text-sm">({product.reviews})</span>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addToCart({
+                          id: product.id,
+                          name: productName,
+                          price: product.price,
+                          quantity: 1,
+                          image: product.image
+                        });
+                      }}
+                      className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                      {t.home.buy}
+                    </button>
                   </div>
                 </div>
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    addToCart({
-                      id: '3',
-                      name: 'Câble Type-C NOTCH 100W Tressé',
-                      price: 99,
-                      quantity: 1,
-                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D'
-                    });
-                  }}
-                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                  {t.home.buy}
-                </button>
-              </div>
-            </div>
-
-            {/* Product 4 */}
-            <div className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-              <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
-                -25%
-              </div>
-              <Link href="/product/4" className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 group-hover:opacity-0" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWlut6sOSGm2cooiTBkNpZBCKlJPcaYL2kS1vUVC73ilSi66yIYSH8whcEQrDUecXT8m3bkJo_3qNXtyRG9K84gZ00ZlviqjPTiKW8p4PV_Ona3yHeGGYcp8AEqnTChusAHJmLoGFvWNHX8pgfOKHBBDCWqqeuaMDj2dWPCws7xdsALaj6q2PpZcMNnDk1AnGoK1iJ7vQUAMQYSyRNRDTst0ip7jgD8G3M_9V-m9FlQK6xeqZ0wVquvBuTbbfPaqr926BMEwROMkAQ')" }}></div>
-                <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-110" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=800&auto=format&fit=crop')" }}></div>
-              </Link>
-              <div className="p-6 flex flex-col flex-grow gap-4">
-                <div>
-                  <Link href="/product/4">
-                    <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">Écouteurs Sans Fil NOTCH Pro ANC</h3>
-                  </Link>
-                </div>
-                <div className="flex flex-col gap-2 mt-auto">
-                  <div className="flex items-end gap-3">
-                    <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">299 DH</span>
-                    <span className="text-slate-400 line-through text-sm font-medium mb-1.5">399 DH</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.9</span>
-                    <span className="text-slate-400 text-sm">(56)</span>
-                  </div>
-                </div>
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    addToCart({
-                      id: '4',
-                      name: 'Chargeur Mural NOTCH 65W GaN',
-                      price: 299,
-                      quantity: 1,
-                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWlut6sOSGm2cooiTBkNpZBCKlJPcaYL2kS1vUVC73ilSi66yIYSH8whcEQrDUecXT8m3bkJo_3qNXtyRG9K84gZ00ZlviqjPTiKW8p4PV_Ona3yHeGGYcp8AEqnTChusAHJmLoGFvWNHX8pgfOKHBBDCWqqeuaMDj2dWPCws7xdsALaj6q2PpZcMNnDk1AnGoK1iJ7vQUAMQYSyRNRDTst0ip7jgD8G3M_9V-m9FlQK6xeqZ0wVquvBuTbbfPaqr926BMEwROMkAQ'
-                    });
-                  }}
-                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                  {t.home.buy}
-                </button>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </section>
 

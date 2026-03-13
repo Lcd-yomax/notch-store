@@ -4,38 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-const slides = [
-  {
-    id: 1,
-    badge: "home.limitedOffer",
-    title1: "home.heroTitle1",
-    title2: "home.heroTitle2",
-    desc: "home.heroDesc",
-    buttonText: "home.buyNow",
-    buttonLink: "/product/1",
-    image: "https://images.unsplash.com/photo-1555529771-835f59bfc50c?q=80&w=1920&auto=format&fit=crop",
-  },
-  {
-    id: 2,
-    badge: "home.newCollection",
-    title1: "home.heroTitle3",
-    title2: "home.heroTitle4",
-    desc: "home.heroDesc2",
-    buttonText: "home.discover",
-    buttonLink: "/categories",
-    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=1920&auto=format&fit=crop",
-  },
-  {
-    id: 3,
-    badge: "home.specialPromo",
-    title1: "home.heroTitle5",
-    title2: "home.heroTitle6",
-    desc: "home.heroDesc3",
-    buttonText: "home.shopNow",
-    buttonLink: "/categories",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1920&auto=format&fit=crop",
-  }
-];
+import { heroSlides as slides } from '@/lib/dummyData';
 
 export default function HeroSlider() {
   const { t, language } = useLanguage();

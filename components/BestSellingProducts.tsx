@@ -4,36 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-const bestSellingProducts = [
-  {
-    id: 'bs1',
-    rating: 4.8,
-    reviews: 124,
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop',
-    badge: 'bestSeller'
-  },
-  {
-    id: 'bs2',
-    rating: 4.6,
-    reviews: 89,
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop',
-    badge: 'popular'
-  },
-  {
-    id: 'bs3',
-    rating: 4.9,
-    reviews: 56,
-    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800&auto=format&fit=crop',
-    badge: 'sale'
-  },
-  {
-    id: 'bs4',
-    rating: 4.7,
-    reviews: 210,
-    image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop',
-    badge: null
-  }
-];
+import { bestSellingProducts } from '@/lib/dummyData';
 
 export default function BestSellingProducts() {
   const { t } = useLanguage();

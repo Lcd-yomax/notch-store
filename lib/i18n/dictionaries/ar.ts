@@ -312,6 +312,8 @@ export const ar = {
     submit: "إرسال التقييم",
     noReviews: "لا توجد تقييمات حتى الآن. كن أول من يقيم!",
     basedOn: "بناءً على",
-    reviewsCount: "تقييمات"
+    reviewsCount: "تقييمات",
+    successTitle: "شكراً على تقييمك!",
+    successMessage: "تم تقديم تقييمك بنجاح وسيكون مرئياً قريباً."
   }
 };

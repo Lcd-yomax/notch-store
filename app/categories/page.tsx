@@ -4,54 +4,29 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { categoriesData } from '@/lib/dummyData';
 
 export default function Categories() {
   const { t } = useLanguage();
 
-  const categories = [
-    {
-      id: 'power-banks',
-      name: t.categories.items.powerBanks.name,
-      description: t.categories.items.powerBanks.desc,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDcjE3d3CjD6i2E0XIvPZUVdgE0O5PvMnAWj45MK19UAOQNXZCfVbWvXttS1Ni6zStfyVB4pU_J4P7j2FRdQeYflGq_D-I5wlId8b_z8O-T3TJogBvRN6S9L-M4BhlgAL8Yfp1wO6cf8ko9rYoZu11Hoger7FxqEJCM1qjgIziwjTVsOJYFJM5c0rPqg75KmGYS-LFSYjfVl4b67urTeW2g9NacFd6xhrNrZINHeYk3gCWw0Xf9Wtekj8QcsNnU2ZKA-ikHRUzcsAfG',
-      itemCount: 15
-    },
-    {
-      id: 'chargeurs',
-      name: t.categories.items.chargeurs.name,
-      description: t.categories.items.chargeurs.desc,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD',
-      itemCount: 24
-    },
-    {
-      id: 'cables',
-      name: t.categories.items.cables.name,
-      description: t.categories.items.cables.desc,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D',
-      itemCount: 42
-    },
-    {
-      id: 'audio',
-      name: t.categories.items.audio.name,
-      description: t.categories.items.audio.desc,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWlut6sOSGm2cooiTBkNpZBCKlJPcaYL2kS1vUVC73ilSi66yIYSH8whcEQrDUecXT8m3bkJo_3qNXtyRG9K84gZ00ZlviqjPTiKW8p4PV_Ona3yHeGGYcp8AEqnTChusAHJmLoGFvWNHX8pgfOKHBBDCWqqeuaMDj2dWPCws7xdsALaj6q2PpZcMNnDk1AnGoK1iJ7vQUAMQYSyRNRDTst0ip7jgD8G3M_9V-m9FlQK6xeqZ0wVquvBuTbbfPaqr926BMEwROMkAQ',
-      itemCount: 18
-    },
-    {
-      id: 'accessoires-voiture',
-      name: t.categories.items.accessoiresVoiture.name,
-      description: t.categories.items.accessoiresVoiture.desc,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD',
-      itemCount: 12
-    },
-    {
-      id: 'protection',
-      name: t.categories.items.protection.name,
-      description: t.categories.items.protection.desc,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb',
-      itemCount: 56
-    }
-  ];
+  const categories = categoriesData.map((c) => {
+    // Determine translated name and description
+    const getTranslation = (keyPath: string) => {
+      const keys = keyPath.split('.');
+      let current: any = t;
+      for (const key of keys) {
+        if (current && current[key] !== undefined) current = current[key];
+        else return keyPath;
+      }
+      return typeof current === 'string' ? current : keyPath;
+    };
+
+    return {
+      ...c,
+      name: getTranslation(c.nameKey),
+      description: getTranslation(c.descKey),
+    };
+  });
 
   return (
     <>
