@@ -10,8 +10,7 @@ export default function Cart() {
   const { t } = useLanguage();
   const { items: cartItems, removeFromCart, updateQuantity, subtotal } = useCart();
 
-  const shipping = 30; // Fixed shipping cost
-  const total = subtotal + shipping;
+  const total = subtotal;
 
   return (
     <>
@@ -77,10 +76,6 @@ export default function Cart() {
                   <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 font-medium">
                     <span>{t.cart.subtotal}</span>
                     <span className="text-slate-900 dark:text-white font-bold">{subtotal} DH</span>
-                  </div>
-                  <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 font-medium">
-                    <span>{t.cart.shipping}</span>
-                    <span className="text-slate-900 dark:text-white font-bold">{shipping} DH</span>
                   </div>
                 </div>
 

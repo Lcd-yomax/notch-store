@@ -4,9 +4,19 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useCart } from '@/lib/CartContext';
+import { useRouter } from 'next/navigation';
 
 export default function Checkout() {
   const { t } = useLanguage();
+  const { subtotal, totalItems, clearCart } = useCart();
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    clearCart();
+    router.push('/success');
+  };
 
   return (
     <>
@@ -15,7 +25,7 @@ export default function Checkout() {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-8">{t.checkout.title}</h1>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Checkout Form */}
             <div className="lg:col-span-2 flex flex-col gap-10">
               {/* Informations personnelles */}
@@ -27,13 +37,14 @@ export default function Checkout() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="fullName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.product.orderForm?.fullName || 'Nom complet'}</label>
-                    <input type="text" id="fullName" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.product.orderForm?.fullName || 'Nom complet'} />
+                    <input type="text" id="fullName" required className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.product.orderForm?.fullName || 'Nom complet'} />
                   </div>
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="phone" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.phone}</label>
                     <input 
                       type="tel" 
                       id="phone" 
+                      required
                       pattern="^0[678][0-9]{8}$"
                       title="Le numéro doit commencer par 06, 07 ou 08 et contenir 10 chiffres (ex: 0612345678)"
                       className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" 
@@ -52,11 +63,11 @@ export default function Checkout() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="address" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.address}</label>
-                    <input type="text" id="address" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.address} />
+                    <input type="text" id="address" required className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.address} />
                   </div>
                   <div className="flex flex-col gap-2 sm:col-span-2">
                     <label htmlFor="city" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.checkout.city}</label>
-                    <input type="text" id="city" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.city} />
+                    <input type="text" id="city" required className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder={t.checkout.city} />
                   </div>
                 </div>
               </div>
@@ -87,21 +98,17 @@ export default function Checkout() {
                 
                 <div className="flex flex-col gap-4 mb-6 border-b border-slate-200 dark:border-slate-800 pb-6">
                   <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 font-medium">
-                    <span>{t.cart.subtotal} (3 {t.checkout.items})</span>
-                    <span className="text-slate-900 dark:text-white font-bold">447 DH</span>
-                  </div>
-                  <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 font-medium">
-                    <span>{t.cart.shipping}</span>
-                    <span className="text-slate-900 dark:text-white font-bold">30 DH</span>
+                    <span>{t.cart.subtotal} ({totalItems} {t.checkout.items})</span>
+                    <span className="text-slate-900 dark:text-white font-bold">{subtotal} DH</span>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-end mb-8">
                   <span className="text-lg font-bold text-slate-900 dark:text-white">{t.cart.total}</span>
-                  <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">477 <span className="text-xl">DH</span></span>
+                  <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{subtotal} <span className="text-xl">DH</span></span>
                 </div>
 
-                <button className="w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3 mb-4">
+                <button type="submit" className="w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3 mb-4">
                   {t.checkout.confirmOrder}
                   <span className="material-symbols-outlined">check_circle</span>
                 </button>
@@ -112,7 +119,7 @@ export default function Checkout() {
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </main>
       <Footer />
