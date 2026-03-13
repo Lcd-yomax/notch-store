@@ -46,10 +46,9 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
             <span className="material-symbols-outlined text-primary text-2xl sm:text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
             <span className="text-xl sm:text-2xl font-black tracking-tighter text-slate-900 dark:text-white">Notch<span className="text-primary hidden sm:inline">Maroc</span></span>
           </Link>
-          {/* We added a margin-right auto to push the middle nav slightly left relative to the right-aligned icons. You can control the shift with marging right/left values. */}
+
           <nav className="hidden md:flex items-center justify-center flex-1 pr-12 lg:pr-24 gap-6 lg:gap-10">
             <Link href="/shop" className={`relative text-[15px] font-bold transition-colors ${pathname.startsWith('/shop') ? 'text-primary after:w-full' : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary after:w-0 hover:after:w-full'} after:content-[''] after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300`}>{t.header.shop}</Link>
-
             {/* Mega Menu Dropdown */}
             <div className="group relative h-full flex items-center">
               <Link href="/categories" className={`flex items-center gap-1 relative text-[15px] font-bold transition-colors py-6 ${pathname.startsWith('/categories') ? 'text-primary after:w-full' : 'text-slate-600 dark:text-slate-300 group-hover:text-primary dark:group-hover:text-primary after:w-0 group-hover:after:w-full'} after:content-[''] after:absolute after:bottom-4 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300`}>
