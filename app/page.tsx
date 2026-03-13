@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useCart } from '@/lib/CartContext';
 import HeroSlider from '@/components/HeroSlider';
 import CategorySlider from '@/components/CategorySlider';
 import FeaturedProducts from '@/components/FeaturedProducts';
@@ -11,6 +12,7 @@ import BestSellingProducts from '@/components/BestSellingProducts';
 
 export default function Home() {
   const { t } = useLanguage();
+  const { addToCart } = useCart();
 
   return (
     <>
@@ -92,7 +94,19 @@ export default function Home() {
                     <span className="text-slate-400 text-sm">(124)</span>
                   </div>
                 </div>
-                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart({
+                      id: '1',
+                      name: 'Écouteurs Sans Fil NOTCH Pro',
+                      price: 249,
+                      quantity: 1,
+                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD'
+                    });
+                  }}
+                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                >
                   <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                   {t.home.buy}
                 </button>
@@ -125,7 +139,19 @@ export default function Home() {
                     <span className="text-slate-400 text-sm">(89)</span>
                   </div>
                 </div>
-                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart({
+                      id: '2',
+                      name: 'Powerbank NOTCH 20000mAh Fast Charge',
+                      price: 399,
+                      quantity: 1,
+                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb'
+                    });
+                  }}
+                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                >
                   <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                   {t.home.buy}
                 </button>
@@ -154,11 +180,23 @@ export default function Home() {
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.6</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.7</span>
                     <span className="text-slate-400 text-sm">(210)</span>
                   </div>
                 </div>
-                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart({
+                      id: '3',
+                      name: 'Câble Type-C NOTCH 100W Tressé',
+                      price: 99,
+                      quantity: 1,
+                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D'
+                    });
+                  }}
+                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                >
                   <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                   {t.home.buy}
                 </button>
@@ -187,11 +225,23 @@ export default function Home() {
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.7</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">4.9</span>
                     <span className="text-slate-400 text-sm">(56)</span>
                   </div>
                 </div>
-                <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart({
+                      id: '4',
+                      name: 'Chargeur Mural NOTCH 65W GaN',
+                      price: 299,
+                      quantity: 1,
+                      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWlut6sOSGm2cooiTBkNpZBCKlJPcaYL2kS1vUVC73ilSi66yIYSH8whcEQrDUecXT8m3bkJo_3qNXtyRG9K84gZ00ZlviqjPTiKW8p4PV_Ona3yHeGGYcp8AEqnTChusAHJmLoGFvWNHX8pgfOKHBBDCWqqeuaMDj2dWPCws7xdsALaj6q2PpZcMNnDk1AnGoK1iJ7vQUAMQYSyRNRDTst0ip7jgD8G3M_9V-m9FlQK6xeqZ0wVquvBuTbbfPaqr926BMEwROMkAQ'
+                    });
+                  }}
+                  className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                >
                   <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                   {t.home.buy}
                 </button>

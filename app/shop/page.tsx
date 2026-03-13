@@ -4,9 +4,11 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useCart } from '@/lib/CartContext';
 
 export default function Shop() {
   const { t } = useLanguage();
+  const { addToCart } = useCart();
 
   const products = [
     {
@@ -247,7 +249,19 @@ export default function Shop() {
                           <span className="text-slate-400 text-sm">({product.reviews})</span>
                         </div>
                       </div>
-                      <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                      <button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addToCart({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            quantity: 1,
+                            image: product.image
+                          });
+                        }}
+                        className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                      >
                         <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                         {t.shop.buy}
                       </button>

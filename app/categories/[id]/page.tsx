@@ -5,10 +5,12 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { use } from 'react';
+import { useCart } from '@/lib/CartContext';
 
 export default function CategoryDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { t } = useLanguage();
+  const { addToCart } = useCart();
   
   // Try to get the translated category name if it exists, otherwise fallback to formatting the id
   const categoryKey = id.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
@@ -201,7 +203,19 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                           <span className="text-slate-400 text-sm">({product.reviews})</span>
                         </div>
                       </div>
-                      <button className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer">
+                      <button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addToCart({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            quantity: 1,
+                            image: product.image
+                          });
+                        }}
+                        className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                      >
                         <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                         {t.product.addToCart}
                       </button>

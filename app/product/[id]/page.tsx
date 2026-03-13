@@ -4,12 +4,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useCart } from '@/lib/CartContext';
 import { use, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { t } = useLanguage();
+  const { addToCart } = useCart();
   const router = useRouter();
   
   const [rating, setRating] = useState(5);
@@ -206,10 +208,28 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                   </div>
-                  <button type="submit" className="w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3 mt-2">
-                    <span className="material-symbols-outlined">local_shipping</span>
-                    {t.product.orderNow || 'Commander'}
-                  </button>
+                  <div className="flex gap-4 mt-2">
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        addToCart({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          quantity: 1,
+                          image: product.images[0]
+                        });
+                      }}
+                      className="flex-1 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 group/btn"
+                    >
+                      <span className="material-symbols-outlined group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                      {t.product.addToCart || 'Ajouter au panier'}
+                    </button>
+                    <button type="submit" className="flex-1 bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3">
+                      <span className="material-symbols-outlined">local_shipping</span>
+                      {t.product.orderNow || 'Commander'}
+                    </button>
+                  </div>
                 </form>
 
                 <div className="mb-8">

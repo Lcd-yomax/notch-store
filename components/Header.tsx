@@ -1,14 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useCart } from '@/lib/CartContext';
 import SearchModal from './SearchModal';
 
 export default function Header({ showPromo = true }: { showPromo?: boolean }) {
   const { t, language, setLanguage } = useLanguage();
+  const { totalItems } = useCart();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -39,7 +47,9 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
             </button>
             <Link href="/cart" className="relative text-slate-700 dark:text-slate-200 hover:text-primary transition-colors flex items-center justify-center p-1">
               <span className="material-symbols-outlined text-2xl">shopping_cart</span>
-              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">2</span>
+              {mounted && totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">{totalItems}</span>
+              )}
             </Link>
             <select
               value={language}

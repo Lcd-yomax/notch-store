@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
+import { CartProvider } from '@/lib/CartContext';
 import './globals.css';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
@@ -30,7 +31,9 @@ export default function RootLayout({
       </head>
       <body className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col">
         <LanguageProvider>
-          {children}
+          <CartProvider>
+            {children}
+          </CartProvider>
         </LanguageProvider>
       </body>
     </html>
