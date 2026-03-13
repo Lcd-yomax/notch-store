@@ -11,7 +11,7 @@ export default function Contact() {
   return (
     <>
       <Header />
-      <main className="flex-grow bg-slate-50 dark:bg-slate-950 py-10">
+      <main className="flex-grow bg-white dark:bg-slate-950 py-10">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">{t.contact.title}</h1>

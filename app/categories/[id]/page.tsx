@@ -36,7 +36,7 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
   return (
     <>
       <Header />
-      <main className="flex-grow bg-slate-50 dark:bg-slate-950 py-10">
+      <main className="flex-grow bg-white dark:bg-slate-950 py-10">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-8">

@@ -9,7 +9,7 @@ export default function SuccessPage() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950">
       <Header />
       
       <main className="flex-grow flex items-center justify-center p-4">

@@ -21,7 +21,7 @@ export default function Checkout() {
   return (
     <>
       <Header />
-      <main className="flex-grow bg-slate-50 dark:bg-slate-950 py-10">
+      <main className="flex-grow bg-white dark:bg-slate-950 py-10">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-8">{t.checkout.title}</h1>
 
