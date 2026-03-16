@@ -36,6 +36,8 @@ export default function Shop() {
   const [outOfStockOnly, setOutOfStockOnly] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<string>('popular');
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
 
   // Filter and Sort Logic
   const filteredProducts = useMemo(() => {
@@ -83,16 +85,21 @@ export default function Shop() {
     return result;
   }, [products, selectedCategories, selectedBrands, minPrice, maxPrice, inStockOnly, outOfStockOnly, sortOrder]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
   const handleCategoryChange = (category: string) => {
     setSelectedCategories(prev => 
       prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
     );
+    setCurrentPage(1);
   };
 
   const handleBrandChange = (brand: string) => {
     setSelectedBrands(prev => 
       prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
     );
+    setCurrentPage(1);
   };
 
   const clearFilters = () => {
@@ -102,6 +109,23 @@ export default function Shop() {
     setMaxPrice('');
     setInStockOnly(false);
     setOutOfStockOnly(false);
+    setCurrentPage(1);
+  };
+
+  const getPageNumbers = () => {
+    const pages: (number | '...')[] = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 3) pages.push('...');
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (currentPage < totalPages - 2) pages.push('...');
+      pages.push(totalPages);
+    }
+    return pages;
   };
 
   return (
@@ -246,7 +270,7 @@ export default function Shop() {
                     </button>
                   </div>
                 ) : (
-                  filteredProducts.map((product) => (
+                  paginatedProducts.map((product) => (
                     <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
                     {product.discount > 0 && (
                       <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
@@ -298,29 +322,43 @@ export default function Shop() {
               </div>
               
               {/* Pagination */}
-              <div className="flex justify-center mt-12">
-                <div className="flex items-center gap-2">
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <span className="material-symbols-outlined rtl:rotate-180">chevron_left</span>
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-primary text-white font-bold flex items-center justify-center shadow-lg shadow-primary/30">
-                    1
-                  </button>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">
-                    2
-                  </button>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">
-                    3
-                  </button>
-                  <span className="text-slate-400 px-1">...</span>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">
-                    8
-                  </button>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors">
-                    <span className="material-symbols-outlined rtl:rotate-180">chevron_right</span>
-                  </button>
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-12">
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined rtl:rotate-180">chevron_left</span>
+                    </button>
+                    {getPageNumbers().map((page, idx) =>
+                      page === '...' ? (
+                        <span key={`dots-${idx}`} className="text-slate-400 px-1">...</span>
+                      ) : (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all duration-200 cursor-pointer ${
+                            currentPage === page
+                              ? 'bg-primary text-white shadow-lg shadow-primary/30'
+                              : 'border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined rtl:rotate-180">chevron_right</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
