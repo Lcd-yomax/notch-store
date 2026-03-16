@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { use } from 'react';
+import { use, useState, useMemo } from 'react';
 import { useCart } from '@/lib/CartContext';
 import { shopProducts } from '@/lib/dummyData';
 
@@ -33,6 +33,94 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
     return { ...p, name: typeof currentName === 'string' ? currentName : p.nameKey };
   });
 
+  // Filter States
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [inStockOnly, setInStockOnly] = useState<boolean>(false);
+  const [outOfStockOnly, setOutOfStockOnly] = useState<boolean>(false);
+  const [sortOrder, setSortOrder] = useState<string>('popular');
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
+
+  // Filter and Sort Logic
+  const filteredProducts = useMemo(() => {
+    // First map to category
+    let result = products.filter(p => p.category === id);
+
+    if (selectedBrands.length > 0) {
+      result = result.filter(p => selectedBrands.includes(p.brand || ''));
+    }
+
+    if (minPrice) {
+      result = result.filter(p => p.price >= Number(minPrice));
+    }
+
+    if (maxPrice) {
+      result = result.filter(p => p.price <= Number(maxPrice));
+    }
+
+    if (inStockOnly && !outOfStockOnly) {
+      result = result.filter(p => p.inStock);
+    } else if (outOfStockOnly && !inStockOnly) {
+      result = result.filter(p => !p.inStock);
+    }
+
+    switch (sortOrder) {
+      case 'price-low':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'newest':
+        result.reverse();
+        break;
+      case 'popular':
+      default:
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+    }
+
+    return result;
+  }, [products, id, selectedBrands, minPrice, maxPrice, inStockOnly, outOfStockOnly, sortOrder]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  const handleBrandChange = (brand: string) => {
+    setSelectedBrands(prev => 
+      prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
+    );
+    setCurrentPage(1);
+  };
+
+  const clearFilters = () => {
+    setSelectedBrands([]);
+    setMinPrice('');
+    setMaxPrice('');
+    setInStockOnly(false);
+    setOutOfStockOnly(false);
+    setCurrentPage(1);
+  };
+
+  const getPageNumbers = () => {
+    const pages: (number | '...')[] = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 3) pages.push('...');
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (currentPage < totalPages - 2) pages.push('...');
+      pages.push(totalPages);
+    }
+    return pages;
+  };
+
   return (
     <>
       <Header />
@@ -53,13 +141,20 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
               <p className="text-slate-500 text-lg font-medium">{t.shop.desc}</p>
             </div>
             <div className="flex items-center gap-4">
-              <select className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer">
+              <select 
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+              >
                 <option value="popular">{t.shop.sort.popular}</option>
                 <option value="newest">{t.shop.sort.newest}</option>
                 <option value="price-low">{t.shop.sort.priceLow}</option>
                 <option value="price-high">{t.shop.sort.priceHigh}</option>
               </select>
-              <button className="md:hidden w-11 h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-300">
+              <button 
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="md:hidden w-11 h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-300"
+              >
                 <span className="material-symbols-outlined">tune</span>
               </button>
             </div>
@@ -71,33 +166,44 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sticky top-24">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-bold text-slate-900 dark:text-white text-lg">{t.shop.filters.title}</h3>
-                  <button className="text-sm font-medium text-primary hover:underline">{t.shop.filters.reset}</button>
+                  <button onClick={clearFilters} className="text-sm font-medium text-primary hover:underline">{t.shop.filters.reset}</button>
                 </div>
                 
                 <div className="mb-8">
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.price}</h4>
                   <div className="flex items-center gap-2">
-                    <input type="number" placeholder="Min" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
+                    <input 
+                      type="number" 
+                      placeholder={t.shop.filters.min} 
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" 
+                    />
                     <span className="text-slate-400">-</span>
-                    <input type="number" placeholder="Max" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" />
+                    <input 
+                      type="number" 
+                      placeholder={t.shop.filters.max} 
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" 
+                    />
                   </div>
                 </div>
 
                 <div className="mb-8">
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.brand}</h4>
                   <div className="flex flex-col gap-3">
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" defaultChecked />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Notch (15)</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Anker (8)</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Baseus (12)</span>
-                    </label>
+                    {['Notch', 'Anker', 'Baseus'].map((brand) => (
+                      <label key={brand} className="flex items-center gap-3 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedBrands.includes(brand)}
+                          onChange={() => handleBrandChange(brand)}
+                          className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                        />
+                        <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{brand}</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
 
@@ -105,12 +211,22 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.availability}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" defaultChecked />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.inStock} (32)</span>
+                      <input 
+                        type="checkbox" 
+                        checked={inStockOnly}
+                        onChange={(e) => setInStockOnly(e.target.checked)}
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                      />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.inStock}</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.outOfStock} (3)</span>
+                      <input 
+                        type="checkbox" 
+                        checked={outOfStockOnly}
+                        onChange={(e) => setOutOfStockOnly(e.target.checked)}
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                      />
+                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.outOfStock}</span>
                     </label>
                   </div>
                 </div>
@@ -120,8 +236,18 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
             {/* Product Grid */}
             <div className="flex-grow">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                {filteredProducts.length === 0 ? (
+                  <div className="col-span-full py-12 flex flex-col items-center justify-center text-center">
+                    <span className="material-symbols-outlined text-6xl text-slate-200 dark:text-slate-700 mb-4">search_off</span>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Aucun produit trouvé</h3>
+                    <p className="text-slate-500 max-w-md">Essayez de modifier vos filtres pour trouver ce que vous cherchez.</p>
+                    <button onClick={clearFilters} className="mt-6 px-6 py-2 bg-primary text-white rounded-xl font-medium hover:bg-amber-500 transition-colors">
+                      Réinitialiser les filtres
+                    </button>
+                  </div>
+                ) : (
+                  paginatedProducts.map((product) => (
+                    <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
                     {product.discount > 0 && (
                       <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
                         -{product.discount}%
@@ -168,24 +294,47 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                       </button>
                     </div>
                   </div>
-                ))}
+                )))}
               </div>
               
               {/* Pagination */}
-              <div className="flex justify-center mt-12">
-                <div className="flex items-center gap-2">
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <span className="material-symbols-outlined">chevron_left</span>
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-primary text-white font-bold flex items-center justify-center shadow-md shadow-primary/20">1</button>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">2</button>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors font-bold">3</button>
-                  <span className="text-slate-400 px-2">...</span>
-                  <button className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary transition-colors">
-                    <span className="material-symbols-outlined">chevron_right</span>
-                  </button>
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-12">
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    {getPageNumbers().map((page, idx) =>
+                      page === '...' ? (
+                        <span key={`dots-${idx}`} className="text-slate-400 px-2">...</span>
+                      ) : (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all duration-200 cursor-pointer ${
+                            currentPage === page
+                              ? 'bg-primary text-white shadow-md shadow-primary/20'
+                              : 'border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined">chevron_right</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

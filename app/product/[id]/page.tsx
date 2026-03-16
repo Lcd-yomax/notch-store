@@ -40,7 +40,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
     if (triggerRef.current) {
       observer.observe(triggerRef.current);
     }
-    
+
     return () => observer.disconnect();
   }, []);
 
@@ -49,7 +49,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
       // Scroll slightly above the form to ensure it's not hidden under any fixed headers
       const y = formRef.current.getBoundingClientRect().top + window.scrollY - 120;
       window.scrollTo({ top: y, behavior: 'smooth' });
-      
+
       // Focus the first input (Nom complet) after a small delay to let scrolling finish
       setTimeout(() => {
         const firstInput = formRef.current?.querySelector('input');
@@ -67,6 +67,24 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Build WhatsApp message with order details
+    const waNumber = '212667018042'; // +212 667-018042
+    const message = [
+      `Nouvelle commande - NotchMaroc`,
+      ``,
+      `Produit: ${product.name}`,
+      `Prix: ${product.price} DH`,
+      ``,
+      `Client: ${orderName}`,
+      `Telephone: ${orderPhone}`,
+      `Adresse: ${orderAddress}`,
+      `Ville: ${orderCity}`,
+    ].join('\n');
+
+    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+
     router.push('/success');
   };
 
@@ -151,11 +169,11 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             <span className="text-slate-900 dark:text-white truncate max-w-[200px] sm:max-w-none">{product.name}</span>
           </nav>
 
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 lg:p-10 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 lg:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Product Images */}
               <div className="flex flex-col gap-4">
-                <div className="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                <div className="relative w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center">
                   <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-sm font-black px-4 py-2 rounded-full shadow-lg">
                     -{product.discount}%
                   </div>
@@ -196,12 +214,12 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   </div>
                 </div>
 
-                <div className="flex items-end gap-4 mb-8 pb-8 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-end gap-4 mb-8 pb-8">
                   <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">{product.price} <span className="text-2xl">DH</span></span>
                   <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{product.originalPrice} DH</span>
                 </div>
 
-                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.fullName || 'Nom complet'}</label>
@@ -251,7 +269,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       <span className="material-symbols-outlined">local_shipping</span>
                       {t.product.orderNow || 'Acheter maintenant'}
                     </button>
-                    <button
+                    {/* <button
                       type="button"
                       onClick={() => {
                         addToCart({
@@ -266,7 +284,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     >
                       <span className="material-symbols-outlined group-hover/btn:scale-110 transition-transform">shopping_cart</span>
                       {t.product.addToCart || 'Ajouter au panier'}
-                    </button>
+                    </button> */}
                   </div>
                 </form>
                 {/* Scroll Trigger for Sticky Button */}
@@ -296,17 +314,17 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     <span className="material-symbols-outlined text-slate-400">local_shipping</span>
                     {t.product.freeShipping}
                   </div>
-                  <div className="flex items-center gap-2">
+                  {/* <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-slate-400">verified_user</span>
                     {t.product.warranty}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Reviews Section */}
-          <div className="mt-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 lg:p-10 shadow-sm">
+          <div className="mt-16 bg-white dark:bg-slate-900 rounded-3xl p-6 lg:p-10">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">{t.reviewsSection.title}</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Reviews List */}
@@ -345,7 +363,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     </div>
                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">{t.reviewsSection.successTitle || "Merci !"}</h3>
                     <p className="text-slate-600 dark:text-slate-400 max-w-[300px] mb-8">{t.reviewsSection.successMessage || "Votre avis a été soumis avec succès."}</p>
-                    <button 
+                    <button
                       onClick={() => setIsReviewSubmitted(false)}
                       className="px-6 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold transition-colors cursor-pointer"
                     >
@@ -356,51 +374,51 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <>
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t.reviewsSection.leaveReview}</h3>
                     <form onSubmit={handleSubmitReview} className="flex flex-col gap-4">
-                  {/* Rating */}
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.rating}</label>
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5].map(star => (
-                        <button
-                          type="button"
-                          key={star}
-                          onClick={() => setRating(star)}
-                          onMouseEnter={() => setHoverRating(star)}
-                          onMouseLeave={() => setHoverRating(0)}
-                          className="text-amber-400 focus:outline-none"
-                        >
-                          <span className="material-symbols-outlined text-2xl transition-all" style={{ fontVariationSettings: star <= (hoverRating || rating) ? "'FILL' 1" : "'FILL' 0" }}>star</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                      {/* Rating */}
+                      <div className="flex flex-col gap-2">
+                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.rating}</label>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map(star => (
+                            <button
+                              type="button"
+                              key={star}
+                              onClick={() => setRating(star)}
+                              onMouseEnter={() => setHoverRating(star)}
+                              onMouseLeave={() => setHoverRating(0)}
+                              className="text-amber-400 focus:outline-none"
+                            >
+                              <span className="material-symbols-outlined text-2xl transition-all" style={{ fontVariationSettings: star <= (hoverRating || rating) ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="reviewName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.fullName}</label>
-                      <input required type="text" id="reviewName" value={name} onChange={e => setName(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="reviewEmail" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.email}</label>
-                      <input required type="email" id="reviewEmail" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                    </div>
-                  </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-2">
+                          <label htmlFor="reviewName" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.fullName}</label>
+                          <input required type="text" id="reviewName" value={name} onChange={e => setName(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <label htmlFor="reviewEmail" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.email}</label>
+                          <input required type="email" id="reviewEmail" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
+                        </div>
+                      </div>
 
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="reviewComment" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.comment}</label>
-                    <textarea required id="reviewComment" rows={4} value={comment} onChange={e => setComment(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"></textarea>
-                  </div>
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor="reviewComment" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.comment}</label>
+                        <textarea required id="reviewComment" rows={4} value={comment} onChange={e => setComment(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"></textarea>
+                      </div>
 
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="reviewImage" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.image}</label>
-                    <input type="file" id="reviewImage" accept="image/*" onChange={handleImageChange} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
-                  </div>
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor="reviewImage" className="text-sm font-bold text-slate-700 dark:text-slate-300">{t.reviewsSection.image}</label>
+                        <input type="file" id="reviewImage" accept="image/*" onChange={handleImageChange} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                      </div>
 
-                  <button type="submit" className="mt-2 w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.5)] cursor-pointer">
-                    {t.reviewsSection.submit}
-                  </button>
-                </form>
-                </>
+                      <button type="submit" className="mt-2 w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.5)] cursor-pointer">
+                        {t.reviewsSection.submit}
+                      </button>
+                    </form>
+                  </>
                 )}
               </div>
             </div>
@@ -410,13 +428,13 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
       <Footer />
 
       {/* Sticky Bottom Buy Button */}
-      <div 
+      <div
         className={`fixed bottom-0 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-4 z-50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.3)] ${showStickyButton ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}
       >
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           <div className="hidden sm:flex items-center gap-4 flex-1">
-            <div 
-              className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg bg-cover bg-center border border-slate-200 dark:border-slate-700" 
+            <div
+              className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg bg-cover bg-center"
               style={{ backgroundImage: `url('${product.images[0]}')` }}
             ></div>
             <div className="flex flex-col">
@@ -424,7 +442,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
               <span className="text-sm font-black text-primary">{product.price} DH <span className="text-xs text-slate-500 line-through font-medium ml-1">{product.originalPrice} DH</span></span>
             </div>
           </div>
-          <button 
+          <button
             type="button"
             onClick={scrollToForm}
             className="flex-1 sm:flex-none w-full sm:w-auto bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.4)] flex items-center justify-center gap-3 cursor-pointer group"

@@ -114,12 +114,12 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
             >
               <span className="material-symbols-outlined text-2xl">search</span>
             </button>
-            <Link href="/cart" className="relative text-slate-700 dark:text-slate-200 hover:text-primary transition-colors flex items-center justify-center p-1">
+            {/* <Link href="/cart" className="relative text-slate-700 dark:text-slate-200 hover:text-primary transition-colors flex items-center justify-center p-1">
               <span className="material-symbols-outlined text-2xl">shopping_cart</span>
               {mounted && totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">{totalItems}</span>
               )}
-            </Link>
+            </Link> */}
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as 'fr' | 'ar')}
