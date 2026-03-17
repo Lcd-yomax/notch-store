@@ -14,6 +14,10 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const { addToCart } = useCart();
   const router = useRouter();
 
+  // Variation States
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [name, setName] = useState('');
@@ -74,7 +78,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
       `Nouvelle commande - NotchMaroc`,
       ``,
       `Produit: ${product.name}`,
-      `Prix: ${product.price} DH`,
+      `Variation: ${selectedColor || 'N/A'} - ${selectedSize || 'N/A'}`,
+      `Prix: ${currentVariation?.price ?? product.price} DH`,
       ``,
       `Client: ${orderName}`,
       `Telephone: ${orderPhone}`,
@@ -152,8 +157,48 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
       'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb',
       'https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D'
     ],
-    stock: true
+    stock: true,
+    variations: [
+      { id: 'v1', color: 'Noir', size: '1m', price: 249, originalPrice: 349, stock: 15, imageIndex: 0 },
+      { id: 'v2', color: 'Noir', size: '2m', price: 299, originalPrice: 399, stock: 5, imageIndex: 0 },
+      { id: 'v3', color: 'Blanc', size: '1m', price: 249, originalPrice: 349, stock: 0, imageIndex: 1 },
+      { id: 'v4', color: 'Blanc', size: '2m', price: 299, originalPrice: 399, stock: 8, imageIndex: 1 },
+    ]
   };
+
+  // Select first available options on load
+  useEffect(() => {
+    if (product.variations.length > 0 && !selectedColor) {
+      const colors = Array.from(new Set(product.variations.map(v => v.color).filter(Boolean)));
+      if (colors.length > 0) setSelectedColor(colors[0]);
+    }
+  }, [product.variations, selectedColor]);
+
+  useEffect(() => {
+    if (product.variations.length > 0 && selectedColor && !selectedSize) {
+      const availableSizesForColor = product.variations
+        .filter(v => v.color === selectedColor && v.size)
+        .map(v => v.size);
+      if (availableSizesForColor.length > 0) setSelectedSize(availableSizesForColor[0]);
+    }
+  }, [product.variations, selectedColor, selectedSize]);
+
+  // Derived state for the currently matching variation
+  const currentVariation = product.variations.find(
+    v => (v.color === selectedColor || (!v.color && !selectedColor)) && 
+         (v.size === selectedSize || (!v.size && !selectedSize))
+  );
+
+  // Auto-switch image when color changes
+  useEffect(() => {
+    if (currentVariation?.imageIndex !== undefined) {
+      setActiveImageIndex(currentVariation.imageIndex);
+    }
+  }, [currentVariation]);
+
+  const availableColors = Array.from(new Set(product.variations.map(v => v.color).filter(Boolean)));
+  const availableSizes = Array.from(new Set(product.variations.map(v => v.size).filter(Boolean)));
+
 
   return (
     <>
@@ -207,16 +252,82 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     <span className="text-slate-900 dark:text-white font-bold">{product.rating}</span>
                     <span className="text-slate-400">({product.reviews} {t.product.reviews})</span>
                     <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
-                    <span className="text-emerald-500 font-bold flex items-center gap-1">
-                      <span className="material-symbols-outlined text-sm">check_circle</span>
-                      {t.product.inStock}
-                    </span>
+                    
+                    {currentVariation ? (
+                      currentVariation.stock > 0 ? (
+                        <span className="text-emerald-500 font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">check_circle</span>
+                          En stock ({currentVariation.stock})
+                        </span>
+                      ) : (
+                        <span className="text-red-500 font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">error</span>
+                          Rupture de stock
+                        </span>
+                      )
+                    ) : product.stock ? (
+                      <span className="text-emerald-500 font-bold flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">check_circle</span>
+                        {t.product.inStock}
+                      </span>
+                    ) : (
+                      <span className="text-red-500 font-bold flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">error</span>
+                        Rupture de stock
+                      </span>
+                    )}
                   </div>
                 </div>
 
-                <div className="flex items-end gap-4 mb-8 pb-8">
-                  <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">{product.price} <span className="text-2xl">DH</span></span>
-                  <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{product.originalPrice} DH</span>
+                {/* Variations */}
+                {availableColors.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider">Couleur: <span className="text-slate-500 font-normal normal-case">{selectedColor}</span></h3>
+                    <div className="flex items-center gap-3">
+                      {availableColors.map(color => (
+                        <button
+                          key={color}
+                          onClick={() => setSelectedColor(color)}
+                          className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                            selectedColor === color 
+                              ? 'border-primary text-primary bg-primary/5' 
+                              : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600'
+                          }`}
+                        >
+                          {color}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {availableSizes.length > 0 && selectedColor && (
+                  <div className="mb-8 border-b border-slate-100 dark:border-slate-800 pb-8">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider">Taille: <span className="text-slate-500 font-normal normal-case">{selectedSize}</span></h3>
+                    <div className="flex items-center gap-3">
+                      {product.variations.filter(v => v.color === selectedColor && v.size).map(v => (
+                        <button
+                          key={v.size}
+                          onClick={() => setSelectedSize(v.size as string)}
+                          disabled={v.stock === 0}
+                          className={`px-5 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${
+                            selectedSize === v.size 
+                              ? 'border-primary text-primary bg-primary/5 shadow-sm' 
+                              : v.stock === 0
+                                ? 'border-dashed border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed bg-slate-50 dark:bg-slate-900/50'
+                                : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                          }`}
+                        >
+                          {v.size} {v.stock === 0 && <span className="block text-[10px] font-normal leading-none mt-1 text-red-400">Épuisé</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-end gap-4 mb-8">
+                  <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">{currentVariation?.price ?? product.price} <span className="text-2xl">DH</span></span>
+                  <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{currentVariation?.originalPrice ?? product.originalPrice} DH</span>
                 </div>
 
                 <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
