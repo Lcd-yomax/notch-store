@@ -257,12 +257,12 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       currentVariation.stock > 0 ? (
                         <span className="text-emerald-500 font-bold flex items-center gap-1">
                           <span className="material-symbols-outlined text-sm">check_circle</span>
-                          En stock ({currentVariation.stock})
+                          {t.product.inStock} ({currentVariation.stock})
                         </span>
                       ) : (
                         <span className="text-red-500 font-bold flex items-center gap-1">
                           <span className="material-symbols-outlined text-sm">error</span>
-                          Rupture de stock
+                          {t.product.outOfStock}
                         </span>
                       )
                     ) : product.stock ? (
@@ -273,7 +273,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     ) : (
                       <span className="text-red-500 font-bold flex items-center gap-1">
                         <span className="material-symbols-outlined text-sm">error</span>
-                        Rupture de stock
+                        {t.product.outOfStock}
                       </span>
                     )}
                   </div>
@@ -282,7 +282,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                 {/* Variations */}
                 {availableColors.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider">Couleur: <span className="text-slate-500 font-normal normal-case">{selectedColor}</span></h3>
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider">{t.product.color}: <span className="text-slate-500 font-normal normal-case">{selectedColor}</span></h3>
                     <div className="flex items-center gap-3">
                       {availableColors.map(color => (
                         <button
@@ -303,7 +303,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
                 {availableSizes.length > 0 && selectedColor && (
                   <div className="mb-8 border-b border-slate-100 dark:border-slate-800 pb-8">
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider">Taille: <span className="text-slate-500 font-normal normal-case">{selectedSize}</span></h3>
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider">{t.product.size}: <span className="text-slate-500 font-normal normal-case">{selectedSize}</span></h3>
                     <div className="flex items-center gap-3">
                       {product.variations.filter(v => v.color === selectedColor && v.size).map(v => (
                         <button
@@ -318,7 +318,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                                 : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50'
                           }`}
                         >
-                          {v.size} {v.stock === 0 && <span className="block text-[10px] font-normal leading-none mt-1 text-red-400">Épuisé</span>}
+                          {v.size} {v.stock === 0 && <span className="block text-[10px] font-normal leading-none mt-1 text-red-400">{t.product.soldOut}</span>}
                         </button>
                       ))}
                     </div>
