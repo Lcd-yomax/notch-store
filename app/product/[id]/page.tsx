@@ -114,7 +114,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [product]);
 
   const scrollToForm = () => {
     if (formRef.current) {
@@ -359,8 +359,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                           key={color}
                           onClick={() => setSelectedColor(color)}
                           className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${selectedColor === color
-                              ? 'border-primary text-primary bg-primary/5'
-                              : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600'
+                            ? 'border-primary text-primary bg-primary/5'
+                            : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600'
                             }`}
                         >
                           {color}
@@ -380,10 +380,10 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                           onClick={() => setSelectedSize(v.size as string)}
                           disabled={v.stock === 0}
                           className={`px-5 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${selectedSize === v.size
-                              ? 'border-primary text-primary bg-primary/5 shadow-sm'
-                              : v.stock === 0
-                                ? 'border-dashed border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed bg-slate-50 dark:bg-slate-900/50'
-                                : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                            ? 'border-primary text-primary bg-primary/5 shadow-sm'
+                            : v.stock === 0
+                              ? 'border-dashed border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed bg-slate-50 dark:bg-slate-900/50'
+                              : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50'
                             }`}
                         >
                           {v.size} {v.stock === 0 && <span className="block text-[10px] font-normal leading-none mt-1 text-red-400">{t.product.soldOut}</span>}
@@ -398,7 +398,12 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{currentVariation?.originalPrice ?? product.originalPrice} DH</span>
                 </div>
 
+                {t.product.orderForm?.title && (
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{t.product.orderForm.title}</h2>
+                )}
+
                 <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{t.product.orderForm?.fullName || 'Nom complet'}</label>
@@ -444,7 +449,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     />
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 mt-2">
-                    <button type="submit" className="flex-1 w-full bg-primary hover:bg-amber-500 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)] flex items-center justify-center gap-3 cursor-pointer">
+                    <button type="submit" className="btn-glow-shake flex-1 w-full bg-primary hover:bg-amber-500 text-white font-bold text-xl py-5 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer">
                       <span className="material-symbols-outlined">local_shipping</span>
                       {t.product.orderNow || 'Acheter maintenant'}
                     </button>
@@ -624,7 +629,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
           <button
             type="button"
             onClick={scrollToForm}
-            className="flex-1 sm:flex-none w-full sm:w-auto bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_4px_14px_rgb(254,165,29,0.3)] hover:shadow-[0_6px_20px_rgb(254,165,29,0.4)] flex items-center justify-center gap-3 cursor-pointer group"
+            className="btn-glow-shake flex-1 sm:flex-none w-full sm:w-auto bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer group"
           >
             <span className="material-symbols-outlined group-hover:-translate-y-1 transition-transform duration-300">local_shipping</span>
             {t.product.orderNow || 'Acheter maintenant'}

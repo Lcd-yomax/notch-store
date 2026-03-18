@@ -38,3 +38,32 @@
     transform: translateX(50%);
   }
 }
+
+/* Buy Now button: glowing pulse + periodic shake */
+@keyframes btn-shake {
+  0%,  85%  { transform: translateX(0) rotate(0deg);   }
+  87%        { transform: translateX(-4px) rotate(-2deg); }
+  89%        { transform: translateX(4px)  rotate(2deg);  }
+  91%        { transform: translateX(-4px) rotate(-1deg); }
+  93%        { transform: translateX(4px)  rotate(1deg);  }
+  95%        { transform: translateX(-2px) rotate(0deg);  }
+  97%        { transform: translateX(2px)  rotate(0deg);  }
+  100%       { transform: translateX(0)   rotate(0deg);  }
+}
+
+@keyframes btn-glow-pulse {
+  0%, 100% { box-shadow: 0 0 18px 4px rgba(254,165,29,0.55); }
+  50%       { box-shadow: 0 0 32px 8px rgba(254,165,29,0.85); }
+}
+
+.btn-glow-shake {
+  animation:
+    btn-glow-pulse 1.8s ease-in-out infinite,
+    btn-shake      3.5s ease-in-out infinite;
+}
+
+.btn-glow-shake:hover {
+  animation: none;
+  box-shadow: 0 0 35px 10px rgba(254,165,29,0.75);
+  transform: scale(1.02);
+}
