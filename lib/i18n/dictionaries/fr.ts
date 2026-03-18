@@ -224,6 +224,7 @@ export const fr = {
     addToCart: "Ajouter au panier",
     orderNow: "Acheter maintenant",
     orderForm: {
+      title: "Remplissez vos informations ci-dessous pour commander",
       fullName: "Nom complet",
       address: "Adresse complète",
       city: "Ville",

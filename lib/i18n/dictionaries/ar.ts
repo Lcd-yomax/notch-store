@@ -224,6 +224,7 @@ export const ar = {
     addToCart: "أضف إلى السلة",
     orderNow: "اطلب الآن",
     orderForm: {
+      title: "أدخل معلوماتك أدناه لإتمام الطلب",
       fullName: "الاسم الكامل",
       address: "العنوان الكامل",
       city: "المدينة",
