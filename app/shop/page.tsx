@@ -3,35 +3,44 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
-import { shopProducts } from '@/lib/dummyData';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 export default function Shop() {
   const { t } = useLanguage();
   const { addToCart } = useCart();
   
-  // Resolve localized names for the products
-  const products = shopProducts.map(p => {
-    const keys = p.nameKey.split('.');
-    let currentName: any = t;
-    for (const key of keys) {
-      if (currentName && currentName[key] !== undefined) {
-        currentName = currentName[key];
-      } else {
-        currentName = p.nameKey;
-        break;
+  const [products, setProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchShopData() {
+      try {
+        const [catRes, prodRes] = await Promise.all([
+          fetch('/api/categories'),
+          fetch('/api/products')
+        ]);
+        const catData = await catRes.json();
+        const prodData = await prodRes.json();
+        
+        setCategories(catData || []);
+        setProducts(prodData || []);
+      } catch (err) {
+        console.error('Failed to load shop data', err);
+      } finally {
+        setIsLoading(false);
       }
     }
-    return { ...p, name: typeof currentName === 'string' ? currentName : p.nameKey };
-  });
+    fetchShopData();
+  }, []);
 
   // Filter States
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [inStockOnly, setInStockOnly] = useState<boolean>(false);
   const [outOfStockOnly, setOutOfStockOnly] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<string>('popular');
@@ -44,67 +53,50 @@ export default function Shop() {
     let result = [...products];
 
     if (selectedCategories.length > 0) {
-      result = result.filter(p => selectedCategories.includes(p.category || ''));
-    }
-
-    if (selectedBrands.length > 0) {
-      result = result.filter(p => selectedBrands.includes(p.brand || ''));
+      result = result.filter(p => selectedCategories.includes(p.categories?.slug || ''));
     }
 
     if (minPrice) {
-      result = result.filter(p => p.price >= Number(minPrice));
+      result = result.filter(p => (p.variations?.[0]?.price_display || p.variations?.[0]?.price || 0) >= Number(minPrice));
     }
 
     if (maxPrice) {
-      result = result.filter(p => p.price <= Number(maxPrice));
+      result = result.filter(p => (p.variations?.[0]?.price_display || p.variations?.[0]?.price || 0) <= Number(maxPrice));
     }
 
-    if (inStockOnly && !outOfStockOnly) {
-      result = result.filter(p => p.inStock);
-    } else if (outOfStockOnly && !inStockOnly) {
-      result = result.filter(p => !p.inStock);
-    } // If both or neither are checked, show all
+    // Since we don't have stock boolean natively without checking variation stock size, ignore for now
 
     switch (sortOrder) {
       case 'price-low':
-        result.sort((a, b) => a.price - b.price);
+        result.sort((a, b) => (a.variations?.[0]?.price_display || 0) - (b.variations?.[0]?.price_display || 0));
         break;
       case 'price-high':
-        result.sort((a, b) => b.price - a.price);
+        result.sort((a, b) => (b.variations?.[0]?.price_display || 0) - (a.variations?.[0]?.price_display || 0));
         break;
       case 'newest':
-        // For dummy data, we'll just reverse to simulate newest
         result.reverse();
         break;
       case 'popular':
       default:
-        result.sort((a, b) => b.rating - a.rating);
+        // Default API order
         break;
     }
 
     return result;
-  }, [products, selectedCategories, selectedBrands, minPrice, maxPrice, inStockOnly, outOfStockOnly, sortOrder]);
+  }, [products, selectedCategories, minPrice, maxPrice, inStockOnly, outOfStockOnly, sortOrder]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
   const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
-  const handleCategoryChange = (category: string) => {
+  const handleCategoryChange = (categorySlug: string) => {
     setSelectedCategories(prev => 
-      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
-    );
-    setCurrentPage(1);
-  };
-
-  const handleBrandChange = (brand: string) => {
-    setSelectedBrands(prev => 
-      prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
+      prev.includes(categorySlug) ? prev.filter(c => c !== categorySlug) : [...prev, categorySlug]
     );
     setCurrentPage(1);
   };
 
   const clearFilters = () => {
     setSelectedCategories([]);
-    setSelectedBrands([]);
     setMinPrice('');
     setMaxPrice('');
     setInStockOnly(false);
@@ -177,16 +169,16 @@ export default function Shop() {
                 <div className="mb-8">
                   <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.categories}</h4>
                   <div className="flex flex-col gap-3">
-                    {['chargeurs', 'cables', 'power-banks', 'audio'].map((cat) => (
-                      <label key={cat} className="flex items-center gap-3 cursor-pointer group">
+                    {categories.map((cat) => (
+                      <label key={cat.id} className="flex items-center gap-3 cursor-pointer group">
                         <input 
                           type="checkbox" 
-                          checked={selectedCategories.includes(cat)}
-                          onChange={() => handleCategoryChange(cat)}
+                          checked={selectedCategories.includes(cat.slug)}
+                          onChange={() => handleCategoryChange(cat.slug)}
                           className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
                         />
                         <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                          {cat.charAt(0).toUpperCase() + cat.slice(1).replace('-', ' ')}
+                          {cat.name}
                         </span>
                       </label>
                     ))}
@@ -211,23 +203,6 @@ export default function Shop() {
                       onChange={(e) => setMaxPrice(e.target.value)}
                       className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary" 
                     />
-                  </div>
-                </div>
-
-                <div className="mb-8">
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.brand}</h4>
-                  <div className="flex flex-col gap-3">
-                    {['Notch', 'Anker', 'Baseus'].map((brand) => (
-                      <label key={brand} className="flex items-center gap-3 cursor-pointer group">
-                        <input 
-                          type="checkbox" 
-                          checked={selectedBrands.includes(brand)}
-                          onChange={() => handleBrandChange(brand)}
-                          className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
-                        />
-                        <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{brand}</span>
-                      </label>
-                    ))}
                   </div>
                 </div>
 
@@ -260,7 +235,11 @@ export default function Shop() {
             {/* Product Grid */}
             <div className="flex-grow">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.length === 0 ? (
+                {isLoading ? (
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[400px] animate-pulse"></div>
+                  ))
+                ) : filteredProducts.length === 0 ? (
                   <div className="col-span-full py-12 flex flex-col items-center justify-center text-center">
                     <span className="material-symbols-outlined text-6xl text-slate-200 dark:text-slate-700 mb-4">search_off</span>
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Aucun produit trouvé</h3>
@@ -270,55 +249,70 @@ export default function Shop() {
                     </button>
                   </div>
                 ) : (
-                  paginatedProducts.map((product) => (
-                    <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                    {product.discount > 0 && (
-                      <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
-                        -{product.discount}%
-                      </div>
-                    )}
-                    <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
-                      <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 group-hover:opacity-0" style={{ backgroundImage: `url('${product.image}')` }}></div>
-                      <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-110" style={{ backgroundImage: `url('${product.hoverImage}')` }}></div>
-                    </Link>
-                    <div className="p-6 flex flex-col flex-grow gap-4">
-                      <div>
-                        <Link href={`/product/${product.id}`}>
-                          <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{product.name}</h3>
-                        </Link>
-                      </div>
-                      <div className="flex flex-col gap-2 mt-auto">
-                        <div className="flex items-end gap-3">
-                          <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{product.price} DH</span>
-                          {product.originalPrice > product.price && (
-                            <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{product.originalPrice} DH</span>
+                  paginatedProducts.map((product) => {
+                    const priceDisplay = product.variations?.[0]?.price_display || 0;
+                    const price = product.variations?.[0]?.price || 0;
+                    const discount = price > priceDisplay ? Math.round(((price - priceDisplay) / price) * 100) : 0;
+
+                    return (
+                      <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                        {discount > 0 && (
+                          <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
+                            -{discount}%
+                          </div>
+                        )}
+                        <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
+                          {product.thumbnail_url ? (
+                            <Image 
+                              src={product.thumbnail_url}
+                              alt={product.name}
+                              fill
+                              className="object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
                           )}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                          <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">{product.rating}</span>
-                          <span className="text-slate-400 text-sm">({product.reviews})</span>
+                        </Link>
+                        <div className="p-6 flex flex-col flex-grow gap-4">
+                          <div>
+                            <Link href={`/product/${product.id}`}>
+                              <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{product.name}</h3>
+                            </Link>
+                          </div>
+                          <div className="flex flex-col gap-2 mt-auto">
+                            <div className="flex items-end gap-3">
+                              <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{priceDisplay} DH</span>
+                              {discount > 0 && (
+                                <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{price} DH</span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                              <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">{product.rating || '5.0'}</span>
+                              <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
+                            </div>
+                          </div>
+                          <button 
+                            onClick={(e) => {
+                              e.preventDefault();
+                              addToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: priceDisplay,
+                                quantity: 1,
+                                image: product.thumbnail_url || ''
+                              });
+                            }}
+                            className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
+                            {t.shop.buy}
+                          </button>
                         </div>
                       </div>
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          addToCart({
-                            id: product.id,
-                            name: product.name,
-                            price: product.price,
-                            quantity: 1,
-                            image: product.image
-                          });
-                        }}
-                        className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                        {t.shop.buy}
-                      </button>
-                    </div>
-                  </div>
-                )))}
+                    );
+                  })
+                )}
               </div>
               
               {/* Pagination */}
