@@ -52,7 +52,6 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             description: p.description || '',
             features: [
               'Haute qualité',
-              'Durabilité garantie',
               'Design moderne'
             ], // Fallback default features
             images: p.images?.length > 0 ? p.images.sort((a: any, b: any) => a.sort_order - b.sort_order).map((img: any) => img.url) : [p.thumbnail_url || ''],
