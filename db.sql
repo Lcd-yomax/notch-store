@@ -368,3 +368,37 @@ CREATE TRIGGER on_new_review_created
   AFTER INSERT ON public.reviews
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_review();
+
+  -- Order activity log (tracks who changed what and when)
+CREATE TABLE public.order_activity (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id    uuid NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  user_id     uuid REFERENCES dashboard_users(id) ON DELETE SET NULL,
+  action      text NOT NULL,           -- e.g. 'status_changed', 'note_added', 'created'
+  old_value   text,
+  new_value   text,
+  note        text,
+  created_at  timestamptz DEFAULT now()
+);
+
+ALTER TABLE public.order_activity ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "admin_read_order_activity" ON order_activity
+  FOR SELECT USING (has_permission('orders:read'));
+CREATE POLICY "admin_write_order_activity" ON order_activity
+  FOR INSERT WITH CHECK (has_permission('orders:update_status'));
+
+-- Auto-log when an order is first created
+CREATE OR REPLACE FUNCTION public.handle_order_activity_on_create()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.order_activity (order_id, action, new_value)
+  VALUES (NEW.id, 'created', NEW.status::text);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_order_created_activity
+  AFTER INSERT ON public.orders
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_order_activity_on_create();

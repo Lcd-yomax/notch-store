@@ -1,13 +1,50 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-import { bestSellingProducts } from '@/lib/dummyData';
-
 export default function BestSellingProducts() {
   const { t } = useLanguage();
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchBestSellers() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        // Grab a different slice for 'Best Sellers'
+        setProducts(data.slice(5, 9) || []);
+      } catch (err) {
+        console.error('Failed to load best selling products', err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchBestSellers();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{t.home.bestSellingProducts}</h2>
+            <p className="text-slate-500 text-base md:text-lg">{t.home.bestSellingDesc}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
+          {Array.from({ length: 4 }).map((_, i) => (
+             <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[350px]"></div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (products.length === 0) return null;
 
   return (
     <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
@@ -23,20 +60,19 @@ export default function BestSellingProducts() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {bestSellingProducts.map((product) => (
+        {products.map((product) => (
           <Link key={product.id} href={`/product/${product.id}`} className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
             <div className="relative aspect-square bg-slate-50 dark:bg-slate-800 overflow-hidden">
-              {product.badge && (
-                <div className="absolute top-4 left-4 z-10 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                  {t.home.badges[product.badge as keyof typeof t.home.badges]}
-                </div>
+              {product.thumbnail_url ? (
+                <Image
+                  src={product.thumbnail_url}
+                  alt={product.name}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              ) : (
+                <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
               )}
-              <Image
-                src={product.image}
-                alt={t.home.bestSellingProductsList[product.id as keyof typeof t.home.bestSellingProductsList].name}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
-              />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
               <button className="absolute bottom-4 right-4 w-10 h-10 bg-white text-slate-900 rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary hover:text-white">
                 <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 0" }}>favorite</span>
@@ -46,14 +82,16 @@ export default function BestSellingProducts() {
             <div className="p-5 flex flex-col flex-grow">
               <div className="flex items-center gap-1 mb-2">
                 <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{product.rating}</span>
-                <span className="text-sm text-slate-400">({product.reviews})</span>
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{product.rating || '5.0'}</span>
+                <span className="text-sm text-slate-400">({product.reviews || '0'})</span>
               </div>
-              <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">{t.home.bestSellingProductsList[product.id as keyof typeof t.home.bestSellingProductsList].name}</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">{product.name}</h3>
               <div className="mt-auto flex items-center gap-3">
-                <span className="font-black text-lg text-slate-900 dark:text-white">{t.home.bestSellingProductsList[product.id as keyof typeof t.home.bestSellingProductsList].price}</span>
-                {t.home.bestSellingProductsList[product.id as keyof typeof t.home.bestSellingProductsList].originalPrice && (
-                  <span className="text-sm text-slate-400 line-through font-medium">{t.home.bestSellingProductsList[product.id as keyof typeof t.home.bestSellingProductsList].originalPrice}</span>
+                <span className="font-black text-lg text-slate-900 dark:text-white">
+                  {product.variations?.[0]?.price_display ? `${product.variations[0].price_display} DH` : 'N/A'}
+                </span>
+                {product.variations?.[0]?.price && product.variations[0].price > product.variations[0].price_display && (
+                  <span className="text-sm text-slate-400 line-through font-medium">{product.variations[0].price} DH</span>
                 )}
               </div>
             </div>

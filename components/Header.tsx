@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
 import SearchModal from './SearchModal';
-import { categoriesData } from '@/lib/dummyData';
 
 export default function Header({ showPromo = true }: { showPromo?: boolean }) {
   const { t, language, setLanguage } = useLanguage();
@@ -14,11 +13,21 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
   const pathname = usePathname();
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+    async function fetchCategories() {
+      try {
+        const res = await fetch('/api/categories');
+        const data = await res.json();
+        setCategories(data || []);
+      } catch (err) {
+        console.error('Failed to load header categories', err);
+      }
+    }
+    fetchCategories();
   }, []);
 
   return (
@@ -59,31 +68,25 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                 <div className="p-8 grid grid-cols-3 gap-8">
                   {/* Category Links */}
                   <div className="col-span-2 grid grid-cols-2 gap-x-6 gap-y-4">
-                    {categoriesData.map((category) => {
-                      const nameParts = category.nameKey.split('.');
-                      let localizedName: any = t;
-                      for (const part of nameParts) {
-                        if (localizedName && localizedName[part]) localizedName = localizedName[part];
-                        else {
-                          localizedName = category.nameKey;
-                          break;
-                        }
-                      }
-
-                      return (
-                        <Link key={category.id} href={`/categories/${category.id}`} className="flex items-center gap-4 group/item p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                          <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800">
-                            <img src={category.image} alt={category.id} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
+                    {categories.length > 0 ? categories.map((category) => (
+                        <Link key={category.id} href={`/categories/${category.slug}`} className="flex items-center gap-4 group/item p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                          <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                            {category.image_url ? (
+                              <img src={category.image_url} alt={category.name} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
+                            ) : (
+                              <span className="material-symbols-outlined text-slate-400">image</span>
+                            )}
                           </div>
                           <div>
                             <p className="font-bold text-slate-900 dark:text-white group-hover/item:text-primary transition-colors">
-                              {typeof localizedName === 'string' ? localizedName : category.nameKey}
+                              {category.name}
                             </p>
-                            <p className="text-xs text-slate-500 mt-0.5">{category.itemCount} {((t as any).products) || 'Produits'}</p>
+                            <p className="text-xs text-slate-500 mt-0.5">{category.products?.[0]?.count || 0} {((t as any).products) || 'Produits'}</p>
                           </div>
                         </Link>
-                      );
-                    })}
+                    )) : (
+                      <div className="col-span-2 text-slate-500 p-4">Chargement des catégories...</div>
+                    )}
                   </div>
 
                   {/* Featured Banner */}

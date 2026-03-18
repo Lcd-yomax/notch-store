@@ -14,6 +14,11 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const { addToCart } = useCart();
   const router = useRouter();
 
+  // State
+  const [product, setProduct] = useState<any>(null);
+  const [reviewsList, setReviewsList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   // Variation States
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -25,6 +30,69 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [comment, setComment] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
+  // Data Fetching
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [prodRes, revRes] = await Promise.all([
+          fetch(`/api/products?id=${id}`),
+          fetch(`/api/reviews?product_id=${id}&limit=10`)
+        ]);
+
+        const prodData = await prodRes.json();
+        const revData = await revRes.json();
+
+        if (prodData && prodData.length > 0) {
+          const p = prodData[0];
+          const mappedProduct = {
+            id: p.id,
+            name: p.name,
+            description: p.description || '',
+            features: [
+              'Haute qualité',
+              'Durabilité garantie',
+              'Design moderne'
+            ], // Fallback default features
+            images: p.images?.length > 0 ? p.images.sort((a: any, b: any) => a.sort_order - b.sort_order).map((img: any) => img.url) : [p.thumbnail_url || ''],
+            stock: p.is_active,
+            discount: p.variations?.[0]?.discount_label ? parseInt(p.variations[0].discount_label) || 0 : 0,
+            rating: 5.0, // Calculate dynamically later or fetch from aggregate
+            reviews: revData?.length || 0,
+            price: p.variations?.[0]?.price_display || 0,
+            originalPrice: p.variations?.[0]?.price || 0,
+            variations: (p.variations || []).map((v: any, index: number) => ({
+              id: v.id,
+              color: v.color || null,
+              size: v.size || null,
+              price: v.price_display || v.price,
+              originalPrice: v.price,
+              stock: v.stock,
+              imageIndex: 0 // Simplification: all use main image unless categorized
+            }))
+          };
+          setProduct(mappedProduct);
+        }
+
+        if (Array.isArray(revData)) {
+          setReviewsList(revData.map(r => ({
+            id: r.id,
+            name: r.full_name,
+            rating: r.stars,
+            date: new Date(r.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }),
+            comment: r.comment,
+            image: r.image_url || null
+          })));
+        }
+      } catch (error) {
+        console.error('Failed to load product details', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadData();
+  }, [id]);
 
   // Sticky button state and refs
   const formRef = useRef<HTMLFormElement>(null);
@@ -93,24 +161,43 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
     router.push('/success');
   };
 
-  const [reviewsList, setReviewsList] = useState<{ id: number; name: string; rating: number; date: string; comment: string; image: string | null; }[]>([
-    {
-      id: 1,
-      name: t.productDetails.reviews[0].name,
-      rating: 5,
-      date: t.productDetails.reviews[0].date,
-      comment: t.productDetails.reviews[0].comment,
-      image: null
-    },
-    {
-      id: 2,
-      name: t.productDetails.reviews[1].name,
-      rating: 4,
-      date: t.productDetails.reviews[1].date,
-      comment: t.productDetails.reviews[1].comment,
-      image: null
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingReview(true);
+
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: id,
+          author_name: name,
+          author_email: email,
+          rating,
+          content: comment,
+          images: image ? [image] : []
+        })
+      });
+
+      if (!res.ok) throw new Error('Failed to submit review');
+
+      setName('');
+      setEmail('');
+      setComment('');
+      setRating(5);
+      setImage(null);
+      setIsReviewSubmitted(true);
+      setImage(null);
+      setIsReviewSubmitted(true);
+      // We do not add it to reviewsList here because it needs admin approval first.
+
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert("Une erreur est survenue lors de l'envoi de votre avis. Veuillez réessayer.");
+    } finally {
+      setIsSubmittingReview(false);
     }
-  ]);
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -122,71 +209,29 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
     }
   };
 
-  const handleSubmitReview = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newReview = {
-      id: Date.now(),
-      name,
-      rating,
-      date: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }),
-      comment,
-      image
-    };
-    setReviewsList([newReview, ...reviewsList]);
-    setName('');
-    setEmail('');
-    setComment('');
-    setRating(5);
-    setImage(null);
-    setIsReviewSubmitted(true);
-  };
 
-  // Mock product data based on ID
-  const product = {
-    id: id,
-    name: t.productDetails.name,
-    price: 249,
-    originalPrice: 349,
-    discount: 30,
-    rating: 4.8,
-    reviews: 124,
-    description: t.productDetails.description,
-    features: t.productDetails.features,
-    images: [
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCykLfWFjyRIPtV9bQD2tx9t5dH4VHdPpXqeg_FwOd8V4rRcA45Nc-1u-1PtUPAyTFZmbVygQ_bRpOxOwUQL7SMNW6yhOculCR-wC9bdGx0vZTLcrL9GfE9mPVVI5pZQCMpfX-hs0T_QJbRkUa7Hpa36EWd9XJnr36wt4CMMNBRJxM8OCH6IQnq6D4GnvsMQH8zGJ6ZnOh_RcBYQYWt75N0i0LNEoEBnTxEfwd0r3caDh4UPJ57UOQCHx0oaJPbd-xqOKcAsVYHbJmD',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuD6-PzCy-47LExPVhmTpGvqDvHJUT1yoa4NhJQjSOSss0A1pImJFnSU1Zlrd0GHIwA7qSOJixW8WIxQYzleF2l7dpIqCeXdfuteZeViu9RchJuRyveHuLj0EV6l3fayAaCZlybMeJ_nh8lwjKCiqJEBOVW9HHMYW_IYhs5lvPzHgLnzvJHstCornVqsEx7QlLMQrb4xja4WxozWpAGanngGnZjMLdjpccnZPYEEEMXnOe61dtmyCIJi6YvAFPDf7tCJ8ojRBsoiT1Sb',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDM9pXG2JOOngvqdudDIysGjRL0czJwD08aNiX4L9KwOLs1I4vGcJHzzGLP2KDLjas49w7hE0UudVZEexExOsB9oY9a0U6JEAdkd_PwAxwKvsYF8PiWH8JaBL-N3VgAKjV8AEhljeUMUww8vZPXlk0Alu4nWVhk8HAGPq4AAaHN8Af6TT_MKjIXR-kutYg-WXjksoGXcxRe1sAKDYscK0D44HE2o1hA3WYp2F6o73h46sa4q_Lwrf8U8JG3-B6GqQbwZi1evPSoeX0D'
-    ],
-    stock: true,
-    variations: [
-      { id: 'v1', color: 'Noir', size: '1m', price: 249, originalPrice: 349, stock: 15, imageIndex: 0 },
-      { id: 'v2', color: 'Noir', size: '2m', price: 299, originalPrice: 399, stock: 5, imageIndex: 0 },
-      { id: 'v3', color: 'Blanc', size: '1m', price: 249, originalPrice: 349, stock: 0, imageIndex: 1 },
-      { id: 'v4', color: 'Blanc', size: '2m', price: 299, originalPrice: 399, stock: 8, imageIndex: 1 },
-    ]
-  };
 
   // Select first available options on load
   useEffect(() => {
-    if (product.variations.length > 0 && !selectedColor) {
-      const colors = Array.from(new Set(product.variations.map(v => v.color).filter(Boolean)));
-      if (colors.length > 0) setSelectedColor(colors[0]);
+    if (product?.variations?.length > 0 && !selectedColor) {
+      const colors = Array.from(new Set(product.variations.map((v: any) => v.color).filter(Boolean)));
+      if (colors.length > 0) setSelectedColor(colors[0] as string);
     }
-  }, [product.variations, selectedColor]);
+  }, [product, selectedColor]);
 
   useEffect(() => {
-    if (product.variations.length > 0 && selectedColor && !selectedSize) {
+    if (product?.variations?.length > 0 && selectedColor && !selectedSize) {
       const availableSizesForColor = product.variations
-        .filter(v => v.color === selectedColor && v.size)
-        .map(v => v.size);
-      if (availableSizesForColor.length > 0) setSelectedSize(availableSizesForColor[0]);
+        .filter((v: any) => v.color === selectedColor && v.size)
+        .map((v: any) => v.size);
+      if (availableSizesForColor.length > 0) setSelectedSize(availableSizesForColor[0] as string);
     }
-  }, [product.variations, selectedColor, selectedSize]);
+  }, [product, selectedColor, selectedSize]);
 
   // Derived state for the currently matching variation
-  const currentVariation = product.variations.find(
-    v => (v.color === selectedColor || (!v.color && !selectedColor)) && 
-         (v.size === selectedSize || (!v.size && !selectedSize))
+  const currentVariation = product?.variations?.find(
+    (v: any) => (v.color === selectedColor || (!v.color && !selectedColor)) &&
+      (v.size === selectedSize || (!v.size && !selectedSize))
   );
 
   // Auto-switch image when color changes
@@ -196,9 +241,34 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
     }
   }, [currentVariation]);
 
-  const availableColors = Array.from(new Set(product.variations.map(v => v.color).filter(Boolean)));
-  const availableSizes = Array.from(new Set(product.variations.map(v => v.size).filter(Boolean)));
+  const availableColors = Array.from(new Set(product?.variations?.map((v: any) => v.color).filter(Boolean) || [])) as string[];
+  const availableSizes = Array.from(new Set(product?.variations?.map((v: any) => v.size).filter(Boolean) || [])) as string[];
 
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <main className="flex-grow bg-white dark:bg-slate-950 py-10 flex items-center justify-center min-h-[60vh]">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!product) {
+    return (
+      <>
+        <Header />
+        <main className="flex-grow bg-white dark:bg-slate-950 py-10 flex flex-col items-center justify-center text-center min-h-[60vh]">
+          <span className="material-symbols-outlined text-6xl text-slate-200 dark:text-slate-700 mb-4">search_off</span>
+          <h1 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">Produit introuvable</h1>
+          <Link href="/shop" className="text-primary hover:underline">Retour à la boutique</Link>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -225,7 +295,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${product.images[activeImageIndex]}')` }}></div>
                 </div>
                 <div className="grid grid-cols-4 gap-4">
-                  {product.images.map((img, idx) => (
+                  {product.images.map((img: string, idx: number) => (
                     <button
                       key={idx}
                       onClick={() => setActiveImageIndex(idx)}
@@ -252,12 +322,12 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     <span className="text-slate-900 dark:text-white font-bold">{product.rating}</span>
                     <span className="text-slate-400">({product.reviews} {t.product.reviews})</span>
                     <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
-                    
+
                     {currentVariation ? (
                       currentVariation.stock > 0 ? (
                         <span className="text-emerald-500 font-bold flex items-center gap-1">
                           <span className="material-symbols-outlined text-sm">check_circle</span>
-                          {t.product.inStock} ({currentVariation.stock})
+                          {t.product.inStock}
                         </span>
                       ) : (
                         <span className="text-red-500 font-bold flex items-center gap-1">
@@ -288,11 +358,10 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                         <button
                           key={color}
                           onClick={() => setSelectedColor(color)}
-                          className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
-                            selectedColor === color 
-                              ? 'border-primary text-primary bg-primary/5' 
+                          className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${selectedColor === color
+                              ? 'border-primary text-primary bg-primary/5'
                               : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600'
-                          }`}
+                            }`}
                         >
                           {color}
                         </button>
@@ -305,18 +374,17 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <div className="mb-8 border-b border-slate-100 dark:border-slate-800 pb-8">
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider">{t.product.size}: <span className="text-slate-500 font-normal normal-case">{selectedSize}</span></h3>
                     <div className="flex items-center gap-3">
-                      {product.variations.filter(v => v.color === selectedColor && v.size).map(v => (
+                      {product.variations.filter((v: any) => v.color === selectedColor && v.size).map((v: any) => (
                         <button
                           key={v.size}
                           onClick={() => setSelectedSize(v.size as string)}
                           disabled={v.stock === 0}
-                          className={`px-5 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${
-                            selectedSize === v.size 
-                              ? 'border-primary text-primary bg-primary/5 shadow-sm' 
+                          className={`px-5 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${selectedSize === v.size
+                              ? 'border-primary text-primary bg-primary/5 shadow-sm'
                               : v.stock === 0
                                 ? 'border-dashed border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed bg-slate-50 dark:bg-slate-900/50'
                                 : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50'
-                          }`}
+                            }`}
                         >
                           {v.size} {v.stock === 0 && <span className="block text-[10px] font-normal leading-none mt-1 text-red-400">{t.product.soldOut}</span>}
                         </button>
@@ -411,7 +479,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                 <div className="mb-10">
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">{t.product.features}</h3>
                   <ul className="space-y-3">
-                    {product.features.map((feature, idx) => (
+                    {product.features.map((feature: string, idx: number) => (
                       <li key={idx} className="flex items-start gap-3 text-slate-600 dark:text-slate-400">
                         <span className="material-symbols-outlined text-primary mt-0.5 text-xl">check</span>
                         <span>{feature}</span>
@@ -473,7 +541,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       <span className="material-symbols-outlined text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                     </div>
                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">{t.reviewsSection.successTitle || "Merci !"}</h3>
-                    <p className="text-slate-600 dark:text-slate-400 max-w-[300px] mb-8">{t.reviewsSection.successMessage || "Votre avis a été soumis avec succès."}</p>
+                    <p className="text-slate-600 dark:text-slate-400 max-w-[300px] mb-8">{t.reviewsSection.successMessage || "Votre avis a été soumis avec succès et est en attente d'approbation par notre équipe."}</p>
                     <button
                       onClick={() => setIsReviewSubmitted(false)}
                       className="px-6 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-bold transition-colors cursor-pointer"

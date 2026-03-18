@@ -6,6 +6,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const categoryId = searchParams.get('category_id');
     const slug = searchParams.get('slug');
+    const categorySlug = searchParams.get('category_slug');
+    const id = searchParams.get('id');
 
     let query = supabase
       .from('products')
@@ -23,6 +25,14 @@ export async function GET(request: Request) {
     
     if (slug) {
       query = query.eq('slug', slug);
+    }
+
+    if (id) {
+      query = query.eq('id', id);
+    }
+
+    if (categorySlug) {
+      query = query.eq('categories.slug', categorySlug);
     }
 
     const { data, error } = await query;
