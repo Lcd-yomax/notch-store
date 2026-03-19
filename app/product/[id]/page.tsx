@@ -136,28 +136,44 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [orderPhone, setOrderPhone] = useState('');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const handleOrderSubmit = (e: React.FormEvent) => {
+  const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
+
+  const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmittingOrder(true);
 
-    // Build WhatsApp message with order details
-    const waNumber = '212667018042'; // +212 667-018042
-    const message = [
-      `Nouvelle commande - NotchMaroc`,
-      ``,
-      `Produit: ${product.name}`,
-      `Variation: ${selectedColor || 'N/A'} - ${selectedSize || 'N/A'}`,
-      `Prix: ${currentVariation?.price ?? product.price} DH`,
-      ``,
-      `Client: ${orderName}`,
-      `Telephone: ${orderPhone}`,
-      `Adresse: ${orderAddress}`,
-      `Ville: ${orderCity}`,
-    ].join('\n');
+    try {
+      const price = currentVariation?.price ?? product.price;
+      const variationId = currentVariation?.id ?? product.variations?.[0]?.id ?? null;
 
-    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
-    window.open(waUrl, '_blank');
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: orderName,
+          phone: orderPhone,
+          address: orderAddress,
+          city: orderCity,
+          total_amount: price,
+          notes: `Couleur: ${selectedColor || 'N/A'} | Taille: ${selectedSize || 'N/A'}`,
+          items: variationId
+            ? [{ variation_id: variationId, quantity: 1, unit_price: price }]
+            : []
+        })
+      });
 
-    router.push('/success');
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Order failed');
+      }
+
+      router.push('/success');
+    } catch (error: any) {
+      console.error('Order submission error:', error);
+      alert("Une erreur est survenue lors de la commande. Veuillez réessayer.");
+    } finally {
+      setIsSubmittingOrder(false);
+    }
   };
 
   const handleSubmitReview = async (e: React.FormEvent) => {
@@ -448,9 +464,17 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     />
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 mt-2">
-                    <button type="submit" className="btn-glow-shake flex-1 w-full bg-primary hover:bg-amber-500 text-white font-bold text-xl py-5 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer">
-                      <span className="material-symbols-outlined">local_shipping</span>
-                      {t.product.orderNow || 'Acheter maintenant'}
+                    <button
+                      type="submit"
+                      disabled={isSubmittingOrder}
+                      className="btn-glow-shake flex-1 w-full bg-primary hover:bg-amber-500 disabled:opacity-70 disabled:cursor-not-allowed text-white font-bold text-xl py-5 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer"
+                    >
+                      {isSubmittingOrder ? (
+                        <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                      ) : (
+                        <span className="material-symbols-outlined">local_shipping</span>
+                      )}
+                      {isSubmittingOrder ? 'Envoi en cours...' : (t.product.orderNow || 'Acheter maintenant')}
                     </button>
                     {/* <button
                       type="button"
@@ -494,7 +518,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
                 <div className="mt-auto pt-6 flex items-center justify-center gap-6 text-sm font-medium text-slate-500">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-slate-400">local_shipping</span>
+                    <span className="material-symbols-outlined text-slate-400 text-3xl">local_shipping</span>
                     {t.product.freeShipping}
                   </div>
                   {/* <div className="flex items-center gap-2">
