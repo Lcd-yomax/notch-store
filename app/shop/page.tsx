@@ -267,6 +267,7 @@ export default function Shop() {
                               src={product.thumbnail_url}
                               alt={product.name}
                               fill
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                               className="object-cover group-hover:scale-110 transition-transform duration-500"
                             />
                           ) : (

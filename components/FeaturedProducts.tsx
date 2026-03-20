@@ -61,6 +61,7 @@ export default function FeaturedProducts() {
                   src={largeProduct.thumbnail_url} 
                   alt={largeProduct.name}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
@@ -86,6 +87,7 @@ export default function FeaturedProducts() {
                     src={product.thumbnail_url} 
                     alt={product.name}
                     fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 ) : (

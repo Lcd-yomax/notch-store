@@ -69,6 +69,7 @@ export default function CategorySlider() {
                       src={category.image_url} 
                       alt={category.name}
                       fill
+                      sizes="(max-width: 768px) 50vw, 20vw"
                       className="object-cover group-hover/item:scale-110 transition-transform duration-500"
                     />
                   ) : (

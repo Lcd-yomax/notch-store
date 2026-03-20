@@ -499,9 +499,10 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
                 <div className="mb-8">
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{t.product.description}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {product.description}
-                  </p>
+                  <div 
+                    className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
                 </div>
 
                 <div className="mb-10">

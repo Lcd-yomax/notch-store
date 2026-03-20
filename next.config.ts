@@ -1,13 +1,11 @@
 const nextConfig = {
   reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: false,
   },
   // Allow access to remote image placeholder.
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
