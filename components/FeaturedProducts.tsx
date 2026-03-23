@@ -70,7 +70,7 @@ export default function FeaturedProducts() {
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
               <h3 className="font-bold text-white text-lg md:text-xl drop-shadow-md">{largeProduct.name}</h3>
               <span className="font-medium text-white text-lg drop-shadow-md">
-                {largeProduct.variations?.[0]?.price_display ? `${largeProduct.variations[0].price_display} DH` : 'N/A'}
+                {largeProduct.variations?.[0]?.price ? `${largeProduct.variations[0].price} DH` : 'N/A'}
               </span>
             </div>
           </Link>
@@ -95,7 +95,7 @@ export default function FeaturedProducts() {
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-end gap-1 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                 <h3 className="font-bold text-white text-sm truncate max-w-full xl:max-w-[60%] drop-shadow-md">{product.name}</h3>
                 <span className="font-medium text-white text-sm drop-shadow-md">
-                   {product.variations?.[0]?.price_display ? `${product.variations[0].price_display} DH` : 'N/A'}
+                   {product.variations?.[0]?.price ? `${product.variations[0].price} DH` : 'N/A'}
                 </span>
               </div>
             </Link>

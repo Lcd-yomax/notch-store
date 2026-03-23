@@ -59,14 +59,14 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             discount: p.variations?.[0]?.discount_label ? parseInt(p.variations[0].discount_label) || 0 : 0,
             rating: 5.0, // Calculate dynamically later or fetch from aggregate
             reviews: revData?.length || 0,
-            price: p.variations?.[0]?.price_display || 0,
-            originalPrice: p.variations?.[0]?.price || 0,
+            price: p.variations?.[0]?.price || 0,
+            originalPrice: p.variations?.[0]?.price_display || null,
             variations: (p.variations || []).map((v: any, index: number) => ({
               id: v.id,
               color: v.color || null,
               size: v.size || null,
-              price: v.price_display || v.price,
-              originalPrice: v.price,
+              price: v.price,
+              originalPrice: v.price_display || null,
               stock: v.stock,
               imageIndex: 0 // Simplification: all use main image unless categorized
             }))
@@ -410,7 +410,9 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
                 <div className="flex items-end gap-4 mb-8">
                   <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">{currentVariation?.price ?? product.price} <span className="text-2xl">DH</span></span>
-                  <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{currentVariation?.originalPrice ?? product.originalPrice} DH</span>
+                  {(currentVariation?.originalPrice ?? product.originalPrice) && (
+                    <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{currentVariation?.originalPrice ?? product.originalPrice} DH</span>
+                  )}
                 </div>
 
                 {t.product.orderForm?.title && (
@@ -499,9 +501,10 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
                 <div className="mb-8">
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{t.product.description}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {product.description}
-                  </p>
+                  <div 
+                    className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-slate-900 dark:prose-headings:text-white prose-strong:text-slate-800 dark:prose-strong:text-white prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-hr:border-slate-200 dark:prose-hr:border-slate-700"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
                 </div>
 
                 <div className="mb-10">

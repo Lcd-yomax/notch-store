@@ -106,9 +106,9 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {latestPromos.map((product) => {
                 const productName = product.name;
-                const priceDisplay = product.variations?.[0]?.price_display || 0;
                 const price = product.variations?.[0]?.price || 0;
-                const discount = price > priceDisplay ? Math.round(((price - priceDisplay) / price) * 100) : 0;
+                const priceDisplay = product.variations?.[0]?.price_display || null;
+                const discount = priceDisplay && priceDisplay > price ? Math.round(((priceDisplay - price) / priceDisplay) * 100) : 0;
 
                 return (
                   <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
@@ -137,9 +137,9 @@ export default function Home() {
                       </div>
                       <div className="flex flex-col gap-2 mt-auto">
                         <div className="flex items-end gap-3">
-                          <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{priceDisplay} DH</span>
-                          {discount > 0 && (
-                            <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{price} DH</span>
+                          <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{price} DH</span>
+                          {discount > 0 && priceDisplay && (
+                            <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{priceDisplay} DH</span>
                           )}
                         </div>
                         <div className="flex items-center gap-1">
@@ -154,7 +154,7 @@ export default function Home() {
                           addToCart({
                             id: product.id,
                             name: productName,
-                            price: priceDisplay,
+                            price: price,
                             quantity: 1,
                             image: product.thumbnail_url || ''
                           });

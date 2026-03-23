@@ -88,10 +88,10 @@ export default function BestSellingProducts() {
               <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">{product.name}</h3>
               <div className="mt-auto flex items-center gap-3">
                 <span className="font-black text-lg text-slate-900 dark:text-white">
-                  {product.variations?.[0]?.price_display ? `${product.variations[0].price_display} DH` : 'N/A'}
+                  {product.variations?.[0]?.price ? `${product.variations[0].price} DH` : 'N/A'}
                 </span>
-                {product.variations?.[0]?.price && product.variations[0].price > product.variations[0].price_display && (
-                  <span className="text-sm text-slate-400 line-through font-medium">{product.variations[0].price} DH</span>
+                {product.variations?.[0]?.price_display && product.variations[0].price_display > product.variations[0].price && (
+                  <span className="text-sm text-slate-400 line-through font-medium">{product.variations[0].price_display} DH</span>
                 )}
               </div>
             </div>

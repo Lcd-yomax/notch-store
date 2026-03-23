@@ -23,7 +23,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
             setAllProducts(data.map((p: any) => ({
               id: p.id,
               name: p.name,
-              price: p.variations?.[0]?.price_display ?? p.variations?.[0]?.price ?? '—',
+              price: p.variations?.[0]?.price ?? p.variations?.[0]?.price_display ?? '—',
               image: p.thumbnail_url || (p.images?.[0]?.url ?? ''),
             })));
           }
