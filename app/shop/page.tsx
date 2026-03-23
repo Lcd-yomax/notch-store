@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
+import { ImageSizes } from '@/lib/imageUtils';
 import { useState, useMemo, useEffect } from 'react';
 
 export default function Shop() {
@@ -264,10 +265,11 @@ export default function Shop() {
                         <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
                           {product.thumbnail_url ? (
                             <Image 
-                              src={product.thumbnail_url}
+                              src={ImageSizes.medium(product.thumbnail_url || '')}
                               alt={product.name}
                               fill
-                              className="object-cover group-hover:scale-110 transition-transform duration-500"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>

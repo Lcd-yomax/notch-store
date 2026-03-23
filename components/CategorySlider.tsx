@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { ImageSizes } from '@/lib/imageUtils';
 
 export default function CategorySlider() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -38,19 +39,20 @@ export default function CategorySlider() {
     <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
       <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8">{t.home.shopByCategory}</h2>
       <div className="relative group">
+        {/* Left arrow – only shown when there are enough categories to scroll */}
         <button 
           onClick={() => scroll('left')}
-          className="absolute left-0 top-[40%] -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity"
+          className={`absolute left-0 top-[40%] -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity ${categories.length <= 6 ? 'hidden' : ''}`}
         >
           <span className="material-symbols-outlined">chevron_left</span>
         </button>
         
         <div 
           ref={scrollRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className={`flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${!isLoading && categories.length <= 6 ? 'justify-center' : 'justify-start'}`}
         >
           {isLoading ? (
-             Array.from({ length: 8 }).map((_, i) => (
+             Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="flex flex-col items-center gap-4 min-w-[140px] md:min-w-[180px] snap-start">
                   <div className="w-full aspect-square rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
                   <div className="w-24 h-5 bg-slate-200 dark:bg-slate-800 rounded animate-pulse"></div>
@@ -66,9 +68,10 @@ export default function CategorySlider() {
                 <div className="w-full aspect-square rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
                   {category.image_url ? (
                     <Image 
-                      src={category.image_url} 
+                      src={ImageSizes.small(category.image_url)} 
                       alt={category.name}
                       fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
                       className="object-cover group-hover/item:scale-110 transition-transform duration-500"
                     />
                   ) : (
@@ -78,7 +81,7 @@ export default function CategorySlider() {
                   )}
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <span className="font-medium text-slate-900 dark:text-white text-base text-center line-clamp-1">
+                  <span className="font-medium text-slate-900 dark:text-white text-base text-center line-clamp-1 group-hover/item:text-primary transition-colors">
                     {category.name}
                   </span>
                   {category.products && (
@@ -92,13 +95,15 @@ export default function CategorySlider() {
           )}
         </div>
 
+        {/* Right arrow – only shown when there are enough categories to scroll */}
         <button 
           onClick={() => scroll('right')}
-          className="absolute right-0 top-[40%] -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity"
+          className={`absolute right-0 top-[40%] -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity ${categories.length <= 6 ? 'hidden' : ''}`}
         >
           <span className="material-symbols-outlined">chevron_right</span>
         </button>
       </div>
+
     </section>
   );
 }

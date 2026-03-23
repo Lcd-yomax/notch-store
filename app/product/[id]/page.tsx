@@ -7,6 +7,7 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
 import { use, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { ImageSizes } from '@/lib/imageUtils';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -307,7 +308,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-sm font-black px-4 py-2 rounded-full shadow-lg">
                     -{product.discount}%
                   </div>
-                  <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${product.images[activeImageIndex]}')` }}></div>
+                  <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${ImageSizes.full(product.images[activeImageIndex])}')` }}></div>
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                   {product.images.map((img: string, idx: number) => (
@@ -316,7 +317,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       onClick={() => setActiveImageIndex(idx)}
                       className={`relative aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border-2 ${idx === activeImageIndex ? 'border-primary' : 'border-transparent'} hover:border-primary/50 transition-colors p-2`}
                     >
-                      <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${img}')` }}></div>
+                      <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${ImageSizes.thumbnail(img)}')` }}></div>
                     </button>
                   ))}
                 </div>

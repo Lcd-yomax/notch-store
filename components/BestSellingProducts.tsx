@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { ImageSizes } from '@/lib/imageUtils';
 
 export default function BestSellingProducts() {
   const { t } = useLanguage();
@@ -53,7 +54,7 @@ export default function BestSellingProducts() {
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{t.home.bestSellingProducts}</h2>
           <p className="text-slate-500 text-base md:text-lg">{t.home.bestSellingDesc}</p>
         </div>
-        <Link href="/products" className="hidden md:flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+        <Link href="/shop" className="hidden md:flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
           {t.home.seeAll}
           <span className="material-symbols-outlined">arrow_forward</span>
         </Link>
@@ -65,18 +66,15 @@ export default function BestSellingProducts() {
             <div className="relative aspect-square bg-slate-50 dark:bg-slate-800 overflow-hidden">
               {product.thumbnail_url ? (
                 <Image
-                  src={product.thumbnail_url}
+                  src={ImageSizes.small(product.thumbnail_url || '')}
                   alt={product.name}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
                 />
               ) : (
                 <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
               )}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-              <button className="absolute bottom-4 right-4 w-10 h-10 bg-white text-slate-900 rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary hover:text-white">
-                <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 0" }}>favorite</span>
-              </button>
+              
             </div>
 
             <div className="p-5 flex flex-col flex-grow">

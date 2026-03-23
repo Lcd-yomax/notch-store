@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { ImageSizes } from '@/lib/imageUtils';
 
 export default function FeaturedProducts() {
   const { t } = useLanguage();
@@ -58,10 +59,11 @@ export default function FeaturedProducts() {
             <div className="absolute inset-0 w-full h-full">
               {largeProduct.thumbnail_url ? (
                 <Image 
-                  src={largeProduct.thumbnail_url} 
+                  src={ImageSizes.large(largeProduct.thumbnail_url || '')} 
                   alt={largeProduct.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-contain group-hover:scale-105 transition-transform duration-500 p-8"
                 />
               ) : (
                 <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -83,10 +85,11 @@ export default function FeaturedProducts() {
               <div className="absolute inset-0 w-full h-full">
                {product.thumbnail_url ? (
                   <Image 
-                    src={product.thumbnail_url} 
-                    alt={product.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                     src={ImageSizes.medium(product.thumbnail_url || '')} 
+                     alt={product.name}
+                     fill
+                     sizes="(max-width: 640px) 100vw, 25vw"
+                     className="object-contain group-hover:scale-105 transition-transform duration-500 p-4"
                   />
                 ) : (
                   <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
