@@ -71,7 +71,8 @@ export default function CategorySlider() {
                       src={ImageSizes.small(category.image_url)} 
                       alt={category.name}
                       fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                       
                       className="object-cover group-hover/item:scale-110 transition-transform duration-500"
                     />
                   ) : (

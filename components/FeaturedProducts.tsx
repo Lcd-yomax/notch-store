@@ -63,7 +63,8 @@ export default function FeaturedProducts() {
                   alt={largeProduct.name}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-contain group-hover:scale-105 transition-transform duration-500 p-8"
+                   className="object-contain group-hover:scale-105 transition-transform duration-500 p-8"
+ 
                 />
               ) : (
                 <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -85,11 +86,11 @@ export default function FeaturedProducts() {
               <div className="absolute inset-0 w-full h-full">
                {product.thumbnail_url ? (
                   <Image 
-                     src={ImageSizes.medium(product.thumbnail_url || '')} 
+                      src={ImageSizes.medium(product.thumbnail_url || '')} 
                      alt={product.name}
                      fill
                      sizes="(max-width: 640px) 100vw, 25vw"
-                     className="object-contain group-hover:scale-105 transition-transform duration-500 p-4"
+                     className="object-contain group-hover:scale-105 transition-transform duration-500 p-4"                    
                   />
                 ) : (
                   <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>

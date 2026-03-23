@@ -112,6 +112,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                           src={product.image}
                           alt={product.name}
                           fill
+                          sizes="64px"
                           className="object-cover"
                         />
                       ) : (

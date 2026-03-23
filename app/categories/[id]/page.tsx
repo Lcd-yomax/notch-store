@@ -248,7 +248,8 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                               alt={product.name}
                               fill
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+                               className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+ 
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>

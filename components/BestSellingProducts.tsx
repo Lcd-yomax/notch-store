@@ -69,7 +69,8 @@ export default function BestSellingProducts() {
                   src={ImageSizes.small(product.thumbnail_url || '')}
                   alt={product.name}
                   fill
-                  className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+                   className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+           
                 />
               ) : (
                 <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
