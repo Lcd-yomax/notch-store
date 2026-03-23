@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
@@ -50,10 +51,28 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
         </div>
       )}
       <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
-        <div className="max-w-[1440px] mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <span className="material-symbols-outlined text-primary text-2xl sm:text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-            <span className="text-xl sm:text-2xl font-black tracking-tighter text-slate-900 dark:text-white">Notch<span className="text-primary hidden sm:inline">Maroc</span></span>
+        <div className="max-w-[1440px] mx-auto px-4 lg:px-8 h-28 flex items-center justify-between">
+          <Link href="/" className="flex items-center shrink-0">
+            {/* Light mode logo */}
+            <Image
+              src="/images/logo/logo-light.png"
+              alt="Notch Logo"
+              width={220}
+              height={120}
+              className="w-auto object-contain block dark:hidden"
+              style={{ height: '120px', width: 'auto' }}
+              priority
+            />
+            {/* Dark mode logo */}
+            <Image
+              src="/images/logo/logo-dark.png"
+              alt="Notch Logo"
+              width={220}
+              height={120}
+              className="w-auto object-contain hidden dark:block"
+              style={{ height: '120px', width: 'auto' }}
+              priority
+            />
           </Link>
 
           <nav className="hidden md:flex items-center justify-center flex-1 pr-12 lg:pr-24 gap-6 lg:gap-10">
@@ -69,21 +88,21 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                   {/* Category Links */}
                   <div className="col-span-2 grid grid-cols-2 gap-x-6 gap-y-4">
                     {categories.length > 0 ? categories.map((category) => (
-                        <Link key={category.id} href={`/categories/${category.slug}`} className="flex items-center gap-4 group/item p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                          <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                            {category.image_url ? (
-                              <img src={category.image_url} alt={category.name} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
-                            ) : (
-                              <span className="material-symbols-outlined text-slate-400">image</span>
-                            )}
-                          </div>
-                          <div>
-                            <p className="font-bold text-slate-900 dark:text-white group-hover/item:text-primary transition-colors">
-                              {category.name}
-                            </p>
-                            <p className="text-xs text-slate-500 mt-0.5">{category.products?.[0]?.count || 0} {((t as any).products) || 'Produits'}</p>
-                          </div>
-                        </Link>
+                      <Link key={category.id} href={`/categories/${category.slug}`} className="flex items-center gap-4 group/item p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                          {category.image_url ? (
+                            <img src={category.image_url} alt={category.name} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
+                          ) : (
+                            <span className="material-symbols-outlined text-slate-400">image</span>
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-900 dark:text-white group-hover/item:text-primary transition-colors">
+                            {category.name}
+                          </p>
+                          <p className="text-xs text-slate-500 mt-0.5">{category.products?.[0]?.count || 0} {((t as any).products) || 'Produits'}</p>
+                        </div>
+                      </Link>
                     )) : (
                       <div className="col-span-2 text-slate-500 p-4">Chargement des catégories...</div>
                     )}
@@ -142,7 +161,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-lg py-4 px-4 flex flex-col gap-4">
+          <div className="md:hidden absolute top-28 left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-lg py-4 px-4 flex flex-col gap-4">
             <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className={`font-bold text-lg transition-colors ${pathname.startsWith('/shop') ? 'text-primary' : 'text-slate-600 dark:text-slate-300 hover:text-primary'}`}>{t.header.shop}</Link>
             <Link href="/categories" onClick={() => setIsMobileMenuOpen(false)} className={`font-bold text-lg transition-colors ${pathname.startsWith('/categories') ? 'text-primary' : 'text-slate-600 dark:text-slate-300 hover:text-primary'}`}>{t.header.categories}</Link>
             <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`font-bold text-lg transition-colors ${pathname === '/about' ? 'text-primary' : 'text-slate-600 dark:text-slate-300 hover:text-primary'}`}>{t.header.about}</Link>

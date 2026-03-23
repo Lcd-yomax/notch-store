@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
+import { ImageSizes } from '@/lib/imageUtils';
 import { useState, useMemo, useEffect } from 'react';
 
 export default function Shop() {
@@ -57,21 +58,21 @@ export default function Shop() {
     }
 
     if (minPrice) {
-      result = result.filter(p => (p.variations?.[0]?.price_display || p.variations?.[0]?.price || 0) >= Number(minPrice));
+      result = result.filter(p => (p.variations?.[0]?.price || 0) >= Number(minPrice));
     }
 
     if (maxPrice) {
-      result = result.filter(p => (p.variations?.[0]?.price_display || p.variations?.[0]?.price || 0) <= Number(maxPrice));
+      result = result.filter(p => (p.variations?.[0]?.price || 0) <= Number(maxPrice));
     }
 
     // Since we don't have stock boolean natively without checking variation stock size, ignore for now
 
     switch (sortOrder) {
       case 'price-low':
-        result.sort((a, b) => (a.variations?.[0]?.price_display || 0) - (b.variations?.[0]?.price_display || 0));
+        result.sort((a, b) => (a.variations?.[0]?.price || 0) - (b.variations?.[0]?.price || 0));
         break;
       case 'price-high':
-        result.sort((a, b) => (b.variations?.[0]?.price_display || 0) - (a.variations?.[0]?.price_display || 0));
+        result.sort((a, b) => (b.variations?.[0]?.price || 0) - (a.variations?.[0]?.price || 0));
         break;
       case 'newest':
         result.reverse();
@@ -250,9 +251,9 @@ export default function Shop() {
                   </div>
                 ) : (
                   paginatedProducts.map((product) => {
-                    const priceDisplay = product.variations?.[0]?.price_display || 0;
                     const price = product.variations?.[0]?.price || 0;
-                    const discount = price > priceDisplay ? Math.round(((price - priceDisplay) / price) * 100) : 0;
+                    const priceDisplay = product.variations?.[0]?.price_display || null;
+                    const discount = priceDisplay && priceDisplay > price ? Math.round(((priceDisplay - price) / priceDisplay) * 100) : 0;
 
                     return (
                       <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
@@ -264,11 +265,12 @@ export default function Shop() {
                         <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
                           {product.thumbnail_url ? (
                             <Image 
-                              src={product.thumbnail_url}
+                              src={ImageSizes.medium(product.thumbnail_url || '')}
                               alt={product.name}
                               fill
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              className="object-cover group-hover:scale-110 transition-transform duration-500"
+                               className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+ 
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -282,9 +284,9 @@ export default function Shop() {
                           </div>
                           <div className="flex flex-col gap-2 mt-auto">
                             <div className="flex items-end gap-3">
-                              <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{priceDisplay} DH</span>
-                              {discount > 0 && (
-                                <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{price} DH</span>
+                              <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{price} DH</span>
+                              {discount > 0 && priceDisplay && (
+                                <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{priceDisplay} DH</span>
                               )}
                             </div>
                             <div className="flex items-center gap-1">
@@ -299,7 +301,7 @@ export default function Shop() {
                               addToCart({
                                 id: product.id,
                                 name: product.name,
-                                price: priceDisplay,
+                                price: price,
                                 quantity: 1,
                                 image: product.thumbnail_url || ''
                               });

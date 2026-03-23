@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
+import { ImageSizes } from '@/lib/imageUtils';
 import HeroSlider from '@/components/HeroSlider';
 import CategorySlider from '@/components/CategorySlider';
 import FeaturedProducts from '@/components/FeaturedProducts';
@@ -106,9 +107,9 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {latestPromos.map((product) => {
                 const productName = product.name;
-                const priceDisplay = product.variations?.[0]?.price_display || 0;
-                const price = product.variations?.[0]?.price || 0;
-                const discount = price > priceDisplay ? Math.round(((price - priceDisplay) / price) * 100) : 0;
+                const price = product.variations?.[0]?.price;
+                const priceDisplay = product.variations?.[0]?.price_display || null;
+                const discount = priceDisplay && price && priceDisplay > price ? Math.round(((priceDisplay - price) / priceDisplay) * 100) : 0;
 
                 return (
                   <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
@@ -120,11 +121,12 @@ export default function Home() {
                     <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
                       {product.thumbnail_url ? (
                         <Image 
-                          src={product.thumbnail_url} 
+                          src={ImageSizes.small(product.thumbnail_url || '')} 
                           alt={productName}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                           className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+ 
                         />
                       ) : (
                          <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -138,9 +140,9 @@ export default function Home() {
                       </div>
                       <div className="flex flex-col gap-2 mt-auto">
                         <div className="flex items-end gap-3">
-                          <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{priceDisplay} DH</span>
-                          {discount > 0 && (
-                            <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{price} DH</span>
+                          <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{price ? `${price} DH` : 'N/A'}</span>
+                          {discount > 0 && priceDisplay && (
+                            <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{priceDisplay} DH</span>
                           )}
                         </div>
                         <div className="flex items-center gap-1">
@@ -155,7 +157,7 @@ export default function Home() {
                           addToCart({
                             id: product.id,
                             name: productName,
-                            price: priceDisplay,
+                            price: price,
                             quantity: 1,
                             image: product.thumbnail_url || ''
                           });

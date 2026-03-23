@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function Footer() {
@@ -11,10 +12,16 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-6">
-              <span className="material-symbols-outlined text-primary text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-              <span className="text-3xl font-black tracking-tighter text-white">Notch<span className="text-primary">Maroc</span></span>
-            </div>
+            <Link href="/" className="flex items-center mb-6">
+              <Image
+                src="/images/logo/logo-dark.png"
+                alt="Notch Logo"
+                width={160}
+                height={120}
+                style={{ height: '170px', width: 'auto' }}
+                className="w-auto object-contain"
+              />
+            </Link>
             <p className="text-slate-400 leading-relaxed mb-8">
               {t.footer.description}
             </p>

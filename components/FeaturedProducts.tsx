@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { ImageSizes } from '@/lib/imageUtils';
 
 export default function FeaturedProducts() {
   const { t } = useLanguage();
@@ -58,11 +59,12 @@ export default function FeaturedProducts() {
             <div className="absolute inset-0 w-full h-full">
               {largeProduct.thumbnail_url ? (
                 <Image 
-                  src={largeProduct.thumbnail_url} 
+                  src={ImageSizes.large(largeProduct.thumbnail_url || '')} 
                   alt={largeProduct.name}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                   className="object-contain group-hover:scale-105 transition-transform duration-500 p-8"
+ 
                 />
               ) : (
                 <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -71,7 +73,7 @@ export default function FeaturedProducts() {
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
               <h3 className="font-bold text-white text-lg md:text-xl drop-shadow-md">{largeProduct.name}</h3>
               <span className="font-medium text-white text-lg drop-shadow-md">
-                {largeProduct.variations?.[0]?.price_display ? `${largeProduct.variations[0].price_display} DH` : 'N/A'}
+                {largeProduct.variations?.[0]?.price ? `${largeProduct.variations[0].price} DH` : 'N/A'}
               </span>
             </div>
           </Link>
@@ -84,11 +86,11 @@ export default function FeaturedProducts() {
               <div className="absolute inset-0 w-full h-full">
                {product.thumbnail_url ? (
                   <Image 
-                    src={product.thumbnail_url} 
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      src={ImageSizes.medium(product.thumbnail_url || '')} 
+                     alt={product.name}
+                     fill
+                     sizes="(max-width: 640px) 100vw, 25vw"
+                     className="object-contain group-hover:scale-105 transition-transform duration-500 p-4"                    
                   />
                 ) : (
                   <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -97,7 +99,7 @@ export default function FeaturedProducts() {
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-end gap-1 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                 <h3 className="font-bold text-white text-sm truncate max-w-full xl:max-w-[60%] drop-shadow-md">{product.name}</h3>
                 <span className="font-medium text-white text-sm drop-shadow-md">
-                   {product.variations?.[0]?.price_display ? `${product.variations[0].price_display} DH` : 'N/A'}
+                   {product.variations?.[0]?.price ? `${product.variations[0].price} DH` : 'N/A'}
                 </span>
               </div>
             </Link>

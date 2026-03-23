@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { ImageSizes } from '@/lib/imageUtils';
 
 export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { t, language } = useLanguage();
@@ -23,8 +24,8 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
             setAllProducts(data.map((p: any) => ({
               id: p.id,
               name: p.name,
-              price: p.variations?.[0]?.price_display ?? p.variations?.[0]?.price ?? '—',
-              image: p.thumbnail_url || (p.images?.[0]?.url ?? ''),
+              price: p.variations?.[0]?.price ?? p.variations?.[0]?.price_display ?? '—',
+              image: ImageSizes.thumbnail(p.thumbnail_url || (p.images?.[0]?.url ?? '')),
             })));
           }
         })

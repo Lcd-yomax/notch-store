@@ -7,6 +7,7 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
 import { use, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { ImageSizes } from '@/lib/imageUtils';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -59,14 +60,14 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             discount: p.variations?.[0]?.discount_label ? parseInt(p.variations[0].discount_label) || 0 : 0,
             rating: 5.0, // Calculate dynamically later or fetch from aggregate
             reviews: revData?.length || 0,
-            price: p.variations?.[0]?.price_display || 0,
-            originalPrice: p.variations?.[0]?.price || 0,
+            price: p.variations?.[0]?.price || 0,
+            originalPrice: p.variations?.[0]?.price_display || null,
             variations: (p.variations || []).map((v: any, index: number) => ({
               id: v.id,
               color: v.color || null,
               size: v.size || null,
-              price: v.price_display || v.price,
-              originalPrice: v.price,
+              price: v.price,
+              originalPrice: v.price_display || null,
               stock: v.stock,
               imageIndex: 0 // Simplification: all use main image unless categorized
             }))
@@ -307,7 +308,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-sm font-black px-4 py-2 rounded-full shadow-lg">
                     -{product.discount}%
                   </div>
-                  <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${product.images[activeImageIndex]}')` }}></div>
+                  <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${ImageSizes.full(product.images[activeImageIndex])}')` }}></div>
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                   {product.images.map((img: string, idx: number) => (
@@ -316,7 +317,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       onClick={() => setActiveImageIndex(idx)}
                       className={`relative aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border-2 ${idx === activeImageIndex ? 'border-primary' : 'border-transparent'} hover:border-primary/50 transition-colors p-2`}
                     >
-                      <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${img}')` }}></div>
+                      <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply dark:mix-blend-normal" style={{ backgroundImage: `url('${ImageSizes.thumbnail(img)}')` }}></div>
                     </button>
                   ))}
                 </div>
@@ -410,7 +411,9 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
                 <div className="flex items-end gap-4 mb-8">
                   <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">{currentVariation?.price ?? product.price} <span className="text-2xl">DH</span></span>
-                  <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{currentVariation?.originalPrice ?? product.originalPrice} DH</span>
+                  {(currentVariation?.originalPrice ?? product.originalPrice) && (
+                    <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{currentVariation?.originalPrice ?? product.originalPrice} DH</span>
+                  )}
                 </div>
 
                 {t.product.orderForm?.title && (
@@ -500,7 +503,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                 <div className="mb-8">
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{t.product.description}</h3>
                   <div 
-                    className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed"
+                     className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-slate-900 dark:prose-headings:text-white prose-strong:text-slate-800 dark:prose-strong:text-white prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-hr:border-slate-200 dark:prose-hr:border-slate-700"
+ 
                     dangerouslySetInnerHTML={{ __html: product.description }}
                   />
                 </div>
