@@ -209,7 +209,7 @@ export const heroSlides = [
     desc: "home.heroDesc",
     buttonText: "home.buyNow",
     buttonLink: "/product/1",
-    image: "https://images.unsplash.com/photo-1555529771-835f59bfc50c?q=80&w=1920&auto=format&fit=crop",
+    image: "/video/pb vd.mp4",
   },
   {
     id: 2,
@@ -219,17 +219,27 @@ export const heroSlides = [
     desc: "home.heroDesc2",
     buttonText: "home.discover",
     buttonLink: "/categories",
-    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=1920&auto=format&fit=crop",
+    image: "/images/1.png",
   },
   {
     id: 3,
-    badge: "home.specialPromo",
-    title1: "home.heroTitle5",
-    title2: "home.heroTitle6",
-    desc: "home.heroDesc3",
-    buttonText: "home.shopNow",
+    badge: "home.newCollection",
+    title1: "home.heroTitle3",
+    title2: "home.heroTitle4",
+    desc: "home.heroDesc2",
+    buttonText: "home.discover",
     buttonLink: "/categories",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1920&auto=format&fit=crop",
+    image: "/images/2.png",
+  },
+  {
+    id: 4,
+    badge: "home.newCollection",
+    title1: "home.heroTitle1",
+    title2: "home.heroTitle4",
+    desc: "home.heroDesc",
+    buttonText: "home.discover",
+    buttonLink: "/categories",
+    image: "/images/3.png",
   }
 ];
 

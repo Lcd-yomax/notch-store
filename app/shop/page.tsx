@@ -295,22 +295,13 @@ export default function Shop() {
                               <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
                             </div>
                           </div>
-                          <button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              addToCart({
-                                id: product.id,
-                                name: product.name,
-                                price: price,
-                                quantity: 1,
-                                image: product.thumbnail_url || ''
-                              });
-                            }}
+                          <Link 
+                            href={`/product/${product.id}`}
                             className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
                           >
-                            <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                            {t.shop.buy}
-                          </button>
+                            <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">local_shipping</span>
+                            {t.product?.orderNow || 'Acheter maintenant'}
+                          </Link>
                         </div>
                       </div>
                     );
