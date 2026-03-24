@@ -32,6 +32,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [image, setImage] = useState<string | null>(null);
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
 
   // Data Fetching
   useEffect(() => {
@@ -500,13 +501,31 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                 {/* Scroll Trigger for Sticky Button */}
                 <div ref={triggerRef} className="h-1 w-full" aria-hidden="true" />
 
-                <div className="mb-8">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{t.product.description}</h3>
+                <div className="mb-8 overflow-hidden">
+                  <button 
+                    onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
+                    className="w-full flex items-center justify-between py-4 group"
+                  >
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <span className="material-symbols-outlined text-primary">description</span>
+                      {t.product.description}
+                    </h3>
+                    <span className={`material-symbols-outlined text-slate-400 group-hover:text-primary transition-transform duration-300 ${isDescriptionOpen ? 'rotate-180' : ''}`}>
+                      expand_more
+                    </span>
+                  </button>
                   <div 
-                     className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-slate-900 dark:prose-headings:text-white prose-strong:text-slate-800 dark:prose-strong:text-white prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-hr:border-slate-200 dark:prose-hr:border-slate-700"
- 
-                    dangerouslySetInnerHTML={{ __html: product.description }}
-                  />
+                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isDescriptionOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="pt-2 pb-6">
+                        <div 
+                           className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-slate-900 dark:prose-headings:text-white prose-strong:text-slate-800 dark:prose-strong:text-white prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-hr:border-slate-200 dark:prose-hr:border-slate-700"
+                          dangerouslySetInnerHTML={{ __html: product.description }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="mb-10">
