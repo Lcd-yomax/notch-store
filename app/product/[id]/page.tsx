@@ -32,7 +32,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [image, setImage] = useState<string | null>(null);
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(true);
 
   // Data Fetching
   useEffect(() => {
@@ -421,7 +421,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{t.product.orderForm.title}</h2>
                 )}
 
-                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-8 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
+                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-4 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -498,11 +498,15 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                     </button> */}
                   </div>
                 </form>
+                <div className="flex items-center justify-center w-full gap-2 text-xl font-bold text-slate-700 dark:text-slate-300 py-2 mb-8 mt-0">
+                  <span className="material-symbols-outlined text-primary text-2xl">local_shipping</span>
+                  {t.product.freeShipping}
+                </div>
                 {/* Scroll Trigger for Sticky Button */}
                 <div ref={triggerRef} className="h-1 w-full" aria-hidden="true" />
 
                 <div className="mb-8 overflow-hidden">
-                  <button 
+                  <button
                     onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
                     className="w-full flex items-center justify-between py-4 group"
                   >
@@ -514,13 +518,13 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       expand_more
                     </span>
                   </button>
-                  <div 
+                  <div
                     className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isDescriptionOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
                   >
                     <div className="overflow-hidden">
                       <div className="pt-2 pb-6">
-                        <div 
-                           className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-slate-900 dark:prose-headings:text-white prose-strong:text-slate-800 dark:prose-strong:text-white prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-hr:border-slate-200 dark:prose-hr:border-slate-700"
+                        <div
+                          className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-slate-900 dark:prose-headings:text-white prose-strong:text-slate-800 dark:prose-strong:text-white prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-hr:border-slate-200 dark:prose-hr:border-slate-700"
                           dangerouslySetInnerHTML={{ __html: product.description }}
                         />
                       </div>
@@ -541,10 +545,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                 </div>
 
                 <div className="mt-auto pt-6 flex items-center justify-center gap-6 text-sm font-medium text-slate-500">
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-slate-400 text-3xl">local_shipping</span>
-                    {t.product.freeShipping}
-                  </div>
+
                   {/* <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-slate-400">verified_user</span>
                     {t.product.warranty}

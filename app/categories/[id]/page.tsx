@@ -10,7 +10,8 @@ import { useCart } from '@/lib/CartContext';
 import { ImageSizes } from '@/lib/imageUtils';
 
 export default function CategoryDetails({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+  const unwrappedParams = use(params);
+  const id = decodeURIComponent(unwrappedParams.id); // Decode the URL-encoded slug
   const { t } = useLanguage();
   const { addToCart } = useCart();
   
@@ -23,7 +24,7 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
       try {
         const [catRes, prodRes] = await Promise.all([
           fetch('/api/categories'),
-          fetch(`/api/products?category_slug=${id}`)
+          fetch(`/api/products?category_slug=${encodeURIComponent(id)}`) // Re-encode for API query param
         ]);
         const catData = await catRes.json();
         const prodData = await prodRes.json();
@@ -248,8 +249,7 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                               alt={product.name}
                               fill
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                               className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
- 
+                               className="object-contain mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-500 p-4"
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -274,22 +274,13 @@ export default function CategoryDetails({ params }: { params: Promise<{ id: stri
                               <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
                             </div>
                           </div>
-                          <button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              addToCart({
-                                id: product.id,
-                                name: product.name,
-                                price: price,
-                                quantity: 1,
-                                image: product.thumbnail_url || ''
-                              });
-                            }}
+                          <Link 
+                            href={`/product/${product.id}`}
                             className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
                           >
-                            <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_cart</span>
-                            {t.product.addToCart}
-                          </button>
+                            <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">local_shipping</span>
+                            {t.product?.orderNow || 'Acheter maintenant'}
+                          </Link>
                         </div>
                       </div>
                     );

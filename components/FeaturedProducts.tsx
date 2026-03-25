@@ -35,12 +35,12 @@ export default function FeaturedProducts() {
       <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8">{t.home.featuredProducts}</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-pulse">
-           <div className="bg-slate-200 dark:bg-slate-800 rounded-2xl min-h-[400px] lg:min-h-[500px]"></div>
-           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-             {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl aspect-square sm:aspect-auto sm:min-h-[240px]"></div>
-             ))}
-           </div>
+          <div className="bg-slate-200 dark:bg-slate-800 rounded-2xl min-h-[400px] lg:min-h-[500px]"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl aspect-square sm:aspect-auto sm:min-h-[240px]"></div>
+            ))}
+          </div>
         </div>
       </section>
     );
@@ -51,20 +51,20 @@ export default function FeaturedProducts() {
   return (
     <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
       <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8">{t.home.featuredProducts}</h2>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Large Product */}
         {largeProduct && (
           <Link href={`/product/${largeProduct.id}`} className="group bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex flex-col justify-between relative overflow-hidden min-h-[400px] lg:min-h-[500px]">
             <div className="absolute inset-0 w-full h-full">
               {largeProduct.thumbnail_url ? (
-                <Image 
-                  src={ImageSizes.large(largeProduct.thumbnail_url || '')} 
+                <Image
+                  src={ImageSizes.large(largeProduct.thumbnail_url || '')}
                   alt={largeProduct.name}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                   className="object-contain group-hover:scale-105 transition-transform duration-500 p-8"
- 
+                  className="object-contain group-hover:scale-105 transition-transform duration-500 p-8"
+
                 />
               ) : (
                 <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -84,13 +84,13 @@ export default function FeaturedProducts() {
           {smallProducts.map((product) => (
             <Link key={product.id} href={`/product/${product.id}`} className="group bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex flex-col justify-between relative overflow-hidden aspect-square sm:aspect-auto sm:min-h-[240px]">
               <div className="absolute inset-0 w-full h-full">
-               {product.thumbnail_url ? (
-                  <Image 
-                      src={ImageSizes.medium(product.thumbnail_url || '')} 
-                     alt={product.name}
-                     fill
-                     sizes="(max-width: 640px) 100vw, 25vw"
-                     className="object-contain group-hover:scale-105 transition-transform duration-500 p-4"                    
+                {product.thumbnail_url ? (
+                  <Image
+                    src={ImageSizes.medium(product.thumbnail_url || '')}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 25vw"
+                    className="object-contain group-hover:scale-105 transition-transform duration-500 p-4"
                   />
                 ) : (
                   <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
@@ -99,7 +99,7 @@ export default function FeaturedProducts() {
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-end gap-1 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                 <h3 className="font-bold text-white text-sm truncate max-w-full xl:max-w-[60%] drop-shadow-md">{product.name}</h3>
                 <span className="font-medium text-white text-sm drop-shadow-md">
-                   {product.variations?.[0]?.price ? `${product.variations[0].price} DH` : 'N/A'}
+                  {product.variations?.[0]?.price ? `${product.variations[0].price} DH` : 'N/A'}
                 </span>
               </div>
             </Link>
