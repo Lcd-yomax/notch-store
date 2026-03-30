@@ -305,7 +305,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Product Images */}
               <div className="flex flex-col gap-4">
-                <div className="relative w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center">
+                <div className="relative w-full aspect-square  dark:bg-slate-800 rounded-2xl overflow-hidden flex items-center justify-center">
                   <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-sm font-black px-4 py-2 rounded-full shadow-lg">
                     -{product.discount}%
                   </div>
@@ -399,8 +399,8 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                           className={`px-5 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${selectedSize === v.size
                             ? 'border-primary text-primary bg-primary/5 shadow-sm'
                             : v.stock === 0
-                              ? 'border-dashed border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed bg-slate-50 dark:bg-slate-900/50'
-                              : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                              ? 'border-dashed border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed  dark:bg-slate-900/50'
+                              : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover: dark:hover:bg-slate-800/50'
                             }`}
                         >
                           {v.size} {v.stock === 0 && <span className="block text-[10px] font-normal leading-none mt-1 text-red-400">{t.product.soldOut}</span>}
@@ -421,7 +421,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{t.product.orderForm.title}</h2>
                 )}
 
-                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-4 flex flex-col gap-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
+                <form ref={formRef} onSubmit={handleOrderSubmit} className="mb-4 flex flex-col gap-4  dark:bg-slate-800/50 p-6 rounded-2xl">
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -587,7 +587,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
               </div>
 
               {/* Leave a Review Form */}
-              <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl relative overflow-hidden">
+              <div className=" dark:bg-slate-800/50 p-6 rounded-2xl relative overflow-hidden">
                 {isReviewSubmitted ? (
                   <div className="flex flex-col items-center justify-center text-center py-12 animate-in fade-in zoom-in duration-500">
                     <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(16,185,129,0.3)]">

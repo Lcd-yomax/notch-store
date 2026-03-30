@@ -38,7 +38,7 @@ export default function BestSellingProducts() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
           {Array.from({ length: 4 }).map((_, i) => (
-             <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[350px]"></div>
+            <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[350px]"></div>
           ))}
         </div>
       </section>
@@ -63,19 +63,19 @@ export default function BestSellingProducts() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <Link key={product.id} href={`/product/${product.id}`} className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-            <div className="relative aspect-square bg-slate-50 dark:bg-slate-800 overflow-hidden">
+            <div className="relative aspect-square  dark:bg-slate-800 overflow-hidden">
               {product.thumbnail_url ? (
                 <Image
                   src={ImageSizes.small(product.thumbnail_url || '')}
                   alt={product.name}
                   fill
-                   className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
-           
+                  className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+
                 />
               ) : (
                 <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
               )}
-              
+
             </div>
 
             <div className="p-5 flex flex-col flex-grow">

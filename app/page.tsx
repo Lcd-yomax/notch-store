@@ -30,7 +30,7 @@ export default function Home() {
         ]);
         const productsData = await productsRes.json();
         const reviewsData = await reviewsRes.json();
-        
+
         // Take 4 extra items for promos
         setLatestPromos(productsData.slice(9, 13) || productsData.slice(0, 4) || []);
         setReviews(reviewsData || []);
@@ -96,12 +96,12 @@ export default function Home() {
               <span className="material-symbols-outlined">arrow_forward</span>
             </Link>
           </div>
-          
+
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
-               {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[400px]"></div>
-               ))}
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[400px]"></div>
+              ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -118,18 +118,18 @@ export default function Home() {
                         -{discount}%
                       </div>
                     )}
-                    <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 dark:bg-slate-900/50 overflow-hidden block">
+                    <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3]  dark:bg-slate-900/50 overflow-hidden block">
                       {product.thumbnail_url ? (
-                        <Image 
-                          src={ImageSizes.small(product.thumbnail_url || '')} 
+                        <Image
+                          src={ImageSizes.small(product.thumbnail_url || '')}
                           alt={productName}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                           className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
- 
+                          className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+
                         />
                       ) : (
-                         <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
+                        <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
                       )}
                     </Link>
                     <div className="p-6 flex flex-col flex-grow gap-4">
@@ -151,7 +151,7 @@ export default function Home() {
                           <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
                         </div>
                       </div>
-                      <Link 
+                      <Link
                         href={`/product/${product.id}`}
                         className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
                       >
@@ -173,11 +173,11 @@ export default function Home() {
               <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.home.reviewsDesc}</p>
             </div>
             {isLoading ? (
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 animate-pulse">
-                 {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[300px]"></div>
-                 ))}
-               </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 animate-pulse">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[300px]"></div>
+                ))}
+              </div>
             ) : reviews.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                 {reviews.map((review) => (
@@ -206,9 +206,9 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-                <div className="text-center text-slate-500 dark:text-slate-400 italic">
-                  Aucun avis disponible pour le moment.
-                </div>
+              <div className="text-center text-slate-500 dark:text-slate-400 italic">
+                Aucun avis disponible pour le moment.
+              </div>
             )}
           </div>
         </section>
