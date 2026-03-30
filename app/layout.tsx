@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 import { CartProvider } from '@/lib/CartContext';
+import WhatsAppButton from '@/components/WhatsAppButton';
 import './globals.css';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
@@ -34,6 +35,7 @@ export default function RootLayout({
         <LanguageProvider>
           <CartProvider>
             {children}
+            <WhatsAppButton />
           </CartProvider>
         </LanguageProvider>
       </body>

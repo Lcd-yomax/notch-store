@@ -48,8 +48,8 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
   const results = query.trim() === ''
     ? []
     : allProducts.filter(p =>
-        p.name.toLowerCase().includes(query.toLowerCase())
-      );
+      p.name.toLowerCase().includes(query.toLowerCase())
+    );
 
   const handleClose = () => {
     setQuery('');
@@ -104,7 +104,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                     key={product.id}
                     href={`/product/${product.id}`}
                     onClick={handleClose}
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
+                    className="flex items-center gap-4 p-3 rounded-xl hover: dark:hover:bg-slate-800 transition-colors group"
                   >
                     <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden relative flex-shrink-0">
                       {product.image ? (
