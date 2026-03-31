@@ -62,7 +62,7 @@ export default function BestSellingProducts() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <Link key={product.id} href={`/product/${product.id}`} className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+          <Link key={product.id} href={`/product/${product.slug || product.id}`} className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
             <div className="relative aspect-square  dark:bg-slate-800 overflow-hidden">
               {product.thumbnail_url ? (
                 <Image

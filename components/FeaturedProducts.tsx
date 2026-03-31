@@ -55,7 +55,7 @@ export default function FeaturedProducts() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Large Product */}
         {largeProduct && (
-          <Link href={`/product/${largeProduct.id}`} className="group  dark:bg-slate-800/50 rounded-2xl flex flex-col justify-between relative overflow-hidden min-h-[400px] lg:min-h-[500px]">
+          <Link href={`/product/${largeProduct.slug || largeProduct.id}`} className="group  dark:bg-slate-800/50 rounded-2xl flex flex-col justify-between relative overflow-hidden min-h-[400px] lg:min-h-[500px]">
             <div className="absolute inset-0 w-full h-full">
               {largeProduct.thumbnail_url ? (
                 <Image
@@ -82,7 +82,7 @@ export default function FeaturedProducts() {
         {/* Small Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {smallProducts.map((product) => (
-            <Link key={product.id} href={`/product/${product.id}`} className="group  dark:bg-slate-800/50 rounded-2xl flex flex-col justify-between relative overflow-hidden aspect-square sm:aspect-auto sm:min-h-[240px]">
+            <Link key={product.id} href={`/product/${product.slug || product.id}`} className="group  dark:bg-slate-800/50 rounded-2xl flex flex-col justify-between relative overflow-hidden aspect-square sm:aspect-auto sm:min-h-[240px]">
               <div className="absolute inset-0 w-full h-full">
                 {product.thumbnail_url ? (
                   <Image

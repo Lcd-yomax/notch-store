@@ -118,7 +118,7 @@ export default function Home() {
                         -{discount}%
                       </div>
                     )}
-                    <Link href={`/product/${product.id}`} className="relative w-full aspect-[4/3]  dark:bg-slate-900/50 overflow-hidden block">
+                    <Link href={`/product/${product.slug || product.id}`} className="relative w-full aspect-[4/3]  dark:bg-slate-900/50 overflow-hidden block">
                       {product.thumbnail_url ? (
                         <Image
                           src={ImageSizes.small(product.thumbnail_url || '')}
@@ -134,7 +134,7 @@ export default function Home() {
                     </Link>
                     <div className="p-6 flex flex-col flex-grow gap-4">
                       <div>
-                        <Link href={`/product/${product.id}`}>
+                        <Link href={`/product/${product.slug || product.id}`}>
                           <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{productName}</h3>
                         </Link>
                       </div>
@@ -152,7 +152,7 @@ export default function Home() {
                         </div>
                       </div>
                       <Link
-                        href={`/product/${product.id}`}
+                        href={`/product/${product.slug || product.id}`}
                         className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">local_shipping</span>

@@ -102,7 +102,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                 {results.map((product) => (
                   <Link
                     key={product.id}
-                    href={`/product/${product.id}`}
+                    href={`/product/${product.slug || product.id}`}
                     onClick={handleClose}
                     className="flex items-center gap-4 p-3 rounded-xl hover: dark:hover:bg-slate-800 transition-colors group"
                   >
