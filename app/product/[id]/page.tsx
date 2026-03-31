@@ -38,13 +38,15 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   useEffect(() => {
     async function loadData() {
       try {
-        const [prodRes, revRes] = await Promise.all([
-          fetch(`/api/products?id=${id}`),
-          fetch(`/api/reviews?product_id=${id}&limit=10`)
-        ]);
-
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+        const prodRes = await fetch(`/api/products?${isUUID ? 'id' : 'slug'}=${id}`);
         const prodData = await prodRes.json();
-        const revData = await revRes.json();
+
+        let revData = [];
+        if (prodData && prodData.length > 0) {
+          const revRes = await fetch(`/api/reviews?product_id=${prodData[0].id}&limit=10`);
+          revData = await revRes.json();
+        }
 
         if (prodData && prodData.length > 0) {
           const p = prodData[0];

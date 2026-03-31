@@ -8,7 +8,7 @@ import './globals.css';
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
 
 export const metadata: Metadata = {
-  title: 'Notch-Tech | Premium Tech E-commerce',
+  title: 'Notch-Tech',
   description: 'Votre première destination pour les derniers appareils électroniques et accessoires intelligents au Maroc.',
 };
 
