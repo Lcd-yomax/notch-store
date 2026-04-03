@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 import { heroSlides as slides } from '@/lib/dummyData';
@@ -34,6 +35,7 @@ export default function HeroSlider() {
 
   return (
     <section className="relative w-full min-h-[650px] lg:min-h-[700px] overflow-hidden bg-slate-900 mt-0">
+      <h1 className="sr-only">Notch-Tech | Premium Tech E-commerce</h1>
       {slides.map((slide, index) => (
         <Link
           href="/categories"
@@ -55,10 +57,16 @@ export default function HeroSlider() {
               <div className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/90 via-black/50 to-transparent transition-colors duration-300"></div>
             </div>
           ) : (
-            <div 
-              className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-1000 hover:scale-105"
-              style={{ backgroundImage: `url('${slide.image}')` }}
-            >
+            <div className={`absolute inset-0 w-full h-full transition-transform duration-1000 hover:scale-105`}>
+              <Image 
+                src={slide.image}
+                alt="Banner Image"
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                quality={80}
+                className="object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/90 via-black/50 to-transparent transition-colors duration-300"></div>
             </div>
           )}
@@ -74,10 +82,10 @@ export default function HeroSlider() {
                 </p>
               </div>
 
-              <h1 className={`text-4xl rtl:text-5xl lg:text-5xl rtl:lg:text-6xl xl:text-6xl rtl:xl:text-7xl font-serif font-black leading-[1.1] rtl:leading-[1.4] mb-4 text-white drop-shadow-xl transition-all duration-[1200ms] delay-[500ms] ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+              <h2 className={`text-4xl rtl:text-5xl lg:text-5xl rtl:lg:text-6xl xl:text-6xl rtl:xl:text-7xl font-serif font-black leading-[1.1] rtl:leading-[1.4] mb-4 text-white drop-shadow-xl transition-all duration-[1200ms] delay-[500ms] ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
                 {getTranslation(slide.title1)} <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r rtl:bg-gradient-to-l from-amber-300 to-amber-500">{getTranslation(slide.title2)}</span>
-              </h1>
+              </h2>
               
               <p className={`text-base rtl:text-lg lg:text-lg rtl:lg:text-xl font-medium max-w-lg text-slate-200 drop-shadow-lg transition-all duration-[1200ms] delay-[700ms] ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
                 {getTranslation(slide.desc)}
