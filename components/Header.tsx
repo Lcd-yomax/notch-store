@@ -84,9 +84,9 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
               </Link>
 
               <div className="absolute top-full left-1/2 -translate-x-1/2 w-[800px] xl:w-[900px] bg-white dark:bg-slate-900 shadow-2xl rounded-2xl border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 pointer-events-none group-hover:pointer-events-auto z-50 overflow-hidden transform group-hover:translate-y-0 translate-y-3 cursor-default">
-                <div className="p-8 grid grid-cols-3 gap-8">
+                <div className="p-8">
                   {/* Category Links */}
-                  <div className="col-span-2 grid grid-cols-2 gap-x-6 gap-y-4">
+                  <div className="grid grid-cols-3 gap-x-6 gap-y-4">
                     {categories.length > 0 ? categories.map((category) => (
                       <Link key={category.id} href={`/categories/${category.slug}`} className="flex items-center gap-4 group/item p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                         <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
@@ -104,23 +104,8 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                         </div>
                       </Link>
                     )) : (
-                      <div className="col-span-2 text-slate-500 p-4">Chargement des catégories...</div>
+                      <div className="col-span-3 text-slate-500 p-4">Chargement des catégories...</div>
                     )}
-                  </div>
-
-                  {/* Featured Banner */}
-                  <div className="col-span-1 border-l border-slate-100 dark:border-slate-800 xl:pl-8 pl-6">
-                    <div className="relative h-full min-h-[250px] rounded-xl overflow-hidden group/banner block bg-slate-100 dark:bg-slate-800">
-                      <img src="https://images.unsplash.com/photo-1555529771-835f59bfc50c?q=80&w=800&auto=format&fit=crop" alt="Featured" className="w-full h-full object-cover group-hover/banner:scale-105 transition-transform duration-700 absolute inset-0" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                        <span className="text-primary font-black text-[10px] uppercase tracking-wider mb-1">Nouvelle Collection</span>
-                        <h3 className="text-white font-bold text-lg leading-tight mb-3">Produits Tendance</h3>
-                        <Link href="/shop" className="bg-primary hover:bg-primary-dark text-white text-xs font-bold py-2 px-4 rounded-lg inline-flex w-fit items-center gap-2 transition-colors">
-                          Explorer
-                          <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                        </Link>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
