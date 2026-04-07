@@ -3,7 +3,7 @@
 import React from 'react';
 
 export default function WhatsAppButton() {
-  const phoneNumber = '212512345678';
+  const phoneNumber = '212667018042';
   const message = 'Bonjour, je vous contacte depuis votre site web.';
   
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

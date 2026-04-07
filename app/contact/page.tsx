@@ -84,7 +84,7 @@ export default function Contact() {
                   <p className="text-slate-500 dark:text-slate-400 leading-relaxed mb-2">
                     Lundi - Vendredi, 9h00 - 18h00
                   </p>
-                  <a href="tel:+212512345678" className="text-lg font-bold text-primary hover:underline" dir="ltr">+212 5 12 34 56 78</a>
+                  <a href="tel:+212667018042" className="text-lg font-bold text-primary hover:underline" dir="ltr">+212 667-018042</a>
                 </div>
               </div>
               
