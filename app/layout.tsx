@@ -31,7 +31,7 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col">
+      <body className="bg-background-light text-slate-900 font-display antialiased selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col">
         <LanguageProvider>
           <CartProvider>
             {children}

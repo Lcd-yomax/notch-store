@@ -29,16 +29,16 @@ export default function Categories() {
   return (
     <>
       <Header />
-      <main className="flex-grow bg-white dark:bg-slate-950 py-10">
+      <main className="flex-grow bg-white py-10">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">{t.categories.title}</h1>
+            <h1 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-4">{t.categories.title}</h1>
             <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.categories.desc}</p>
           </div>
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-pulse">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-3xl aspect-[4/3] w-full"></div>
+                <div key={i} className="bg-slate-200 rounded-3xl aspect-[4/3] w-full"></div>
               ))}
             </div>
           ) : (

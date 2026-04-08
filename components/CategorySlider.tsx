@@ -37,7 +37,7 @@ export default function CategorySlider() {
 
   return (
     <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
-      <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8">{t.home.shopByCategory}</h2>
+      <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8">{t.home.shopByCategory}</h2>
       <div className="relative group">
         {/* Left arrow – only shown when there are enough categories to scroll */}
         <button 
@@ -54,8 +54,8 @@ export default function CategorySlider() {
           {isLoading ? (
              Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="flex flex-col items-center gap-4 min-w-[140px] md:min-w-[180px] snap-start">
-                  <div className="w-full aspect-square rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
-                  <div className="w-24 h-5 bg-slate-200 dark:bg-slate-800 rounded animate-pulse"></div>
+                  <div className="w-full aspect-square rounded-xl bg-slate-200 animate-pulse"></div>
+                  <div className="w-24 h-5 bg-slate-200 rounded animate-pulse"></div>
                 </div>
              ))
           ) : (
@@ -65,7 +65,7 @@ export default function CategorySlider() {
                 href={`/categories/${category.slug}`}
                 className="flex flex-col items-center gap-4 min-w-[140px] md:min-w-[180px] snap-start group/item"
               >
-                <div className="w-full aspect-square rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
+                <div className="w-full aspect-square rounded-xl overflow-hidden bg-slate-100 relative">
                   {category.image_url ? (
                     <Image 
                       src={ImageSizes.small(category.image_url)} 
@@ -76,17 +76,17 @@ export default function CategorySlider() {
                       className="object-cover group-hover/item:scale-110 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-200 dark:bg-slate-700">
+                    <div className="w-full h-full flex items-center justify-center bg-slate-200">
                        <span className="material-symbols-outlined text-4xl text-slate-400">image</span>
                     </div>
                   )}
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <span className="font-medium text-slate-900 dark:text-white text-base text-center line-clamp-1 group-hover/item:text-primary transition-colors">
+                  <span className="font-medium text-slate-900 text-base text-center line-clamp-1 group-hover/item:text-primary transition-colors">
                     {category.name}
                   </span>
                   {category.products && (
-                    <span className="text-xs text-slate-500 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
+                    <span className="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-0.5 rounded-md">
                       {category.products[0]?.count || 0} produits
                     </span>
                   )}

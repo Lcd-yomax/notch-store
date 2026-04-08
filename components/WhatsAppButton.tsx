@@ -3,7 +3,7 @@
 import React from 'react';
 
 export default function WhatsAppButton() {
-  const phoneNumber = '212512345678';
+  const phoneNumber = '212667018042';
   const message = 'Bonjour, je vous contacte depuis votre site web.';
   
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -26,7 +26,7 @@ export default function WhatsAppButton() {
       </svg>
       
       {/* Optional: Tooltip to show text on hover */}
-      <span className="absolute right-full mr-4 bg-slate-900 dark:bg-slate-800 text-white text-sm font-bold px-4 py-2 rounded-xl opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 w-max pointer-events-none shadow-xl transform translate-x-4 group-hover:translate-x-0">
+      <span className="absolute right-full mr-4 bg-slate-900 text-white text-sm font-bold px-4 py-2 rounded-xl opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 w-max pointer-events-none shadow-xl transform translate-x-4 group-hover:translate-x-0">
         Discutons sur WhatsApp
       </span>
     </a>
