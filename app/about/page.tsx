@@ -11,24 +11,24 @@ export default function About() {
   return (
     <>
       <Header />
-      <main className="flex-grow bg-white dark:bg-slate-950 py-10">
+      <main className="flex-grow bg-white py-10">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">{t.about.title}</h1>
+            <h1 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-4">{t.about.title}</h1>
             <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.about.subtitle}</p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
             <div className="flex flex-col justify-center gap-6">
-              <h2 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">{t.about.storyTitle}</h2>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
+              <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">{t.about.storyTitle}</h2>
+              <p className="text-slate-600 leading-relaxed text-lg">
                 {t.about.storyP1}
               </p>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
+              <p className="text-slate-600 leading-relaxed text-lg">
                 {t.about.storyP2}
               </p>
             </div>
-            <div className="relative w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative w-full aspect-[4/3] bg-slate-200 rounded-3xl overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkGl-5rC2EZpGUTMTnmRZZR-J837V8RUD4OqDE_CXhYKHS6TRCANb-PCTK2D65OHFecUcRCBnlzESqi5UPSPb6Wj2cUzThsjPQ6MFlf6sQiaW2qF4xeC1sGPvn0tOAWy04_HoLyOXqsVsObPj6ZLfwEFMzeMyiEP19OeQtvxTDSdINlIqdG2HPlYox5E4_5aJ_sqCC-WwxXhqz6fMVw0aQ9kgc32C57UBleMBHH2Iv0_ZRcz1Bl8P4qtof5X3RtvcxbYdXTKgL5XcF')" }}></div>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
               <div className="absolute bottom-8 left-8 right-8">
@@ -38,9 +38,9 @@ export default function About() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-12 lg:p-20 shadow-sm mb-24">
+          <div className="bg-white rounded-3xl border border-slate-200 p-12 lg:p-20 shadow-sm mb-24">
             <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-4">{t.about.valuesTitle}</h2>
+              <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-4">{t.about.valuesTitle}</h2>
               <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">Les principes qui guident chaque décision que nous prenons.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -49,8 +49,8 @@ export default function About() {
                   <span className="material-symbols-outlined text-4xl">verified</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{t.about.value1Title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{t.about.value1Desc}</p>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">{t.about.value1Title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{t.about.value1Desc}</p>
                 </div>
               </div>
               <div className="flex flex-col items-center text-center gap-6">
@@ -58,8 +58,8 @@ export default function About() {
                   <span className="material-symbols-outlined text-4xl">support_agent</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{t.about.value2Title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{t.about.value2Desc}</p>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">{t.about.value2Title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{t.about.value2Desc}</p>
                 </div>
               </div>
               <div className="flex flex-col items-center text-center gap-6">
@@ -67,8 +67,8 @@ export default function About() {
                   <span className="material-symbols-outlined text-4xl">rocket_launch</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{t.about.value3Title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{t.about.value3Desc}</p>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">{t.about.value3Title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{t.about.value3Desc}</p>
                 </div>
               </div>
             </div>

@@ -124,25 +124,25 @@ export default function Shop() {
   return (
     <>
       <Header />
-      <main className="flex-grow bg-white dark:bg-slate-950 py-10">
+      <main className="flex-grow bg-white py-10">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-8">
             <Link href="/" className="hover:text-primary transition-colors">{t.header.home}</Link>
             <span className="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
-            <span className="text-slate-900 dark:text-white">{t.header.shop}</span>
+            <span className="text-slate-900">{t.header.shop}</span>
           </nav>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">{t.shop.title}</h1>
+              <h1 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-2">{t.shop.title}</h1>
               <p className="text-slate-500 text-lg font-medium">{t.shop.desc}</p>
             </div>
             <div className="flex items-center gap-4">
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
               >
                 <option value="popular">{t.shop.sort.popular}</option>
                 <option value="newest">{t.shop.sort.newest}</option>
@@ -151,7 +151,7 @@ export default function Shop() {
               </select>
               <button
                 onClick={() => setIsMobileFiltersOpen(true)}
-                className="md:hidden w-11 h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-300"
+                className="md:hidden w-11 h-11 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-700"
               >
                 <span className="material-symbols-outlined">tune</span>
               </button>
@@ -161,14 +161,14 @@ export default function Shop() {
           <div className="flex gap-8">
             {/* Filters Sidebar (Desktop) */}
             <aside className="hidden md:block w-64 flex-shrink-0">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sticky top-24">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 sticky top-24">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-bold text-slate-900 dark:text-white text-lg">{t.shop.filters.title}</h3>
+                  <h3 className="font-bold text-slate-900 text-lg">{t.shop.filters.title}</h3>
                   <button onClick={clearFilters} className="text-sm font-medium text-primary hover:underline cursor-pointer">{t.shop.filters.reset}</button>
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.categories}</h4>
+                  <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.categories}</h4>
                   <div className="flex flex-col gap-3">
                     {categories.map((cat) => (
                       <label key={cat.id} className="flex items-center gap-3 cursor-pointer group">
@@ -178,7 +178,7 @@ export default function Shop() {
                           onChange={() => handleCategoryChange(cat.slug)}
                           className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                         />
-                        <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                        <span className="text-slate-600 group-hover:text-slate-900 transition-colors">
                           {cat.name}
                         </span>
                       </label>
@@ -187,14 +187,14 @@ export default function Shop() {
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.price}</h4>
+                  <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.price}</h4>
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
                       placeholder={t.shop.filters.min}
                       value={minPrice}
                       onChange={(e) => setMinPrice(e.target.value)}
-                      className="w-full  dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary"
+                      className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary"
                     />
                     <span className="text-slate-400">-</span>
                     <input
@@ -202,13 +202,13 @@ export default function Shop() {
                       placeholder={t.shop.filters.max}
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
-                      className="w-full  dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-primary"
+                      className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white mb-4">{t.shop.filters.availability}</h4>
+                  <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.availability}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input
@@ -217,7 +217,7 @@ export default function Shop() {
                         onChange={(e) => setInStockOnly(e.target.checked)}
                         className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                       />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.inStock}</span>
+                      <span className="text-slate-600 group-hover:text-slate-900 transition-colors">{t.shop.filters.inStock}</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <input
@@ -226,7 +226,7 @@ export default function Shop() {
                         onChange={(e) => setOutOfStockOnly(e.target.checked)}
                         className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                       />
-                      <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{t.shop.filters.outOfStock}</span>
+                      <span className="text-slate-600 group-hover:text-slate-900 transition-colors">{t.shop.filters.outOfStock}</span>
                     </label>
                   </div>
                 </div>
@@ -238,12 +238,12 @@ export default function Shop() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {isLoading ? (
                   Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="bg-slate-200 dark:bg-slate-800 rounded-2xl h-[400px] animate-pulse"></div>
+                    <div key={i} className="bg-slate-200 rounded-2xl h-[400px] animate-pulse"></div>
                   ))
                 ) : filteredProducts.length === 0 ? (
                   <div className="col-span-full py-12 flex flex-col items-center justify-center text-center">
-                    <span className="material-symbols-outlined text-6xl text-slate-200 dark:text-slate-700 mb-4">search_off</span>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Aucun produit trouvé</h3>
+                    <span className="material-symbols-outlined text-6xl text-slate-200 mb-4">search_off</span>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">Aucun produit trouvé</h3>
                     <p className="text-slate-500 max-w-md">Essayez de modifier vos filtres pour trouver ce que vous cherchez.</p>
                     <button onClick={clearFilters} className="mt-6 px-6 py-2 bg-primary text-white rounded-xl font-medium hover:bg-amber-500 transition-colors">
                       Réinitialiser les filtres
@@ -256,13 +256,13 @@ export default function Shop() {
                     const discount = priceDisplay && priceDisplay > price ? Math.round(((priceDisplay - price) / priceDisplay) * 100) : 0;
 
                     return (
-                      <div key={product.id} className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                      <div key={product.id} className="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
                         {discount > 0 && (
                           <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
                             -{discount}%
                           </div>
                         )}
-                        <Link href={`/product/${product.slug || product.id}`} className="relative w-full aspect-[4/3]  dark:bg-slate-900/50 overflow-hidden block">
+                        <Link href={`/product/${product.slug || product.id}`} className="relative w-full aspect-[4/3] overflow-hidden block">
                           {product.thumbnail_url ? (
                             <Image
                               src={ImageSizes.medium(product.thumbnail_url || '')}
@@ -273,25 +273,25 @@ export default function Shop() {
 
                             />
                           ) : (
-                            <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
+                            <div className="w-full h-full bg-slate-200"></div>
                           )}
                         </Link>
                         <div className="p-6 flex flex-col flex-grow gap-4">
                           <div>
                             <Link href={`/product/${product.slug || product.id}`}>
-                              <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{product.name}</h3>
+                              <h3 className="text-slate-900 text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{product.name}</h3>
                             </Link>
                           </div>
                           <div className="flex flex-col gap-2 mt-auto">
                             <div className="flex items-end gap-3">
-                              <span className="text-slate-900 dark:text-white font-black text-2xl tracking-tight">{price} DH</span>
+                              <span className="text-slate-900 font-black text-2xl tracking-tight">{price} DH</span>
                               {discount > 0 && priceDisplay && (
                                 <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{priceDisplay} DH</span>
                               )}
                             </div>
                             <div className="flex items-center gap-1">
                               <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                              <span className="text-slate-600 dark:text-slate-400 text-sm font-bold">{product.rating || '5.0'}</span>
+                              <span className="text-slate-600 text-sm font-bold">{product.rating || '5.0'}</span>
                               <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
                             </div>
                           </div>
@@ -316,7 +316,7 @@ export default function Shop() {
                     <button
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
-                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                      className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                     >
                       <span className="material-symbols-outlined rtl:rotate-180">chevron_left</span>
                     </button>
@@ -329,7 +329,7 @@ export default function Shop() {
                           onClick={() => setCurrentPage(page)}
                           className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all duration-200 cursor-pointer ${currentPage === page
                               ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                              : 'border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary'
+                              : 'border border-slate-200 text-slate-600 hover:text-primary hover:border-primary'
                             }`}
                         >
                           {page}
@@ -339,7 +339,7 @@ export default function Shop() {
                     <button
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
-                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                      className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                     >
                       <span className="material-symbols-outlined rtl:rotate-180">chevron_right</span>
                     </button>
