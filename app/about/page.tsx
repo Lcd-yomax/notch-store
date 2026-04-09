@@ -29,7 +29,7 @@ export default function About() {
               </p>
             </div>
             <div className="relative w-full aspect-[4/3] bg-slate-200 rounded-3xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkGl-5rC2EZpGUTMTnmRZZR-J837V8RUD4OqDE_CXhYKHS6TRCANb-PCTK2D65OHFecUcRCBnlzESqi5UPSPb6Wj2cUzThsjPQ6MFlf6sQiaW2qF4xeC1sGPvn0tOAWy04_HoLyOXqsVsObPj6ZLfwEFMzeMyiEP19OeQtvxTDSdINlIqdG2HPlYox5E4_5aJ_sqCC-WwxXhqz6fMVw0aQ9kgc32C57UBleMBHH2Iv0_ZRcz1Bl8P4qtof5X3RtvcxbYdXTKgL5XcF')" }}></div>
+              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/Contactez-nous.png')" }}></div>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
               <div className="absolute bottom-8 left-8 right-8">
                 <h3 className="text-white text-2xl font-bold mb-2">L&apos;équipe NotchMaroc</h3>

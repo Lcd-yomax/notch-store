@@ -58,6 +58,10 @@ export default function Contact() {
             <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.contact.desc}</p>
           </div>
           
+          <div className="w-full relative aspect-[21/9] sm:aspect-[3/1] rounded-3xl overflow-hidden mb-12 shadow-md">
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/Contactez-nous.png')" }}></div>
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
             {/* Contact Info */}
             <div className="flex flex-col gap-8">
