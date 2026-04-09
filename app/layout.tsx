@@ -67,6 +67,45 @@ export default function RootLayout({
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
           }
         `}</style>
+        <Script
+          id="json-ld-organization"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Notch-Tech",
+              "url": "https://notchmaroc.ma",
+              "logo": "https://notchmaroc.ma/images/logo/logo-head.ico",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+212-6-00-00-00-00",
+                "contactType": "customer service",
+                "areaServed": "MA",
+                "availableLanguage": ["French", "Arabic"]
+              }
+            })
+          }}
+        />
+        <Script
+          id="json-ld-website"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Notch-Tech",
+              "url": "https://notchmaroc.ma",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://notchmaroc.ma/shop?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
       </head>
       <body className="bg-background-light text-slate-900 font-display antialiased selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col">
         <LanguageProvider>

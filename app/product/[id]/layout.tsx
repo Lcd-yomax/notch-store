@@ -47,10 +47,58 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
-export default function ProductLayout({
+export default async function ProductLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ id: string }>;
 }) {
-  return <>{children}</>;
+  const { id } = await params;
+  
+  let jsonLd = null;
+  try {
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+    const { data: products } = await supabase
+      .from('products')
+      .select('id, name, description, thumbnail_url, variations:product_variations(price)')
+      .eq(isUUID ? 'id' : 'slug', id)
+      .limit(1);
+
+    if (products && products.length > 0) {
+      const product = products[0];
+      const cleanDescription = (product.description || '').replace(/<[^>]*>?/gm, '');
+      const price = product.variations?.[0]?.price || '0';
+
+      jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.name,
+        "image": product.thumbnail_url ? [product.thumbnail_url] : [],
+        "description": cleanDescription,
+        "sku": product.id || "N/A",
+        "offers": {
+          "@type": "Offer",
+          "url": `https://notchmaroc.ma/product/${id}`,
+          "priceCurrency": "MAD",
+          "price": price.toString(),
+          "availability": "https://schema.org/InStock"
+        }
+      };
+    }
+  } catch (err) {
+    console.error('Failed to generate product json-ld', err);
+  }
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      {children}
+    </>
+  );
 }
