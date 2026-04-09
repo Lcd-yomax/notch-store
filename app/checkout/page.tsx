@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { pixelInitiateCheckout } from '@/lib/pixel';
 
 export default function Checkout() {
   const { t } = useLanguage();
@@ -14,9 +16,19 @@ export default function Checkout() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Store total so the success page can fire an accurate Purchase pixel event
+    sessionStorage.setItem('lastOrderValue', String(subtotal));
     clearCart();
     router.push('/success');
   };
+
+  // Fire pixel when user reaches checkout
+  useEffect(() => {
+    if (subtotal > 0) {
+      pixelInitiateCheckout({ value: subtotal, numItems: totalItems });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
