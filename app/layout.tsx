@@ -10,8 +10,43 @@ import './globals.css';
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
 
 export const metadata: Metadata = {
-  title: 'Notch-Tech',
-  description: 'Votre première destination pour les derniers appareils électroniques et accessoires intelligents au Maroc.',
+  metadataBase: new URL('https://notchmaroc.ma'), // Assuming this is the domain based on email/contact
+  title: {
+    default: 'Notch-Tech | La technologie à portée de main',
+    template: '%s | Notch-Tech'
+  },
+  description: 'Votre première destination pour les derniers appareils électroniques et accessoires intelligents au Maroc. Livraison rapide et paiement à la livraison partout au Maroc.',
+  keywords: ['électronique', 'accessoires', 'écouteurs', 'montres connectées', 'Maroc', 'paiement à la livraison', 'NotchMaroc'],
+  authors: [{ name: 'Notch-Tech' }],
+  creator: 'Notch-Tech',
+  openGraph: {
+    type: 'website',
+    locale: 'fr_MA',
+    url: 'https://notchmaroc.ma',
+    title: 'Notch-Tech | La technologie à portée de main',
+    description: 'Votre première destination pour les derniers appareils électroniques et accessoires intelligents au Maroc. Livraison rapide et paiement à la livraison.',
+    siteName: 'Notch-Tech',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Notch-Tech | La technologie à portée de main',
+    description: 'Votre première destination pour les derniers appareils électroniques au Maroc. Paiement à la livraison.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: '/images/logo/logo-head.ico',
+    apple: '/images/logo/logo-head.ico',
+  }
 };
 
 export default function RootLayout({
