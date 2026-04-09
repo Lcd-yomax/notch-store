@@ -80,7 +80,7 @@ export default function BestSellingProducts() {
 
             <div className="p-5 flex flex-col flex-grow">
               <div className="flex items-center gap-1 mb-2">
-                <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                 <span className="text-sm font-bold text-slate-700">{product.rating || '5.0'}</span>
                 <span className="text-sm text-slate-400">({product.reviews || '0'})</span>
               </div>

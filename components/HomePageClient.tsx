@@ -113,7 +113,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                         )}
                       </div>
                       <div className="flex items-center gap-1">
-                        <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                        <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                         <span className="text-slate-600 text-sm font-bold">{product.rating || '5.0'}</span>
                         <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
                       </div>
@@ -146,7 +146,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                     <div className="relative z-10">
                       <div className="flex gap-1 mb-6 text-amber-400">
                         {Array.from({ length: 5 }).map((_, i) => (
-                          <span key={i} className={`material-symbols-outlined ${i >= review.stars ? "text-slate-200" : ""}`} style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                          <span key={i} aria-hidden="true" translate="no" className={`material-symbols-outlined ${i >= review.stars ? "text-slate-200" : ""}`} style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                         ))}
                       </div>
                       <p className="text-slate-700 text-lg leading-relaxed mb-8">&quot;{review.comment}&quot;</p>

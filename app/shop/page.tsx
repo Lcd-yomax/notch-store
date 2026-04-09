@@ -290,7 +290,7 @@ export default function Shop() {
                               )}
                             </div>
                             <div className="flex items-center gap-1">
-                              <span className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                              <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                               <span className="text-slate-600 text-sm font-bold">{product.rating || '5.0'}</span>
                               <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
                             </div>

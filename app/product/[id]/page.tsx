@@ -332,11 +332,11 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <h1 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-4">{product.name}</h1>
                   <div className="flex items-center gap-4 flex-wrap">
                     <div className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star_half</span>
+                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star_half</span>
                     </div>
                     <span className="text-slate-900 font-bold">{product.rating}</span>
                     <span className="text-slate-400">({product.reviews} {t.product.reviews})</span>
@@ -575,7 +575,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                         </div>
                         <div className="flex text-amber-400 mb-3">
                           {[1, 2, 3, 4, 5].map(star => (
-                            <span key={star} className="material-symbols-outlined text-sm" style={{ fontVariationSettings: star <= review.rating ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                            <span key={star} aria-hidden="true" translate="no" className="material-symbols-outlined text-sm" style={{ fontVariationSettings: star <= review.rating ? "'FILL' 1" : "'FILL' 0" }}>star</span>
                           ))}
                         </div>
                         <p className="text-slate-600">{review.comment}</p>
@@ -621,7 +621,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                               onMouseLeave={() => setHoverRating(0)}
                               className="text-amber-400 focus:outline-none"
                             >
-                              <span className="material-symbols-outlined text-2xl transition-all" style={{ fontVariationSettings: star <= (hoverRating || rating) ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                              <span aria-hidden="true" translate="no" className="material-symbols-outlined text-2xl transition-all" style={{ fontVariationSettings: star <= (hoverRating || rating) ? "'FILL' 1" : "'FILL' 0" }}>star</span>
                             </button>
                           ))}
                         </div>
