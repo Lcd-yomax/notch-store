@@ -12,10 +12,10 @@ const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
 export const metadata: Metadata = {
   metadataBase: new URL('https://notchmaroc.ma'), // Assuming this is the domain based on email/contact
   title: {
-    default: 'Notch-Tech | La technologie à portée de main',
+    default: 'Produits Notch-Tech | Électronique, sans fil et livraison rapide',
     template: '%s | Notch-Tech'
   },
-  description: 'Votre première destination pour les derniers appareils électroniques et accessoires intelligents au Maroc. Livraison rapide et paiement à la livraison partout au Maroc.',
+  description: 'Découvrez les meilleurs produits Notch-Tech au Maroc : appareils électroniques, écouteurs sans fil et accessoires intelligents. Profitez de la livraison rapide et du paiement à la livraison.',
   keywords: ['électronique', 'accessoires', 'écouteurs', 'montres connectées', 'Maroc', 'paiement à la livraison', 'NotchMaroc'],
   authors: [{ name: 'Notch-Tech' }],
   creator: 'Notch-Tech',
