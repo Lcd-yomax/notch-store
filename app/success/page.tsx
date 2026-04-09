@@ -4,9 +4,19 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useEffect } from 'react';
+import { pixelPurchase } from '@/lib/pixel';
 
 export default function SuccessPage() {
   const { t } = useLanguage();
+
+  // Fire Purchase pixel event (value passed via sessionStorage from checkout)
+  useEffect(() => {
+    const storedValue = sessionStorage.getItem('lastOrderValue');
+    const value = storedValue ? parseFloat(storedValue) : 0;
+    pixelPurchase({ value });
+    sessionStorage.removeItem('lastOrderValue');
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
