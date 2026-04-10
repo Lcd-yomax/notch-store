@@ -15,10 +15,10 @@ export default function BestSellingProducts() {
   useEffect(() => {
     async function fetchBestSellers() {
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch('/api/products?is_best_seller=true');
         const data = await res.json();
-        // Grab a different slice for 'Best Sellers'
-        setProducts(data.slice(5, 9) || []);
+        const arr = Array.isArray(data) ? data : [];
+        setProducts(arr.slice(0, 4));
       } catch (err) {
         console.error('Failed to load best selling products', err);
       } finally {

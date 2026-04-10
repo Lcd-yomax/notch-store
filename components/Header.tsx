@@ -54,24 +54,20 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8 h-28 flex items-center justify-between">
           <Link href="/" className="flex items-center shrink-0">
             {/* Light mode logo */}
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/images/logo/logo-light.png"
               alt="Notch Logo"
-              width={220}
-              height={120}
-              className="w-auto object-contain block"
               style={{ height: '120px', width: 'auto' }}
-              priority
+              className="object-contain block"
             />
             {/* Dark mode logo */}
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/images/logo/logo-dark.png"
               alt="Notch Logo"
-              width={220}
-              height={120}
-              className="w-auto object-contain hidden"
               style={{ height: '120px', width: 'auto' }}
-              priority
+              className="object-contain hidden"
             />
           </Link>
 

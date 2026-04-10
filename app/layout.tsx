@@ -3,6 +3,7 @@ import { Manrope } from 'next/font/google';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 import { CartProvider } from '@/lib/CartContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 import Script from 'next/script';
 import { META_PIXEL_ID } from '@/lib/pixel';
 import './globals.css';
@@ -12,28 +13,35 @@ const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.notch-tech.com'),
   title: {
-    default: 'Notch-Tech | Électronique & Livraison Rapide',
-    template: '%s | Notch-Tech'
+    default: 'Notch-Tech Maroc | Produits Tech Livraison Partout au Maroc',
+    template: '%s | Notch-Tech Maroc'
   },
   alternates: {
     canonical: '/',
   },
-  description: "Achetez l'électronique hi-tech et accessoires intelligents Notch-Tech au Maroc. Profitez de la livraison rapide et du paiement à la réception.",
-  keywords: ['électronique', 'accessoires', 'écouteurs', 'montres connectées', 'Maroc', 'paiement à la livraison', 'NotchMaroc'],
+  description: "Achetez les meilleurs produits tech au Maroc dès 500 DH. Livraison rapide partout au Maroc, sans frais cachés. Paiement à la réception.",
+  keywords: ['électronique', 'produits tech', 'livraison maroc', 'acheter maroc', 'sans frais', 'partout au maroc', 'paiement livraison', 'Notch-Tech'],
   authors: [{ name: 'Notch-Tech' }],
   creator: 'Notch-Tech',
   openGraph: {
     type: 'website',
     locale: 'fr_MA',
     url: 'https://www.notch-tech.com',
-    title: 'Notch-Tech | La technologie à portée de main',
-    description: 'Votre première destination pour les derniers appareils électroniques et accessoires intelligents au Maroc. Livraison rapide et paiement à la livraison.',
+    title: 'Notch-Tech Maroc | Produits Tech Livraison Partout au Maroc',
+    description: 'Achetez les meilleurs produits tech au Maroc dès 500 DH. Livraison rapide partout au Maroc, sans frais cachés. Paiement à la réception.',
     siteName: 'Notch-Tech',
+    images: [{
+      url: '/images/logo/logo-head.ico',
+      width: 1200,
+      height: 630,
+      alt: 'Notch-Tech Maroc - Produits Tech',
+    }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Notch-Tech | La technologie à portée de main',
-    description: 'Votre première destination pour les derniers appareils électroniques au Maroc. Paiement à la livraison.',
+    title: 'Notch-Tech Maroc | Produits Tech Livraison Partout au Maroc',
+    description: 'Achetez les meilleurs produits tech au Maroc dès 500 DH. Livraison rapide partout. Paiement à la réception.',
+    images: ['/images/logo/logo-head.ico'],
   },
   robots: {
     index: true,
@@ -83,11 +91,41 @@ export default function RootLayout({
               "logo": "https://www.notch-tech.com/images/logo/logo-head.ico",
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+212-6-00-00-00-00",
+                "telephone": "+212-667-018042",
                 "contactType": "customer service",
                 "areaServed": "MA",
                 "availableLanguage": ["French", "Arabic"]
               }
+            })
+          }}
+        />
+        <Script
+          id="json-ld-localbusiness"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "Notch-Tech",
+              "url": "https://www.notch-tech.com",
+              "telephone": "+212-667-018042",
+              "email": "contact@notch-tech.com",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Marrakech",
+                "addressCountry": "MA"
+              },
+              "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+                "opens": "09:00",
+                "closes": "21:00"
+              },
+              "sameAs": [
+                "https://www.facebook.com/notchtech.ma",
+                "https://www.instagram.com/notchtech_ma"
+              ]
             })
           }}
         />
@@ -117,6 +155,7 @@ export default function RootLayout({
             <WhatsAppButton />
           </CartProvider>
         </LanguageProvider>
+        <GoogleAnalytics />
 
         {/* ── Meta Pixel Base Code ─────────────────────────────── */}
         {META_PIXEL_ID && (
