@@ -10,6 +10,7 @@ import HeroSlider from '@/components/HeroSlider';
 import CategorySlider from '@/components/CategorySlider';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import BestSellingProducts from '@/components/BestSellingProducts';
+import { Star, ShoppingBag, Quote } from 'lucide-react';
 
 export default function HomePageClient({ productsData, reviewsData }: { productsData: any[], reviewsData: any[] }) {
   const { t } = useLanguage();
@@ -113,7 +114,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                         )}
                       </div>
                       <div className="flex items-center gap-1">
-                        <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                        <Star size={16} fill="currentColor" strokeWidth={0} className="text-amber-400" />
                         <span className="text-slate-600 text-sm font-bold">{product.rating || '5.0'}</span>
                         <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
                       </div>
@@ -122,7 +123,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                       href={`/product/${product.slug || product.id}`}
                       className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_bag</span>
+                      <ShoppingBag size={20} className="group-hover/btn:scale-110 transition-transform" />
                       {t.product?.orderNow || t.home?.buy || 'Acheter maintenant'}
                     </Link>
                   </div>
@@ -146,7 +147,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                     <div className="relative z-10">
                       <div className="flex gap-1 mb-6 text-amber-400">
                         {Array.from({ length: 5 }).map((_, i) => (
-                          <span key={i} aria-hidden="true" translate="no" className={`material-symbols-outlined ${i >= review.stars ? "text-slate-200" : ""}`} style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                          <Star key={i} size={20} fill="currentColor" strokeWidth={0} className={i >= review.stars ? "text-slate-200" : "text-amber-400"} />
                         ))}
                       </div>
                       <p className="text-slate-700 text-lg leading-relaxed mb-8">&quot;{review.comment}&quot;</p>

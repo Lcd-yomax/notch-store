@@ -8,6 +8,7 @@ import { useCart } from '@/lib/CartContext';
 import { use, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ImageSizes } from '@/lib/imageUtils';
+import { Star, StarHalf, ShoppingBag } from 'lucide-react';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -332,11 +333,11 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   <h1 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-4">{product.name}</h1>
                   <div className="flex items-center gap-4 flex-wrap">
                     <div className="flex items-center gap-1">
-                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star_half</span>
+                      <Star size={20} fill="currentColor" strokeWidth={0} className="text-amber-400" />
+                      <Star size={20} fill="currentColor" strokeWidth={0} className="text-amber-400" />
+                      <Star size={20} fill="currentColor" strokeWidth={0} className="text-amber-400" />
+                      <Star size={20} fill="currentColor" strokeWidth={0} className="text-amber-400" />
+                      <StarHalf size={20} fill="currentColor" strokeWidth={0} className="text-amber-400" />
                     </div>
                     <span className="text-slate-900 font-bold">{product.rating}</span>
                     <span className="text-slate-400">({product.reviews} {t.product.reviews})</span>
@@ -478,7 +479,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       {isSubmittingOrder ? (
                         <span className="material-symbols-outlined animate-spin">progress_activity</span>
                       ) : (
-                        <span className="material-symbols-outlined">shopping_bag</span>
+                        <ShoppingBag size={24} />
                       )}
                       {isSubmittingOrder ? 'Envoi en cours...' : (t.product.orderNow || 'Acheter maintenant')}
                     </button>
@@ -575,7 +576,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                         </div>
                         <div className="flex text-amber-400 mb-3">
                           {[1, 2, 3, 4, 5].map(star => (
-                            <span key={star} aria-hidden="true" translate="no" className="material-symbols-outlined text-sm" style={{ fontVariationSettings: star <= review.rating ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                            <Star key={star} size={16} fill="currentColor" strokeWidth={0} className={star <= review.rating ? "text-amber-400" : "text-slate-200"} />
                           ))}
                         </div>
                         <p className="text-slate-600">{review.comment}</p>
@@ -621,7 +622,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                               onMouseLeave={() => setHoverRating(0)}
                               className="text-amber-400 focus:outline-none"
                             >
-                              <span aria-hidden="true" translate="no" className="material-symbols-outlined text-2xl transition-all" style={{ fontVariationSettings: star <= (hoverRating || rating) ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                              <Star size={24} fill="currentColor" strokeWidth={0} className={star <= (hoverRating || rating) ? "text-amber-400 transition-all" : "text-slate-200 transition-all"} />
                             </button>
                           ))}
                         </div>
@@ -681,7 +682,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             onClick={scrollToForm}
             className="btn-glow-shake flex-1 sm:flex-none w-full sm:w-auto bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer group"
           >
-            <span className="material-symbols-outlined group-hover:-translate-y-1 transition-transform duration-300">shopping_bag</span>
+            <ShoppingBag size={24} className="group-hover:-translate-y-1 transition-transform duration-300" />
             {t.product.orderNow || 'Acheter maintenant'}
           </button>
         </div>
