@@ -113,7 +113,8 @@ export default function RootLayout({
               "email": "contact@notch-tech.com",
               "address": {
                 "@type": "PostalAddress",
-                "addressLocality": "Marrakech",
+                "streetAddress": "Boulevard Hassan II",
+                "addressLocality": "Casablanca",
                 "addressCountry": "MA"
               },
               "openingHoursSpecification": {

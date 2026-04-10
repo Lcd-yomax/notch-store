@@ -40,44 +40,44 @@ export default function CategorySlider() {
       <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8">{t.home.shopByCategory}</h2>
       <div className="relative group">
         {/* Left arrow – only shown when there are enough categories to scroll */}
-        <button 
+        <button
           onClick={() => scroll('left')}
           className={`absolute left-0 top-[40%] -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity ${categories.length <= 6 ? 'hidden' : ''}`}
         >
           <span className="material-symbols-outlined">chevron_left</span>
         </button>
-        
-        <div 
+
+        <div
           ref={scrollRef}
           className={`flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${!isLoading && categories.length <= 6 ? 'justify-center' : 'justify-start'}`}
         >
           {isLoading ? (
-             Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex flex-col items-center gap-4 min-w-[140px] md:min-w-[180px] snap-start">
-                  <div className="w-full aspect-square rounded-xl bg-slate-200 animate-pulse"></div>
-                  <div className="w-24 h-5 bg-slate-200 rounded animate-pulse"></div>
-                </div>
-             ))
+            Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex flex-col items-center gap-4 min-w-[140px] md:min-w-[180px] snap-start">
+                <div className="w-full aspect-square rounded-xl bg-slate-200 animate-pulse"></div>
+                <div className="w-24 h-5 bg-slate-200 rounded animate-pulse"></div>
+              </div>
+            ))
           ) : (
             categories.map((category) => (
-              <Link 
-                key={category.id} 
+              <Link
+                key={category.id}
                 href={`/categories/${category.slug}`}
                 className="flex flex-col items-center gap-4 min-w-[140px] md:min-w-[180px] snap-start group/item"
               >
                 <div className="w-full aspect-square rounded-xl overflow-hidden bg-slate-100 relative">
                   {category.image_url ? (
-                    <Image 
-                      src={ImageSizes.small(category.image_url)} 
+                    <Image
+                      src={ImageSizes.small(category.image_url)}
                       alt={category.name}
                       fill
-                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-                       
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+
                       className="object-cover group-hover/item:scale-110 transition-transform duration-500"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-slate-200">
-                       <span className="material-symbols-outlined text-4xl text-slate-400">image</span>
+                      <span className="material-symbols-outlined text-4xl text-slate-400">image</span>
                     </div>
                   )}
                 </div>
@@ -85,11 +85,6 @@ export default function CategorySlider() {
                   <span className="font-medium text-slate-900 text-base text-center line-clamp-1 group-hover/item:text-primary transition-colors">
                     {category.name}
                   </span>
-                  {category.products && (
-                    <span className="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-0.5 rounded-md">
-                      {category.products[0]?.count || 0} produits
-                    </span>
-                  )}
                 </div>
               </Link>
             ))
@@ -97,7 +92,7 @@ export default function CategorySlider() {
         </div>
 
         {/* Right arrow – only shown when there are enough categories to scroll */}
-        <button 
+        <button
           onClick={() => scroll('right')}
           className={`absolute right-0 top-[40%] -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity ${categories.length <= 6 ? 'hidden' : ''}`}
         >

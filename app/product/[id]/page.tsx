@@ -122,15 +122,17 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
 
   const scrollToForm = () => {
     if (formRef.current) {
-      // Scroll slightly above the form to ensure it's not hidden under any fixed headers
-      const y = formRef.current.getBoundingClientRect().top + window.scrollY - 120;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      // Defer the layout read to after the current paint — avoids forced reflow
+      requestAnimationFrame(() => {
+        const y = formRef.current!.getBoundingClientRect().top + window.scrollY - 120;
+        window.scrollTo({ top: y, behavior: 'smooth' });
 
-      // Focus the first input (Nom complet) after a small delay to let scrolling finish
-      setTimeout(() => {
-        const firstInput = formRef.current?.querySelector('input');
-        if (firstInput) (firstInput as HTMLElement).focus();
-      }, 600);
+        // Focus the first input after scrolling finishes
+        setTimeout(() => {
+          const firstInput = formRef.current?.querySelector('input');
+          if (firstInput) (firstInput as HTMLElement).focus();
+        }, 600);
+      });
     }
   };
 
@@ -581,7 +583,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                         </div>
                         <p className="text-slate-600">{review.comment}</p>
                         {review.image && (
-                          <img src={review.image} alt="Review" className="mt-4 rounded-lg max-w-[200px] max-h-[200px] object-cover border border-slate-200" />
+                          <img src={review.image} alt="Review" width={200} height={200} className="mt-4 rounded-lg max-w-[200px] max-h-[200px] object-cover border border-slate-200" />
                         )}
                       </div>
                     ))}

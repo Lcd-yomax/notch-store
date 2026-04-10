@@ -46,14 +46,19 @@ export default function HeroSlider() {
           {/* Media Content */}
           {slide.image.endsWith('.mp4') ? (
             <div className="absolute inset-0 w-full h-full">
-              <video 
-                src={slide.image}
-                autoPlay 
+              <video
+                autoPlay
                 loop
-                muted 
+                muted
                 playsInline
+                preload="metadata"
+                // @ts-ignore — fetchPriority is valid HTML but not yet in React types
+                fetchPriority="high"
+                poster="/images/1.webp"
                 className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
-              />
+              >
+                <source src={slide.image} type="video/mp4" />
+              </video>
               <div className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/90 via-black/50 to-transparent transition-colors duration-300"></div>
             </div>
           ) : (
