@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { ImageSizes } from '@/lib/imageUtils';
+import { Star } from 'lucide-react';
 
 export default function BestSellingProducts() {
   const { t } = useLanguage();
@@ -80,7 +81,7 @@ export default function BestSellingProducts() {
 
             <div className="p-5 flex flex-col flex-grow">
               <div className="flex items-center gap-1 mb-2">
-                <span aria-hidden="true" translate="no" className="material-symbols-outlined text-amber-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                <Star size={16} fill="currentColor" strokeWidth={0} className="text-amber-400" />
                 <span className="text-sm font-bold text-slate-700">{product.rating || '5.0'}</span>
                 <span className="text-sm text-slate-400">({product.reviews || '0'})</span>
               </div>
