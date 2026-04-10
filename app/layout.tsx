@@ -10,19 +10,22 @@ import './globals.css';
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://notchmaroc.ma'), // Assuming this is the domain based on email/contact
+  metadataBase: new URL('https://www.notch-tech.com'),
   title: {
-    default: 'Produits Notch-Tech | Électronique, sans fil et livraison rapide',
+    default: 'Notch-Tech | Électronique & Livraison Rapide',
     template: '%s | Notch-Tech'
   },
-  description: 'Découvrez les meilleurs produits Notch-Tech au Maroc : appareils électroniques, écouteurs sans fil et accessoires intelligents. Profitez de la livraison rapide et du paiement à la livraison.',
+  alternates: {
+    canonical: '/',
+  },
+  description: "Achetez l'électronique hi-tech et accessoires intelligents Notch-Tech au Maroc. Profitez de la livraison rapide et du paiement à la réception.",
   keywords: ['électronique', 'accessoires', 'écouteurs', 'montres connectées', 'Maroc', 'paiement à la livraison', 'NotchMaroc'],
   authors: [{ name: 'Notch-Tech' }],
   creator: 'Notch-Tech',
   openGraph: {
     type: 'website',
     locale: 'fr_MA',
-    url: 'https://notchmaroc.ma',
+    url: 'https://www.notch-tech.com',
     title: 'Notch-Tech | La technologie à portée de main',
     description: 'Votre première destination pour les derniers appareils électroniques et accessoires intelligents au Maroc. Livraison rapide et paiement à la livraison.',
     siteName: 'Notch-Tech',
@@ -76,8 +79,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Notch-Tech",
-              "url": "https://notchmaroc.ma",
-              "logo": "https://notchmaroc.ma/images/logo/logo-head.ico",
+              "url": "https://www.notch-tech.com",
+              "logo": "https://www.notch-tech.com/images/logo/logo-head.ico",
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+212-6-00-00-00-00",
@@ -97,10 +100,10 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "Notch-Tech",
-              "url": "https://notchmaroc.ma",
+              "url": "https://www.notch-tech.com",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://notchmaroc.ma/shop?q={search_term_string}",
+                "target": "https://www.notch-tech.com/shop?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })

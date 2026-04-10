@@ -101,7 +101,7 @@ export default function Contact() {
                   <p className="text-slate-500 leading-relaxed mb-2">
                     Nous vous répondrons dans les 24 heures.
                   </p>
-                  <a href="mailto:contact@notchmaroc.ma" className="text-lg font-bold text-primary hover:underline">contact@notchmaroc.ma</a>
+                  <a href="mailto:contact@notch-tech.com" className="text-lg font-bold text-primary hover:underline">contact@notch-tech.com</a>
                 </div>
               </div>
             </div>

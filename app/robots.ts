@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/checkout/', '/success/'], // Block checkout/success pages to avoid duplicate content/crawling 
     },
-    sitemap: 'https://notchmaroc.ma/sitemap.xml',
+    sitemap: 'https://www.notch-tech.com/sitemap.xml',
   };
 }
