@@ -1,17 +1,30 @@
-const nextConfig = {
+import type { NextConfig } from 'next';
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
+  compress: true,
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Allow access to remote image placeholder.
+  // Images: Supabase already fully optimizes product images via its own
+  // Image Transformation API (see lib/imageUtils.ts). Local assets (logos,
+  // hero) are small static files. Setting unoptimized:true skips Next.js's
+  // /_next/image proxy entirely — this eliminates both the private-IP error
+  // on Supabase CDN and the loader-width warnings.
   images: {
-    unoptimized: false,
+    unoptimized: true,
+    qualities: [75, 80],
+    dangerouslyAllowSVG: false,
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'picsum.photos',
         port: '',
-        pathname: '/**', // This allows any path under the hostname
+        pathname: '/**',
       },
       {
         protocol: 'https',
@@ -38,7 +51,7 @@ const nextConfig = {
   turbopack: {},
   webpack: (config: any, {dev}: any) => {
     // HMR is disabled in AI Studio via DISABLE_HMR env var.
-    // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+    // Do not modify — file watching is disabled to prevent flickering during agent edits.
     if (dev && process.env.DISABLE_HMR === 'true') {
       config.watchOptions = {
         ignored: /.*/,
@@ -48,4 +61,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

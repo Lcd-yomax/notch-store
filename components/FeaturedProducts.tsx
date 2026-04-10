@@ -14,10 +14,10 @@ export default function FeaturedProducts() {
   useEffect(() => {
     async function fetchFeatured() {
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch('/api/products?is_featured=true');
         const data = await res.json();
-        // Just grab the first 5 products to act as 'Featured' for now
-        setProducts(data.slice(0, 5) || []);
+        const arr = Array.isArray(data) ? data : [];
+        setProducts(arr.slice(0, 5));
       } catch (err) {
         console.error('Failed to load featured products', err);
       } finally {

@@ -13,8 +13,14 @@ export async function GET() {
       throw error;
     }
     
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        // Categories change rarely — cache for 1 hour, stale-while-revalidate for 10 min
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=600',
+      },
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
