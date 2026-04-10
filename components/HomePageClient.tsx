@@ -10,7 +10,7 @@ import HeroSlider from '@/components/HeroSlider';
 import CategorySlider from '@/components/CategorySlider';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import BestSellingProducts from '@/components/BestSellingProducts';
-import { Star, ShoppingBag, Quote } from 'lucide-react';
+import { Star, ShoppingBag } from 'lucide-react';
 
 export default function HomePageClient({ productsData, reviewsData }: { productsData: any[], reviewsData: any[] }) {
   const { t } = useLanguage();

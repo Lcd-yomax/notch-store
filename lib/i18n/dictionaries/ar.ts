@@ -30,7 +30,7 @@ export const ar = {
     privacy: "سياسة الخصوصية",
     contactUs: "اتصل بنا",
     address: "شارع الحسن الثاني، الدار البيضاء، المغرب",
-    rights: "جميع الحقوق محفوظة © 2024 NotchMaroc",
+    rights: "جميع الحقوق محفوظة © 2025 Notch-Tech",
   },
   home: {
     limitedOffer: "اكتشف مجموعة واسعة من المنتجات عالية الجودة على موقعنا.",

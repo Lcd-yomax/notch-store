@@ -27,10 +27,10 @@ export default function Footer() {
               {t.footer.description}
             </p>
             <div className="flex items-center gap-4">
-              <a href="https://www.facebook.com/notchtech.ma" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#1877F2] transition-all hover:scale-110">
+              <a href="https://www.facebook.com/notchtech.ma" target="_blank" rel="noopener noreferrer" aria-label="Suivez-nous sur Facebook" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#1877F2] transition-all hover:scale-110">
                 <Facebook size={20} />
               </a>
-              <a href="https://www.instagram.com/notchtech_ma" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#E4405F] transition-all hover:scale-110">
+              <a href="https://www.instagram.com/notchtech_ma" target="_blank" rel="noopener noreferrer" aria-label="Suivez-nous sur Instagram" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#E4405F] transition-all hover:scale-110">
                 <Instagram size={20} />
               </a>
             </div>
@@ -39,9 +39,9 @@ export default function Footer() {
             <h4 className="text-white font-bold text-lg mb-6">{t.footer.quickLinks}</h4>
             <ul className="space-y-4">
               <li><Link href="/about" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.header.about}</Link></li>
-              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.newProducts}</Link></li>
-              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.specialOffers}</Link></li>
-              <li><Link href="#" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.orderTracking}</Link></li>
+              <li><Link href="/shop" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.newProducts}</Link></li>
+              <li><Link href="/shop" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.specialOffers}</Link></li>
+              <li><Link href="/contact" className="text-slate-400 hover:text-primary transition-colors font-medium">{t.footer.orderTracking}</Link></li>
             </ul>
           </div>
           <div>

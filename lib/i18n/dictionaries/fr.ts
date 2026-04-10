@@ -30,7 +30,7 @@ export const fr = {
     privacy: "Politique de confidentialité",
     contactUs: "Contactez-nous",
     address: "Boulevard Hassan II, Casablanca, Maroc",
-    rights: "Tous droits réservés © 2024 NotchMaroc",
+    rights: "Tous droits réservés © 2025 Notch-Tech",
   },
   home: {
     limitedOffer: "Découvrez une vaste sélection de produits de qualité sur notre site.",

@@ -209,7 +209,7 @@ export const heroSlides = [
     desc: "home.heroDesc",
     buttonText: "home.buyNow",
     buttonLink: "/product/1",
-    image: "/video/pb vd.mp4",
+    image: "/video/pb-vd.mp4",
   },
   {
     id: 2,
@@ -219,7 +219,7 @@ export const heroSlides = [
     desc: "home.heroDesc2",
     buttonText: "home.discover",
     buttonLink: "/categories",
-    image: "/images/1.png",
+    image: "/images/1.webp",
   },
   {
     id: 3,
@@ -229,7 +229,7 @@ export const heroSlides = [
     desc: "home.heroDesc3",
     buttonText: "home.discover",
     buttonLink: "/categories",
-    image: "/images/2.png",
+    image: "/images/2.webp",
   },
   {
     id: 4,
@@ -239,7 +239,7 @@ export const heroSlides = [
     desc: "home.heroDesc",
     buttonText: "home.discover",
     buttonLink: "/categories",
-    image: "/images/3.png",
+    image: "/images/3.webp",
   }
 ];
 

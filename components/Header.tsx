@@ -87,7 +87,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                       <Link key={category.id} href={`/categories/${category.slug}`} className="flex items-center gap-4 group/item p-2 rounded-xl hover:bg-slate-50 transition-colors">
                         <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center">
                           {category.image_url ? (
-                            <img src={category.image_url} alt={category.name} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
+                            <img src={category.image_url} alt={category.name} width={48} height={48} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
                           ) : (
                             <span className="material-symbols-outlined text-slate-400">image</span>
                           )}
@@ -124,6 +124,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
               )}
             </Link> */}
             <select
+              aria-label="Choisir la langue"
               value={language}
               onChange={(e) => setLanguage(e.target.value as 'fr' | 'ar')}
               className="bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer border-none"

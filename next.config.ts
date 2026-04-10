@@ -7,6 +7,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: true,
+  compiler: {
+    // Strip all console.* calls in production builds — saves ~10–20KB
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -47,7 +51,6 @@ const nextConfig: NextConfig = {
     ],
   },
   output: 'standalone',
-  transpilePackages: ['motion'],
   turbopack: {},
   webpack: (config: any, {dev}: any) => {
     // HMR is disabled in AI Studio via DISABLE_HMR env var.
