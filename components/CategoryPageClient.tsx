@@ -236,7 +236,7 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                             href={`/product/${product.slug || product.id}`}
                             className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
                           >
-                            <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">local_shipping</span>
+                            <span className="material-symbols-outlined text-xl group-hover/btn:scale-110 transition-transform">shopping_bag</span>
                             {t.product?.orderNow || 'Acheter maintenant'}
                           </Link>
                         </div>

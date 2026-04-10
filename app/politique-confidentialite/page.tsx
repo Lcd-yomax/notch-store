@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
         <>
           <p>{s.s7p1}</p>
           <ul className="list-none space-y-2">
-            <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">mail</span> contact@notchmaroc.ma</li>
+            <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">mail</span> contact@notch-tech.com</li>
             <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">call</span> +212 667-018042</li>
           </ul>
         </>

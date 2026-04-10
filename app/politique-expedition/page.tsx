@@ -111,7 +111,7 @@ export default function ShippingPolicyPage() {
                 <p>{s.s4p1}</p>
                 <ul className="list-none space-y-2">
                   <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">chat</span> WhatsApp : +212 667-018042</li>
-                  <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">mail</span> contact@notchmaroc.ma</li>
+                  <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">mail</span> contact@notch-tech.com</li>
                 </ul>
               </div>
             </section>

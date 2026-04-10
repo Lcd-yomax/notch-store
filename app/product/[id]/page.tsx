@@ -478,7 +478,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       {isSubmittingOrder ? (
                         <span className="material-symbols-outlined animate-spin">progress_activity</span>
                       ) : (
-                        <span className="material-symbols-outlined">local_shipping</span>
+                        <span className="material-symbols-outlined">shopping_bag</span>
                       )}
                       {isSubmittingOrder ? 'Envoi en cours...' : (t.product.orderNow || 'Acheter maintenant')}
                     </button>
@@ -681,7 +681,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             onClick={scrollToForm}
             className="btn-glow-shake flex-1 sm:flex-none w-full sm:w-auto bg-primary hover:bg-amber-500 text-white font-bold text-lg py-3 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer group"
           >
-            <span className="material-symbols-outlined group-hover:-translate-y-1 transition-transform duration-300">local_shipping</span>
+            <span className="material-symbols-outlined group-hover:-translate-y-1 transition-transform duration-300">shopping_bag</span>
             {t.product.orderNow || 'Acheter maintenant'}
           </button>
         </div>

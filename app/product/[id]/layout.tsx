@@ -79,7 +79,7 @@ export default async function ProductLayout({
         "sku": product.id || "N/A",
         "offers": {
           "@type": "Offer",
-          "url": `https://notchmaroc.ma/product/${id}`,
+          "url": `https://www.notch-tech.com/product/${id}`,
           "priceCurrency": "MAD",
           "price": price.toString(),
           "availability": "https://schema.org/InStock"

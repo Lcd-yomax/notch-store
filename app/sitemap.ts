@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { supabase } from '@/lib/supabase/client';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://notchmaroc.ma';
+  const baseUrl = 'https://www.notch-tech.com';
 
   // 1. Static Routes
   const staticRoutes = [

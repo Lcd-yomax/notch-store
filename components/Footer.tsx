@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { Facebook, Instagram } from 'lucide-react';
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -26,14 +27,11 @@ export default function Footer() {
               {t.footer.description}
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-primary transition-colors">
-                <span className="material-symbols-outlined">share</span>
+              <a href="https://www.facebook.com/notchtech.ma" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#1877F2] transition-all hover:scale-110">
+                <Facebook size={20} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-primary transition-colors">
-                <span className="material-symbols-outlined">photo_camera</span>
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-primary transition-colors">
-                <span className="material-symbols-outlined">play_arrow</span>
+              <a href="https://www.instagram.com/notchtech_ma" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#E4405F] transition-all hover:scale-110">
+                <Instagram size={20} />
               </a>
             </div>
           </div>
@@ -68,7 +66,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-slate-400">
                 <span className="material-symbols-outlined text-primary">mail</span>
-                <span>contact@notchmaroc.ma</span>
+                <span>contact@notch-tech.com</span>
               </li>
             </ul>
           </div>
