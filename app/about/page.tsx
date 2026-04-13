@@ -17,7 +17,7 @@ export default function About() {
             <h1 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-4">{t.about.title}</h1>
             <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.about.subtitle}</p>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
             <div className="flex flex-col justify-center gap-6">
               <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">{t.about.storyTitle}</h2>
@@ -32,7 +32,7 @@ export default function About() {
               <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/Contactez-nous.png')" }}></div>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
               <div className="absolute bottom-8 left-8 right-8">
-                <h3 className="text-white text-2xl font-bold mb-2">L&apos;équipe NotchMaroc</h3>
+                <h3 className="text-white text-2xl font-bold mb-2">L&apos;équipe Notch</h3>
                 <p className="text-slate-300 font-medium">Dédiée à vous offrir la meilleure expérience technologique.</p>
               </div>
             </div>
