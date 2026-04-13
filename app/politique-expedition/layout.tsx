@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Politique d\'expédition',
-  description: 'Informations détaillées sur les zones de livraison, les délais et les frais d\'expédition pour toutes vos commandes sur NotchMaroc.',
+  description: 'Informations détaillées sur les zones de livraison, les délais et les frais d\'expédition pour toutes vos commandes sur Notch.',
   robots: {
     index: false,
     follow: true,
