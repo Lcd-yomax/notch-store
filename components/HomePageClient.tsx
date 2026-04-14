@@ -152,7 +152,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
             </div>
             {reviews.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                {reviews.map((review: any) => (
+                {reviews.slice(0, 3).map((review: any) => (
                   <div key={review.id} className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
                     <span className="material-symbols-outlined absolute -top-2 -right-2 text-slate-100 text-8xl rotate-12 pointer-events-none" style={{ fontVariationSettings: "'FILL' 1" }}>format_quote</span>
                     <div className="relative z-10">
