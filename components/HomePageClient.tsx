@@ -113,9 +113,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                       <Link href={`/product/${product.slug || product.id}`}>
                         <h3 className="text-slate-900 text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{productName}</h3>
                       </Link>
-                      <p className="text-slate-500 text-sm line-clamp-2 mb-2 leading-relaxed">
-                        {product.description || "Son stéréo HD, autonomie 30h, confort premium pour vos longues sessions."}
-                      </p>
+
                     </div>
                     <div className="flex flex-col gap-2 mt-auto">
                       <div className="flex items-end gap-3">
@@ -194,7 +192,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                 Tout ce que vous devez savoir sur nos produits et services.
               </p>
             </div>
-            
+
             <div className="flex flex-col gap-4">
               <details className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
                 <summary className="flex items-center justify-between font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
