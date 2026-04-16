@@ -83,7 +83,7 @@ export default function BestSellingProducts() {
               <div className="flex items-center gap-1 mb-2">
                 <Star size={16} fill="currentColor" strokeWidth={0} className="text-amber-400" />
                 <span className="text-sm font-bold text-slate-700">{product.rating || '5.0'}</span>
-                <span className="text-sm text-slate-400">({product.reviews || '0'})</span>
+                {/* <span className="text-sm text-slate-400">({product.reviews || '0'})</span> */}
               </div>
               <h3 className="font-bold text-slate-900 text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">{product.name}</h3>
               <div className="mt-auto flex items-center gap-3">

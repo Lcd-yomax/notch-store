@@ -125,7 +125,7 @@ export default function HomePageClient({ productsData, reviewsData }: { products
                       <div className="flex items-center gap-1">
                         <Star size={16} fill="currentColor" strokeWidth={0} className="text-amber-400" />
                         <span className="text-slate-600 text-sm font-bold">{product.rating || '5.0'}</span>
-                        <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
+                        {/* <span className="text-slate-400 text-sm">({product.reviews || '0'})</span> */}
                       </div>
                     </div>
                     <Link

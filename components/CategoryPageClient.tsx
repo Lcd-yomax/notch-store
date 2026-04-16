@@ -13,7 +13,7 @@ import { Star, ShoppingBag } from 'lucide-react';
 export default function CategoryPageClient({ categoryName, initialProducts }: { categoryName: string, initialProducts: any[] }) {
   const { t } = useLanguage();
   const { addToCart } = useCart();
-  
+
   // Filter States
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
@@ -101,7 +101,7 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
               <p className="text-slate-500 text-lg font-medium">{t.shop.desc}</p>
             </div>
             <div className="flex items-center gap-4">
-              <select 
+              <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
                 className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
@@ -111,7 +111,7 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                 <option value="price-low">{t.shop.sort.priceLow}</option>
                 <option value="price-high">{t.shop.sort.priceHigh}</option>
               </select>
-              <button 
+              <button
                 onClick={() => setIsMobileFiltersOpen(true)}
                 className="md:hidden w-11 h-11 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-700"
               >
@@ -128,24 +128,24 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                   <h3 className="font-bold text-slate-900 text-lg">{t.shop.filters.title}</h3>
                   <button onClick={clearFilters} className="text-sm font-medium text-primary hover:underline">{t.shop.filters.reset}</button>
                 </div>
-                
+
                 <div className="mb-8">
                   <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.price}</h4>
                   <div className="flex items-center gap-2">
-                    <input 
-                      type="number" 
-                      placeholder={t.shop.filters.min} 
+                    <input
+                      type="number"
+                      placeholder={t.shop.filters.min}
                       value={minPrice}
                       onChange={(e) => setMinPrice(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary" 
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary"
                     />
                     <span className="text-slate-400">-</span>
-                    <input 
-                      type="number" 
-                      placeholder={t.shop.filters.max} 
+                    <input
+                      type="number"
+                      placeholder={t.shop.filters.max}
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary" 
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary"
                     />
                   </div>
                 </div>
@@ -154,20 +154,20 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                   <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.availability}</h4>
                   <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer group">
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         checked={inStockOnly}
                         onChange={(e) => setInStockOnly(e.target.checked)}
-                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                       />
                       <span className="text-slate-600 group-hover:text-slate-900 transition-colors">{t.shop.filters.inStock}</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         checked={outOfStockOnly}
                         onChange={(e) => setOutOfStockOnly(e.target.checked)}
-                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                       />
                       <span className="text-slate-600 group-hover:text-slate-900 transition-colors">{t.shop.filters.outOfStock}</span>
                     </label>
@@ -203,12 +203,12 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                         )}
                         <Link href={`/product/${product.slug || product.id}`} className="relative w-full aspect-[4/3] bg-slate-50 overflow-hidden block">
                           {product.thumbnail_url ? (
-                            <Image 
+                            <Image
                               src={ImageSizes.medium(product.thumbnail_url || '')}
                               alt={product.name}
                               fill
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                               className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 p-4"
+                              className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 p-4"
                             />
                           ) : (
                             <div className="w-full h-full bg-slate-200"></div>
@@ -230,10 +230,10 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                             <div className="flex items-center gap-1">
                               <Star size={16} fill="currentColor" strokeWidth={0} className="text-amber-400" />
                               <span className="text-slate-600 text-sm font-bold">{product.rating || '5.0'}</span>
-                              <span className="text-slate-400 text-sm">({product.reviews || '0'})</span>
+                              {/* <span className="text-slate-400 text-sm">({product.reviews || '0'})</span> */}
                             </div>
                           </div>
-                          <Link 
+                          <Link
                             href={`/product/${product.slug || product.id}`}
                             className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
                           >
@@ -246,12 +246,12 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                   })
                 )}
               </div>
-              
+
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center mt-12">
                   <div className="flex items-center gap-2">
-                    <button 
+                    <button
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                       className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
@@ -265,17 +265,16 @@ export default function CategoryPageClient({ categoryName, initialProducts }: { 
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all duration-200 cursor-pointer ${
-                            currentPage === page
-                              ? 'bg-primary text-white shadow-md shadow-primary/20'
-                              : 'border border-slate-200 text-slate-600 hover:text-primary hover:border-primary'
-                          }`}
+                          className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all duration-200 cursor-pointer ${currentPage === page
+                            ? 'bg-primary text-white shadow-md shadow-primary/20'
+                            : 'border border-slate-200 text-slate-600 hover:text-primary hover:border-primary'
+                            }`}
                         >
                           {page}
                         </button>
                       )
                     )}
-                    <button 
+                    <button
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                       className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
