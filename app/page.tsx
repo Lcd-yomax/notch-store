@@ -1,9 +1,9 @@
 import { supabase } from '@/lib/supabase/client';
 import HomePageClient from '@/components/HomePageClient';
 
-// Revalidate this page every hour (3600 seconds)
-// This enables Incremental Static Regeneration (ISR) and massive performance gains.
-export const revalidate = 3600;
+// Revalidate this page every 5 minutes (300 seconds)
+// This enables Incremental Static Regeneration (ISR) with faster updates.
+export const revalidate = 300;
 
 export default async function Home() {
   // Fetch data directly from DB on the server concurrently

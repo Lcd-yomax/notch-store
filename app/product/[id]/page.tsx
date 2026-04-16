@@ -574,7 +574,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                       <div key={review.id} className="border-b border-slate-100 pb-6 last:border-0">
                         <div className="flex items-center justify-between mb-2">
                           <span className="font-bold text-slate-900">{review.name}</span>
-                          <span className="text-sm text-slate-500">{review.date}</span>
+
                         </div>
                         <div className="flex text-amber-400 mb-3">
                           {[1, 2, 3, 4, 5].map(star => (
