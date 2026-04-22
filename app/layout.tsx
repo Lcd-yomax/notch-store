@@ -78,10 +78,8 @@ export default function RootLayout({
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
           }
         `}</style>
-        <Script
-          id="json-ld-organization"
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -99,10 +97,8 @@ export default function RootLayout({
             })
           }}
         />
-        <Script
-          id="json-ld-localbusiness"
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -130,10 +126,8 @@ export default function RootLayout({
             })
           }}
         />
-        <Script
-          id="json-ld-website"
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
