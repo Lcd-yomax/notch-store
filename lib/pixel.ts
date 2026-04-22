@@ -3,7 +3,7 @@
 // Replace PIXEL_ID with your real Meta Pixel ID from your client's Ads Manager.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
+export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '706701205082894';
 
 /** Declare fbq on the global window so TypeScript doesn't complain */
 declare global {
