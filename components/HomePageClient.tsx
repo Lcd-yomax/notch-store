@@ -13,10 +13,19 @@ import BestSellingProducts from '@/components/BestSellingProducts';
 import ProductCompareSlider from '@/components/ProductCompareSlider';
 import { Star, ShoppingBag } from 'lucide-react';
 
-export default function HomePageClient({ productsData, reviewsData }: { productsData: any[], reviewsData: any[] }) {
+export default function HomePageClient({
+  featuredProducts,
+  bestSellerProducts,
+  latestPromos,
+  reviewsData,
+}: {
+  featuredProducts: any[];
+  bestSellerProducts: any[];
+  latestPromos: any[];
+  reviewsData: any[];
+}) {
   const { t } = useLanguage();
 
-  const latestPromos = productsData.slice(9, 13) || productsData.slice(0, 4) || [];
   const reviews = reviewsData || [];
 
   return (
@@ -64,9 +73,9 @@ export default function HomePageClient({ productsData, reviewsData }: { products
         </section>
 
         <CategorySlider />
-        <BestSellingProducts />
+        <BestSellingProducts products={bestSellerProducts} />
         <ProductCompareSlider />
-        <FeaturedProducts />
+        <FeaturedProducts products={featuredProducts} />
 
         <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-20">
           <div className="flex items-end justify-between mb-10">

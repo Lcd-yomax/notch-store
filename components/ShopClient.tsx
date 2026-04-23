@@ -1,0 +1,358 @@
+'use client';
+
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { ImageSizes } from '@/lib/imageUtils';
+import { useState, useMemo } from 'react';
+import { ShoppingBag } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
+
+interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  thumbnail_url: string | null;
+  categories: { id: string; name: string; slug: string }[];
+  variations: { id: string; price: number; price_display: number | null; discount_label: string | null; stock: number }[];
+}
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+interface InitialFilters {
+  categorySlug: string;
+  sortOrder: string;
+  minPrice: string;
+  maxPrice: string;
+}
+
+interface ShopClientProps {
+  initialProducts: Product[];
+  categories: Category[];
+  currentPage: number;
+  totalPages: number;
+  initialFilters: InitialFilters;
+}
+
+export default function ShopClient({
+  initialProducts,
+  categories,
+  currentPage,
+  totalPages,
+  initialFilters,
+}: ShopClientProps) {
+  const { t } = useLanguage();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // URL-driven filter state — initialised from server-rendered props
+  const selectedCategories = initialFilters.categorySlug ? [initialFilters.categorySlug] : [];
+  const sortOrder = initialFilters.sortOrder;
+
+  // Client-only state (applied on top of the server-paginated slice)
+  const [minPrice, setMinPrice] = useState(initialFilters.minPrice);
+  const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice);
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [outOfStockOnly, setOutOfStockOnly] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+  const buildUrl = (overrides: Record<string, string>) => {
+    const params = new URLSearchParams();
+    const base: Record<string, string> = {
+      category: selectedCategories[0] ?? '',
+      sort: sortOrder !== 'popular' ? sortOrder : '',
+    };
+    const merged = { ...base, ...overrides };
+    Object.entries(merged).forEach(([k, v]) => {
+      if (v) params.set(k, v);
+    });
+    const qs = params.toString();
+    return qs ? `${pathname}?${qs}` : pathname;
+  };
+
+  const handleCategoryChange = (slug: string) => {
+    const next = selectedCategories.includes(slug)
+      ? selectedCategories.filter((c) => c !== slug)
+      : [...selectedCategories, slug];
+    const params = new URLSearchParams();
+    if (next[0]) params.set('category', next[0]);
+    if (sortOrder !== 'popular') params.set('sort', sortOrder);
+    const qs = params.toString();
+    router.push(qs ? `${pathname}?${qs}` : pathname);
+  };
+
+  const handleSortChange = (value: string) => {
+    router.push(buildUrl({ sort: value !== 'popular' ? value : '', page: '1' }));
+  };
+
+  const handlePageChange = (page: number) => {
+    router.push(buildUrl({ page: String(page) }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const clearFilters = () => {
+    setMinPrice('');
+    setMaxPrice('');
+    setInStockOnly(false);
+    setOutOfStockOnly(false);
+    router.push(pathname);
+  };
+
+  // Price filter is applied client-side on the current server-paginated page
+  const filteredProducts = useMemo(() => {
+    let result = [...initialProducts];
+    if (minPrice) result = result.filter((p) => (p.variations?.[0]?.price ?? 0) >= Number(minPrice));
+    if (maxPrice) result = result.filter((p) => (p.variations?.[0]?.price ?? 0) <= Number(maxPrice));
+    if (sortOrder === 'price-low') result.sort((a, b) => (a.variations?.[0]?.price ?? 0) - (b.variations?.[0]?.price ?? 0));
+    if (sortOrder === 'price-high') result.sort((a, b) => (b.variations?.[0]?.price ?? 0) - (a.variations?.[0]?.price ?? 0));
+    return result;
+  }, [initialProducts, minPrice, maxPrice, sortOrder]);
+
+  const getPageNumbers = (): (number | '...')[] => {
+    const pages: (number | '...')[] = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 3) pages.push('...');
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (currentPage < totalPages - 2) pages.push('...');
+      pages.push(totalPages);
+    }
+    return pages;
+  };
+
+  return (
+    <>
+      <Header />
+      <main className="flex-grow bg-white py-10">
+        <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+          <nav className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-8">
+            <Link href="/" className="hover:text-primary transition-colors">{t.header.home}</Link>
+            <span className="material-symbols-outlined text-sm rtl:rotate-180">chevron_right</span>
+            <span className="text-slate-900">{t.header.shop}</span>
+          </nav>
+
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-2">{t.shop.title}</h1>
+              <p className="text-slate-500 text-lg font-medium">{t.shop.desc}</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <select
+                value={sortOrder}
+                onChange={(e) => handleSortChange(e.target.value)}
+                className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+              >
+                <option value="popular">{t.shop.sort.popular}</option>
+                <option value="newest">{t.shop.sort.newest}</option>
+                <option value="price-low">{t.shop.sort.priceLow}</option>
+                <option value="price-high">{t.shop.sort.priceHigh}</option>
+              </select>
+              <button
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="md:hidden w-11 h-11 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-700"
+              >
+                <span className="material-symbols-outlined">tune</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex gap-8">
+            {/* Filters Sidebar */}
+            <aside className="hidden md:block w-64 flex-shrink-0">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 sticky top-24">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-bold text-slate-900 text-lg">{t.shop.filters.title}</h3>
+                  <button onClick={clearFilters} className="text-sm font-medium text-primary hover:underline cursor-pointer">{t.shop.filters.reset}</button>
+                </div>
+
+                <div className="mb-8">
+                  <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.categories}</h4>
+                  <div className="flex flex-col gap-3">
+                    {categories.map((cat) => (
+                      <label key={cat.id} className="flex items-center gap-3 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(cat.slug)}
+                          onChange={() => handleCategoryChange(cat.slug)}
+                          className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
+                        />
+                        <span className="text-slate-600 group-hover:text-slate-900 transition-colors">{cat.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mb-8">
+                  <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.price}</h4>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      placeholder={t.shop.filters.min}
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary"
+                    />
+                    <span className="text-slate-400">-</span>
+                    <input
+                      type="number"
+                      placeholder={t.shop.filters.max}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-slate-900 mb-4">{t.shop.filters.availability}</h4>
+                  <div className="flex flex-col gap-3">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={inStockOnly}
+                        onChange={(e) => setInStockOnly(e.target.checked)}
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
+                      />
+                      <span className="text-slate-600 group-hover:text-slate-900 transition-colors">{t.shop.filters.inStock}</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={outOfStockOnly}
+                        onChange={(e) => setOutOfStockOnly(e.target.checked)}
+                        className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
+                      />
+                      <span className="text-slate-600 group-hover:text-slate-900 transition-colors">{t.shop.filters.outOfStock}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            {/* Product Grid */}
+            <div className="flex-grow">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProducts.length === 0 ? (
+                  <div className="col-span-full py-12 flex flex-col items-center justify-center text-center">
+                    <span className="material-symbols-outlined text-6xl text-slate-200 mb-4">search_off</span>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">Aucun produit trouvé</h3>
+                    <p className="text-slate-500 max-w-md">Essayez de modifier vos filtres pour trouver ce que vous cherchez.</p>
+                    <button
+                      onClick={clearFilters}
+                      className="mt-6 px-6 py-2 bg-primary text-white rounded-xl font-medium hover:bg-amber-500 transition-colors"
+                    >
+                      Réinitialiser les filtres
+                    </button>
+                  </div>
+                ) : (
+                  filteredProducts.map((product) => {
+                    const price = product.variations?.[0]?.price ?? 0;
+                    const priceDisplay = product.variations?.[0]?.price_display ?? null;
+                    const discount =
+                      priceDisplay && priceDisplay > price
+                        ? Math.round(((priceDisplay - price) / priceDisplay) * 100)
+                        : 0;
+                    return (
+                      <div
+                        key={product.id}
+                        className="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative"
+                      >
+                        {discount > 0 && (
+                          <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
+                            -{discount}%
+                          </div>
+                        )}
+                        <Link href={`/product/${product.slug || product.id}`} className="relative w-full aspect-[4/3] overflow-hidden block">
+                          {product.thumbnail_url ? (
+                            <Image
+                              src={ImageSizes.medium(product.thumbnail_url)}
+                              alt={product.name}
+                              fill
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-slate-200" />
+                          )}
+                        </Link>
+                        <div className="p-6 flex flex-col flex-grow gap-4">
+                          <Link href={`/product/${product.slug || product.id}`}>
+                            <h3 className="text-slate-900 text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{product.name}</h3>
+                          </Link>
+                          <div className="flex flex-col gap-2 mt-auto">
+                            <div className="flex items-end gap-3">
+                              <span className="text-slate-900 font-black text-2xl tracking-tight">{price} DH</span>
+                              {discount > 0 && priceDisplay && (
+                                <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{priceDisplay} DH</span>
+                              )}
+                            </div>
+                          </div>
+                          <Link
+                            href={`/product/${product.slug || product.id}`}
+                            className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
+                          >
+                            <ShoppingBag size={20} className="group-hover/btn:scale-110 transition-transform" />
+                            {t.product?.orderNow || 'Acheter maintenant'}
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-12">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                      className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined rtl:rotate-180">chevron_left</span>
+                    </button>
+                    {getPageNumbers().map((page, idx) =>
+                      page === '...' ? (
+                        <span key={`dots-${idx}`} className="text-slate-400 px-1">...</span>
+                      ) : (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page as number)}
+                          className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all duration-200 cursor-pointer ${
+                            currentPage === page
+                              ? 'bg-primary text-white shadow-lg shadow-primary/30'
+                              : 'border border-slate-200 text-slate-600 hover:text-primary hover:border-primary'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+                    <button
+                      onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                      disabled={currentPage === totalPages}
+                      className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined rtl:rotate-180">chevron_right</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
+}
