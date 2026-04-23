@@ -46,7 +46,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, dir }}>
-      <div className={!mounted ? 'invisible' : ''}>
+      <div className={`transition-opacity duration-300 ${!mounted ? 'opacity-0' : 'opacity-100'}`}>
         {children}
       </div>
     </LanguageContext.Provider>
