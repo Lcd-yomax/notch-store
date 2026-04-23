@@ -1,33 +1,42 @@
 import { supabase } from '@/lib/supabase/client';
 import HomePageClient from '@/components/HomePageClient';
 
-// Revalidate this page every 5 minutes (300 seconds)
-// This enables Incremental Static Regeneration (ISR) with faster updates.
 export const revalidate = 300;
 
 export default async function Home() {
-  // Fetch data directly from DB on the server concurrently
-  // No loading flashes, no client waterfalls!
-  const [productsRes, reviewsRes] = await Promise.all([
+  const [featuredRes, bestSellersRes, latestPromosRes, reviewsRes] = await Promise.all([
     supabase
       .from('products')
-      .select(`
-        *,
-        categories!inner(id, name, slug),
-        variations:product_variations(*),
-        images:product_images(*)
-      `)
-      .eq('is_active', true),
+      .select('id, name, slug, thumbnail_url, variations:product_variations(id, price, price_display)')
+      .eq('is_active', true)
+      .eq('is_featured', true)
+      .limit(5),
+    supabase
+      .from('products')
+      .select('id, name, slug, thumbnail_url, variations:product_variations(id, price, price_display)')
+      .eq('is_active', true)
+      .eq('is_best_seller', true)
+      .limit(4),
+    supabase
+      .from('products')
+      .select('id, name, slug, thumbnail_url, variations:product_variations(id, price, price_display)')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .limit(4),
     supabase
       .from('reviews')
-      .select('*, products(name)')
+      .select('id, full_name, stars, comment, products(name)')
       .eq('is_approved', true)
       .order('created_at', { ascending: false })
-      .limit(10)
+      .limit(3),
   ]);
 
-  const productsData = productsRes.data || [];
-  const reviewsData = reviewsRes.data || [];
-
-  return <HomePageClient productsData={productsData} reviewsData={reviewsData} />;
+  return (
+    <HomePageClient
+      featuredProducts={featuredRes.data ?? []}
+      bestSellerProducts={bestSellersRes.data ?? []}
+      latestPromos={latestPromosRes.data ?? []}
+      reviewsData={reviewsRes.data ?? []}
+    />
+  );
 }
