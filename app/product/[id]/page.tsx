@@ -9,6 +9,7 @@ import { use, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ImageSizes } from '@/lib/imageUtils';
 import { Star, StarHalf, ShoppingBag } from 'lucide-react';
+import { pixelViewContent, pixelInitiateCheckout, pixelPurchase } from '@/lib/pixel';
 
 export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -77,6 +78,14 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
             }))
           };
           setProduct(mappedProduct);
+
+          // 🔥 Fire ViewContent with the sale price
+          pixelViewContent({
+            id: mappedProduct.id,
+            name: mappedProduct.name,
+            price: mappedProduct.price,
+            currency: 'MAD',
+          });
         }
 
         if (Array.isArray(revData)) {
@@ -142,6 +151,7 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
   const [orderCity, setOrderCity] = useState('');
   const [orderPhone, setOrderPhone] = useState('');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
 
@@ -152,6 +162,10 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
     try {
       const price = currentVariation?.price ?? product.price;
       const variationId = currentVariation?.id ?? product.variations?.[0]?.id ?? null;
+      const totalAmount = price * quantity;
+
+      // 🔥 Fire InitiateCheckout with the sale price × quantity
+      pixelInitiateCheckout({ value: totalAmount, numItems: quantity, currency: 'MAD' });
 
       const res = await fetch('/api/orders', {
         method: 'POST',
@@ -161,10 +175,10 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
           phone: orderPhone,
           address: orderAddress,
           city: orderCity,
-          total_amount: price,
-          notes: `Couleur: ${selectedColor || 'N/A'} | Taille: ${selectedSize || 'N/A'}`,
+          total_amount: totalAmount,
+          notes: `Couleur: ${selectedColor || 'N/A'} | Taille: ${selectedSize || 'N/A'} | Qté: ${quantity}`,
           items: variationId
-            ? [{ variation_id: variationId, quantity: 1, unit_price: price }]
+            ? [{ variation_id: variationId, quantity: quantity, unit_price: price }]
             : []
         })
       });
@@ -173,6 +187,9 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
         const err = await res.json();
         throw new Error(err.error || 'Order failed');
       }
+
+      // 🔥 Fire Purchase with the sale price × quantity before redirect
+      pixelPurchase({ value: totalAmount, currency: 'MAD' });
 
       router.push('/success');
     } catch (error: any) {
@@ -415,10 +432,41 @@ export default function ProductDetails({ params }: { params: Promise<{ id: strin
                   </div>
                 )}
 
-                <div className="flex items-end gap-4 mb-8">
+                <div className="flex items-end gap-4 mb-6">
                   <span className="text-5xl font-black text-slate-900 tracking-tight">{currentVariation?.price ?? product.price} <span className="text-2xl">DH</span></span>
                   {(currentVariation?.originalPrice ?? product.originalPrice) && (
                     <span className="text-xl text-slate-400 line-through font-medium mb-1.5">{currentVariation?.originalPrice ?? product.originalPrice} DH</span>
+                  )}
+                </div>
+
+                {/* Quantity Selector */}
+                <div className="flex items-center gap-4 mb-8">
+                  <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">Quantité</span>
+                  <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      className="w-11 h-11 flex items-center justify-center text-slate-600 hover:bg-slate-100 active:bg-slate-200 transition-colors text-xl font-bold cursor-pointer disabled:opacity-40"
+                      disabled={quantity <= 1}
+                    >
+                      −
+                    </button>
+                    <span className="w-12 h-11 flex items-center justify-center text-slate-900 font-black text-lg border-x border-slate-200 select-none">
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(q => Math.min(10, q + 1))}
+                      className="w-11 h-11 flex items-center justify-center text-slate-600 hover:bg-slate-100 active:bg-slate-200 transition-colors text-xl font-bold cursor-pointer disabled:opacity-40"
+                      disabled={quantity >= 10}
+                    >
+                      +
+                    </button>
+                  </div>
+                  {quantity > 1 && (
+                    <span className="text-sm font-bold text-primary">
+                      Total: {((currentVariation?.price ?? product.price) * quantity).toLocaleString('fr-MA')} DH
+                    </span>
                   )}
                 </div>
 
