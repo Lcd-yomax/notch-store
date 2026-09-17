@@ -1,8 +1,20 @@
 import { supabasePublic as supabase } from '@/lib/supabase/public';
 import ProductListing from '@/components/listing/ProductListing';
 import { getListingFacets, listProducts, parseListingParams } from '@/lib/catalog/queries';
+import { isStorefrontCategoryVisible } from '@/lib/catalog/categoryVisibility';
+import { notFound } from 'next/navigation';
 
 const SMARTPHONES_SLUG = 'smartphones';
+
+async function getCategory(slug: string) {
+  const result = await supabase
+    .from('categories')
+    .select('id, name, slug, is_active')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (!result.error || !/is_active/i.test(result.error.message)) return result;
+  return supabase.from('categories').select('id, name, slug').eq('slug', slug).maybeSingle();
+}
 
 export default async function CategoryDetails({
   params,
@@ -17,10 +29,12 @@ export default async function CategoryDetails({
   const scope = { categorySlug: slug };
 
   const [categoryRes, listing, facets] = await Promise.all([
-    supabase.from('categories').select('id, name, slug').eq('slug', slug).maybeSingle(),
+    getCategory(slug),
     listProducts(scope, filters),
     getListingFacets(scope),
   ]);
+
+  if (!categoryRes.data || !isStorefrontCategoryVisible(categoryRes.data)) notFound();
 
   const categoryName =
     categoryRes.data?.name ?? slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');

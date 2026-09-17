@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { supabasePublic as supabase } from '@/lib/supabase/public';
 import { SITE_URL } from '@/lib/site';
+import { isStorefrontCategoryVisible } from '@/lib/catalog/categoryVisibility';
 
 // Regenerated hourly so new products and brands show up without a rebuild
 export const revalidate = 3600;
@@ -27,11 +28,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // products has no updated_at column: selecting it made the whole query fail silently
-    const [productsRes, categoriesRes, brandsRes] = await Promise.all([
+    const [productsRes, brandsRes] = await Promise.all([
       supabase.from('products').select('slug, created_at').eq('is_active', true),
-      supabase.from('categories').select('slug'),
       supabase.from('brands').select('slug'),
     ]);
+    let { data: categories, error: categoriesError } = await supabase
+      .from('categories')
+      .select('slug, is_active');
+    if (categoriesError && /is_active/i.test(categoriesError.message)) {
+      const fallback = await supabase.from('categories').select('slug');
+      categories = (fallback.data ?? []).map((category) => ({ ...category, is_active: true }));
+      categoriesError = fallback.error;
+    }
+    if (categoriesError) throw categoriesError;
 
     const productRoutes = (productsRes.data ?? []).map((product) => ({
       url: `${baseUrl}/product/${product.slug}`,
@@ -40,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     }));
 
-    const categoryRoutes = (categoriesRes.data ?? []).map((category) => ({
+    const categoryRoutes = (categories ?? []).filter(isStorefrontCategoryVisible).map((category) => ({
       url: `${baseUrl}/categories/${encodeURIComponent(category.slug)}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
