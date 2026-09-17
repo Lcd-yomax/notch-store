@@ -77,6 +77,8 @@ export async function POST(request: Request) {
       const name = () => ({ name: product.name });
       if (!variation.is_active || !product.is_active) return orderError(409, 'unavailable', name);
       if (product.hide_price) return orderError(409, 'priceOnRequest', name);
+      // A variation without a price (price <= 0) can never be ordered
+      if (!(Number(variation.price) > 0)) return orderError(409, 'unavailable', name);
       if (variation.stock < quantity) {
         return orderError(409, 'outOfStock', () => ({ name: product.name, stock: Math.max(0, variation.stock) }));
       }
