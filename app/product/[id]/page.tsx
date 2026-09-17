@@ -96,7 +96,10 @@ export default async function ProductPage({ params }: { params: Params }) {
   const rating = ratingOf(reviews);
 
   const url = `${SITE_URL}/product/${product.slug}`;
-  const availability = totalStock(product.public_variations) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+  const phone = isPhone(product.public_variations);
+  const availability = phone || totalStock(product.public_variations) > 0
+    ? 'https://schema.org/InStock'
+    : 'https://schema.org/OutOfStock';
   const pricing = cardPricing(product);
 
   const jsonLd = {
@@ -105,7 +108,7 @@ export default async function ProductPage({ params }: { params: Params }) {
     name: seoName(product),
     image: galleryFor(product.product_images, null, product.thumbnail_url).slice(0, 5),
     description: stripHtml(product.description).substring(0, 5000) || undefined,
-    sku: defaultVariation(product.public_variations)?.sku,
+    sku: defaultVariation(product.public_variations, phone)?.sku,
     ...(product.brands && { brand: { '@type': 'Brand', name: product.brands.name } }),
     ...(rating.count > 0 && {
       aggregateRating: { '@type': 'AggregateRating', ratingValue: rating.average, reviewCount: rating.count, bestRating: 5, worstRating: 1 },

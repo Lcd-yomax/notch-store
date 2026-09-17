@@ -113,7 +113,7 @@ export async function listProducts(scope: ListingScope, filters: ListingFilters)
   const select = [
     CARD_FIELDS,
     'categories!inner(id, name, slug)',
-    filtersVariations ? 'fv:public_variations!inner(id)' : null,
+    filtersVariations ? 'fv:public_variations!inner(id, storage_gb, ram_gb, condition, stock, price)' : null,
   ]
     .filter(Boolean)
     .join(', ');
@@ -126,7 +126,9 @@ export async function listProducts(scope: ListingScope, filters: ListingFilters)
   if (filters.storages.length > 0) query = query.in('fv.storage_gb', filters.storages);
   if (filters.rams.length > 0) query = query.in('fv.ram_gb', filters.rams);
   if (filters.conditions.length > 0) query = query.in('fv.condition', filters.conditions);
-  if (filters.inStock) query = query.gt('fv.stock', 0);
+  // Phone stock is not sourced from the IMEI feed; any phone variation is
+  // available in the storefront. Accessories still require positive stock.
+  if (filters.inStock) query = query.or('stock.gt.0,storage_gb.not.is.null', { referencedTable: 'fv' });
   if (hasPriceRange) {
     // Hidden prices are NULL in the view: those products are not affected by the price range.
     const bounds = [

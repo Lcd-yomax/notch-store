@@ -7,7 +7,7 @@ import { ImageSizes } from '@/lib/imageUtils';
 import ProductRating from './ProductRating';
 import { StorageChips } from '@/components/ProductCard';
 import type { CardProduct } from '@/lib/catalog/types';
-import { cardPricing } from '@/lib/catalog/variants';
+import { cardPricing, isPhone } from '@/lib/catalog/variants';
 
 export default function BestSellingProducts({ products }: { products: CardProduct[] }) {
   const { t } = useLanguage();
@@ -30,7 +30,7 @@ export default function BestSellingProducts({ products }: { products: CardProduc
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => {
           const pricing = cardPricing(product);
-          const inStock = product.public_variations.some((variation) => variation.is_active && variation.stock > 0);
+          const inStock = isPhone(product.public_variations) || product.public_variations.some((variation) => variation.is_active && variation.stock > 0);
           return (
             <Link
               key={product.id}

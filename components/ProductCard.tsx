@@ -7,7 +7,7 @@ import ProductRating from './ProductRating';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { ImageSizes } from '@/lib/imageUtils';
 import type { CardProduct } from '@/lib/catalog/types';
-import { cardPricing, formatStorage, storagesOf } from '@/lib/catalog/variants';
+import { cardPricing, formatStorage, isPhone, storagesOf } from '@/lib/catalog/variants';
 
 export function StorageChips({ product, className = '' }: { product: Pick<CardProduct, 'public_variations'>; className?: string }) {
   const { t } = useLanguage();
@@ -36,7 +36,7 @@ export default function ProductCard({
   const { t } = useLanguage();
   const href = `/product/${product.slug || product.id}`;
   const pricing = cardPricing(product);
-  const inStock = product.public_variations.some((variation) => variation.is_active && variation.stock > 0);
+  const inStock = isPhone(product.public_variations) || product.public_variations.some((variation) => variation.is_active && variation.stock > 0);
 
   return (
     <div className="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
