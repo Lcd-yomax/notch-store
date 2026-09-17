@@ -1,63 +1,112 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/client';
+import { fr } from '@/lib/i18n/dictionaries/fr';
+import { ar } from '@/lib/i18n/dictionaries/ar';
+import { fill } from '@/lib/i18n/format';
+
+type ErrorKey = keyof typeof fr.orderErrors;
+
+/** Errors carry both languages; the storefront shows the one currently selected. */
+function orderError(
+  status: number,
+  key: ErrorKey,
+  values: (dict: typeof fr.orderErrors) => Record<string, string | number> = () => ({})
+) {
+  return NextResponse.json(
+    {
+      error: key,
+      message: {
+        fr: fill(fr.orderErrors[key], values(fr.orderErrors)),
+        ar: fill(ar.orderErrors[key], values(ar.orderErrors)),
+      },
+    },
+    { status }
+  );
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const text = (value: unknown, max: number) => (typeof value === 'string' ? value.trim().slice(0, max) : '');
 
 export async function POST(request: Request) {
+  let body: any;
   try {
-    const body = await request.json();
-    const { 
-      full_name, 
-      city, 
-      address, 
-      phone, 
-      email, 
-      total_amount, 
-      notes, 
-      items 
-    } = body;
-    
-    // 1. Insert order
-    const { data: order, error: orderError } = await supabase
+    body = await request.json();
+  } catch {
+    return orderError(400, 'invalid');
+  }
+
+  const full_name = text(body?.full_name, 120);
+  const city = text(body?.city, 80);
+  const address = text(body?.address, 300);
+  const phone = text(body?.phone, 20).replace(/[\s.-]/g, '');
+  const email = text(body?.email, 160) || null;
+  const notes = text(body?.notes, 1000) || null;
+
+  if (!full_name || !city || !address || !/^0[5-8][0-9]{8}$/.test(phone)) {
+    return orderError(400, 'invalid');
+  }
+
+  // Client prices and totals are ignored: only variation ids and quantities are trusted.
+  const quantities = new Map<string, number>();
+  for (const item of Array.isArray(body?.items) ? body.items : []) {
+    const quantity = Number(item?.quantity);
+    if (typeof item?.variation_id !== 'string' || !UUID.test(item.variation_id) || !Number.isInteger(quantity) || quantity < 1 || quantity > 50) {
+      return orderError(400, 'invalid');
+    }
+    quantities.set(item.variation_id, (quantities.get(item.variation_id) ?? 0) + quantity);
+  }
+  if (quantities.size === 0) return orderError(400, 'emptyOrder');
+
+  try {
+    // Real prices come from product_variations (server only, service role).
+    const { data: variations, error: variationsError } = await supabase
+      .from('product_variations')
+      .select('id, price, stock, is_active, products!inner(name, is_active, hide_price)')
+      .in('id', Array.from(quantities.keys()));
+
+    if (variationsError) throw variationsError;
+
+    let total = 0;
+    const orderItems: { variation_id: string; quantity: number; unit_price: number }[] = [];
+
+    for (const [variationId, quantity] of quantities) {
+      const variation = (variations ?? []).find((v) => v.id === variationId);
+      const product = variation?.products as unknown as { name: string; is_active: boolean; hide_price: boolean } | undefined;
+
+      if (!variation || !product) return orderError(409, 'unavailable', (dict) => ({ name: dict.unknownProduct }));
+      const name = () => ({ name: product.name });
+      if (!variation.is_active || !product.is_active) return orderError(409, 'unavailable', name);
+      if (product.hide_price) return orderError(409, 'priceOnRequest', name);
+      if (variation.stock < quantity) {
+        return orderError(409, 'outOfStock', () => ({ name: product.name, stock: Math.max(0, variation.stock) }));
+      }
+
+      const unitPrice = Number(variation.price);
+      total += unitPrice * quantity;
+      orderItems.push({ variation_id: variationId, quantity, unit_price: unitPrice });
+    }
+
+    const { data: order, error: orderInsertError } = await supabase
       .from('orders')
-      .insert([{
-        full_name,
-        city,
-        address,
-        phone,
-        email,
-        total_amount,
-        notes,
-        status: 'pending'
-      }])
+      .insert([{ full_name, city, address, phone, email, notes, total_amount: Math.round(total * 100) / 100, status: 'pending' }])
       .select()
       .single();
 
-    if (orderError) {
-      console.error('Supabase Order Insert Error:', orderError);
-      throw orderError;
-    }
+    if (orderInsertError) throw orderInsertError;
 
-    // 2. Insert order items
-    if (items && items.length > 0) {
-      const orderItemsToInsert = items.map((item: any) => ({
-        order_id: order.id,
-        variation_id: item.variation_id,
-        quantity: item.quantity,
-        unit_price: item.unit_price
-      }));
+    const { error: itemsError } = await supabase
+      .from('order_items')
+      .insert(orderItems.map((item) => ({ ...item, order_id: order.id })));
 
-      const { error: itemsError } = await supabase
-        .from('order_items')
-        .insert(orderItemsToInsert);
-
-      if (itemsError) {
-        console.error('Supabase Order Items Insert Error:', itemsError);
-        throw itemsError;
-      }
+    if (itemsError) {
+      // Do not leave an order without items behind
+      await supabase.from('orders').delete().eq('id', order.id);
+      throw itemsError;
     }
 
     return NextResponse.json({ success: true, order });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Order Creation Endpoint Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return orderError(500, 'generic');
   }
 }

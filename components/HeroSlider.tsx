@@ -3,13 +3,15 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ArrowRight, Pause, Play } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 import { heroSlides as slides } from '@/lib/dummyData';
 
 export default function HeroSlider() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
   // Starts false so the first slide text begins in its "hidden" state and
   // transitions in — the same entrance animation used for every slide change.
   const [textVisible, setTextVisible] = useState(false);
@@ -24,12 +26,13 @@ export default function HeroSlider() {
   }, []);
 
   useEffect(() => {
-    const delay = slides[currentSlide].image.endsWith('.mp4') ? 15000 : 10000;
+    if (paused) return;
+    const delay = slides[currentSlide].id === 0 || slides[currentSlide].image.endsWith('.mp4') ? 15000 : 10000;
     const timer = setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, delay);
     return () => clearTimeout(timer);
-  }, [currentSlide]);
+  }, [currentSlide, paused]);
 
   const getTranslation = (keyPath: string) => {
     const keys = keyPath.split('.');
@@ -42,15 +45,18 @@ export default function HeroSlider() {
   };
 
   return (
-    <section className="relative w-full min-h-[650px] lg:min-h-[700px] overflow-hidden bg-slate-900 mt-0">
-      <h1 className="sr-only">Notch-Tech | Premium Tech E-commerce</h1>
+    <section onFocusCapture={() => setPaused(true)} className="relative w-full min-h-[600px] lg:min-h-[620px] overflow-hidden bg-slate-900 mt-0">
+      <h1 className="sr-only">Notch — {t.phoneDiscovery.eyebrow}</h1>
       {slides.map((slide, index) => {
+        const isPhoneSlide = slide.id === 0;
         // Text is shown when this slide is active AND the entrance delay has passed
         const textShown = index === currentSlide && textVisible;
 
         return (
           <Link
-            href="/categories"
+            href={slide.buttonLink}
+            aria-hidden={index !== currentSlide}
+            tabIndex={index === currentSlide ? 0 : -1}
             key={slide.id}
             className={`absolute inset-0 w-full h-full block transition-opacity duration-1000 ease-in-out ${
               index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
@@ -74,6 +80,13 @@ export default function HeroSlider() {
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
               </div>
+            ) : isPhoneSlide ? (
+              <div className="absolute inset-0 bg-[#080909]">
+                <div className="absolute bottom-0 end-0 h-[370px] w-full sm:h-[420px] sm:w-[85%] lg:h-full lg:w-auto lg:aspect-[3/2]">
+                  <Image src={slide.image} alt="" fill priority sizes="(min-width: 1024px) 930px, 100vw" quality={85} className="object-cover object-[78%_center] sm:object-right lg:object-contain lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] rtl:-scale-x-100" />
+                </div>
+                <div className="absolute inset-x-0 top-0 h-[330px] bg-gradient-to-b from-[#080909] from-70% to-transparent lg:hidden" />
+              </div>
             ) : (
               <div className="absolute inset-0 w-full h-full transition-transform duration-1000 hover:scale-105">
                 <Image
@@ -89,9 +102,9 @@ export default function HeroSlider() {
               </div>
             )}
 
-            <div className="relative z-20 w-full h-full max-w-[1440px] mx-auto flex justify-start items-center px-4 lg:px-12">
+            <div className={`relative z-20 w-full h-full max-w-[1440px] mx-auto flex justify-start px-6 lg:px-12 ${isPhoneSlide ? 'items-start pt-10 lg:pt-0 lg:items-center' : 'items-center'}`}>
               <div
-                className={`w-full lg:w-3/5 flex flex-col items-start text-left rtl:text-right z-30 ltr:-ml-2 sm:ltr:-ml-4 lg:ltr:-ml-32 xl:ltr:-ml-40 rtl:-mr-2 sm:rtl:-mr-4 lg:rtl:-mr-12 transition-all duration-[1200ms] ease-out ${
+                className={`w-full ${isPhoneSlide ? 'lg:w-1/2' : 'lg:w-3/5'} flex flex-col items-start text-start z-30 transition-all duration-[1200ms] ease-out ${
                   textShown
                     ? 'translate-x-0 opacity-100'
                     : 'ltr:-translate-x-16 rtl:translate-x-16 opacity-0'
@@ -104,7 +117,7 @@ export default function HeroSlider() {
                       : 'translate-y-8 opacity-0 scale-95'
                   }`}
                 >
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
                   <p className="text-[10px] rtl:text-xs lg:text-xs rtl:lg:text-sm font-bold text-amber-400 tracking-widest uppercase shadow-black/50 drop-shadow-md">
                     {getTranslation(slide.badge)}
                   </p>
@@ -128,6 +141,10 @@ export default function HeroSlider() {
                 >
                   {getTranslation(slide.desc)}
                 </p>
+                <span className="inline-flex items-center gap-3 mt-5 rounded-xl bg-primary text-slate-900 font-bold px-5 py-3">
+                  {isPhoneSlide || slide.id === 1 ? getTranslation(slide.buttonText) : t.phoneDiscovery.accessories}
+                  <ArrowRight size={18} className="rtl:rotate-180" aria-hidden="true" />
+                </span>
               </div>
             </div>
           </Link>
@@ -135,17 +152,19 @@ export default function HeroSlider() {
       })}
 
       {/* Slider controls */}
-      <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center gap-3">
+      <div className="absolute bottom-4 left-0 right-0 z-30 flex items-center justify-center gap-1">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-primary w-10' : 'bg-white/50 hover:bg-white'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
+            className="h-10 px-2 flex items-center justify-center cursor-pointer focus-visible:outline-2 focus-visible:outline-white rounded-full"
+            aria-label={`${t.phoneDiscovery.slide} ${index + 1}`}
+            aria-pressed={index === currentSlide}
+          ><span aria-hidden="true" className={`h-2 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-primary w-8' : 'bg-white/50 w-2'}`} /></button>
         ))}
+        <button type="button" onClick={() => setPaused(!paused)} aria-label={paused ? t.phoneDiscovery.play : t.phoneDiscovery.pause} className="text-white/80 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:text-white focus-visible:outline-2 focus-visible:outline-white">
+          {paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
+        </button>
       </div>
     </section>
   );

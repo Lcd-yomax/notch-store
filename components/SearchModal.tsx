@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { ImageSizes } from '@/lib/imageUtils';
+import type { CardProduct } from '@/lib/catalog/types';
+import { cardPricing } from '@/lib/catalog/variants';
 
 export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { t, language } = useLanguage();
@@ -21,11 +23,14 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) {
-            setAllProducts(data.map((p: any) => ({
+            setAllProducts(data.map((p: CardProduct) => ({
               id: p.id,
+              slug: p.slug,
               name: p.name,
-              price: p.variations?.[0]?.price ?? p.variations?.[0]?.price_display ?? '—',
-              image: ImageSizes.thumbnail(p.thumbnail_url || (p.images?.[0]?.url ?? '')),
+              brand: p.brands?.name ?? '',
+              hidePrice: p.hide_price,
+              price: cardPricing(p)?.price ?? '—',
+              image: ImageSizes.thumbnail(p.thumbnail_url || ''),
             })));
           }
         })
@@ -48,7 +53,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
   const results = query.trim() === ''
     ? []
     : allProducts.filter(p =>
-      p.name.toLowerCase().includes(query.toLowerCase())
+      `${p.brand} ${p.name}`.toLowerCase().includes(query.toLowerCase())
     );
 
   const handleClose = () => {
@@ -125,7 +130,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                       <h4 className="font-bold text-slate-900 group-hover:text-primary transition-colors line-clamp-1">
                         {product.name}
                       </h4>
-                      <p className="text-primary font-bold mt-1">{product.price} DH</p>
+                      <p className="text-primary font-bold mt-1">{product.hidePrice ? t.phone.priceOnRequest : `${product.price} DH`}</p>
                     </div>
                     <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">
                       {language === 'ar' ? 'chevron_left' : 'chevron_right'}

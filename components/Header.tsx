@@ -2,23 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { useCart } from '@/lib/CartContext';
 import SearchModal from './SearchModal';
 
 export default function Header({ showPromo = true }: { showPromo?: boolean }) {
   const { t, language, setLanguage } = useLanguage();
-  const { totalItems } = useCart();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const pathname = usePathname();
 
   useEffect(() => {
-    setMounted(true);
     async function fetchCategories() {
       try {
         const res = await fetch('/api/categories');
@@ -71,7 +66,14 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center justify-center flex-1 pr-12 lg:pr-24 gap-6 lg:gap-10">
+          <nav aria-label={t.header.categories} className="hidden lg:flex items-center justify-center flex-1 px-4 gap-5 xl:gap-8">
+            <Link
+              href="/categories/smartphones"
+              aria-current={pathname === '/categories/smartphones' ? 'page' : undefined}
+              className={`relative text-[15px] font-bold transition-colors ${pathname === '/categories/smartphones' ? 'text-primary after:w-full' : 'text-slate-600 hover:text-primary after:w-0 hover:after:w-full'} after:content-[''] after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300`}
+            >
+              {t.phoneDiscovery.nav}
+            </Link>
             <Link href="/shop" className={`relative text-[15px] font-bold transition-colors ${pathname.startsWith('/shop') ? 'text-primary after:w-full' : 'text-slate-600 hover:text-primary after:w-0 hover:after:w-full'} after:content-[''] after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300`}>{t.header.shop}</Link>
             <div className="group relative h-full flex items-center">
               <Link href="/categories" className={`flex items-center gap-1 relative text-[15px] font-bold transition-colors py-6 ${pathname.startsWith('/categories') ? 'text-primary after:w-full' : 'text-slate-600 group-hover:text-primary after:w-0 group-hover:after:w-full'} after:content-[''] after:absolute after:bottom-4 after:left-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300`}>
@@ -79,7 +81,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                 <span className="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:rotate-180">keyboard_arrow_down</span>
               </Link>
 
-              <div className="absolute top-full left-1/2 -translate-x-1/2 w-[800px] xl:w-[900px] bg-white shadow-2xl rounded-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 pointer-events-none group-hover:pointer-events-auto z-50 overflow-hidden transform group-hover:translate-y-0 translate-y-3 cursor-default">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 w-[min(800px,90vw)] bg-white shadow-2xl rounded-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-50 overflow-hidden cursor-default">
                 <div className="p-8">
                   {/* Category Links */}
                   <div className="grid grid-cols-3 gap-x-6 gap-y-4">
@@ -112,10 +114,11 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
           </nav>
           <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             <button
+              aria-label={t.header.searchTitle}
               onClick={() => setIsSearchOpen(true)}
               className="text-slate-700 hover:text-primary transition-colors flex items-center justify-center p-1 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-2xl">search</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-2xl">search</span>
             </button>
             {/* <Link href="/cart" className="relative text-slate-700 hover:text-primary transition-colors flex items-center justify-center p-1">
               <span className="material-symbols-outlined text-2xl">shopping_cart</span>
@@ -133,22 +136,33 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
               <option value="ar">العربية</option>
             </select>
             <button
+              aria-label={t.phoneDiscovery.menu}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-slate-700 hover:text-primary transition-colors flex items-center justify-center p-1"
+              className="lg:hidden text-slate-700 hover:text-primary transition-colors flex items-center justify-center p-2"
             >
-              <span className="material-symbols-outlined text-2xl sm:text-3xl">{isMobileMenuOpen ? 'close' : 'menu'}</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-2xl sm:text-3xl">{isMobileMenuOpen ? 'close' : 'menu'}</span>
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-28 left-0 w-full bg-white border-b border-slate-200 shadow-lg py-4 px-4 flex flex-col gap-4">
+          <nav id="mobile-navigation" aria-label={t.phoneDiscovery.menu} className="lg:hidden absolute top-28 left-0 w-full bg-white border-b border-slate-200 shadow-lg py-4 px-4 flex flex-col gap-4">
+            <Link
+              href="/categories/smartphones"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-current={pathname === '/categories/smartphones' ? 'page' : undefined}
+              className={`font-bold text-lg transition-colors ${pathname === '/categories/smartphones' ? 'text-primary' : 'text-slate-900 hover:text-primary'}`}
+            >
+              {t.phoneDiscovery.nav}
+            </Link>
             <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className={`font-bold text-lg transition-colors ${pathname.startsWith('/shop') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}>{t.header.shop}</Link>
             <Link href="/categories" onClick={() => setIsMobileMenuOpen(false)} className={`font-bold text-lg transition-colors ${pathname.startsWith('/categories') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}>{t.header.categories}</Link>
             <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`font-bold text-lg transition-colors ${pathname === '/about' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}>{t.header.about}</Link>
             <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className={`font-bold text-lg transition-colors ${pathname === '/contact' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}>{t.header.contact}</Link>
-          </div>
+          </nav>
         )}
       </header>
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

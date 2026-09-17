@@ -13,22 +13,22 @@ const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.notch-tech.com'),
   title: {
-    default: 'Notch-Tech Maroc | Produits Tech Livraison Partout au Maroc',
+    default: 'Notch-Tech Maroc | Smartphones et accessoires',
     template: '%s | Notch-Tech Maroc'
   },
   alternates: {
     canonical: '/',
   },
-  description: "Achetez les meilleurs produits tech au Maroc dès 500 DH. Livraison rapide partout au Maroc, sans frais cachés. Paiement à la réception.",
-  keywords: ['électronique', 'produits tech', 'livraison maroc', 'acheter maroc', 'sans frais', 'partout au maroc', 'paiement livraison', 'Notch-Tech'],
+  description: "Découvrez nos smartphones et accessoires au Maroc. Contactez-nous pour les modèles, les prix et les disponibilités. Livraison partout au Maroc.",
+  keywords: ['smartphones', 'téléphones Maroc', 'accessoires téléphone', 'électronique', 'produits tech', 'livraison maroc', 'acheter maroc', 'sans frais', 'partout au maroc', 'paiement livraison', 'Notch-Tech'],
   authors: [{ name: 'Notch-Tech' }],
   creator: 'Notch-Tech',
   openGraph: {
     type: 'website',
     locale: 'fr_MA',
     url: 'https://www.notch-tech.com',
-    title: 'Notch-Tech Maroc | Produits Tech Livraison Partout au Maroc',
-    description: 'Achetez les meilleurs produits tech au Maroc dès 500 DH. Livraison rapide partout au Maroc, sans frais cachés. Paiement à la réception.',
+    title: 'Notch-Tech Maroc | Smartphones et accessoires',
+    description: 'Découvrez nos smartphones et accessoires au Maroc. Contactez-nous pour les modèles, les prix et les disponibilités. Livraison partout au Maroc.',
     siteName: 'Notch-Tech',
     images: [{
       url: '/images/logo/logo-head.ico',
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Notch-Tech Maroc | Produits Tech Livraison Partout au Maroc',
-    description: 'Achetez les meilleurs produits tech au Maroc dès 500 DH. Livraison rapide partout. Paiement à la réception.',
+    title: 'Notch-Tech Maroc | Smartphones et accessoires',
+    description: 'Smartphones et accessoires au Maroc. Renseignez-vous sur les modèles, les prix et les disponibilités.',
     images: ['/images/logo/logo-head.ico'],
   },
   robots: {

@@ -3,15 +3,15 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { ImageSizes } from '@/lib/imageUtils';
 import HeroSlider from '@/components/HeroSlider';
 import CategorySlider from '@/components/CategorySlider';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import BestSellingProducts from '@/components/BestSellingProducts';
-import ProductCompareSlider from '@/components/ProductCompareSlider';
-import { Star, ShoppingBag } from 'lucide-react';
+import ProductCard from '@/components/ProductCard';
+import type { CardProduct } from '@/lib/catalog/types';
+import { cardPricing } from '@/lib/catalog/variants';
+import { Star } from 'lucide-react';
 
 export default function HomePageClient({
   featuredProducts,
@@ -19,14 +19,21 @@ export default function HomePageClient({
   latestPromos,
   reviewsData,
 }: {
-  featuredProducts: any[];
-  bestSellerProducts: any[];
-  latestPromos: any[];
+  featuredProducts: CardProduct[];
+  bestSellerProducts: CardProduct[];
+  latestPromos: CardProduct[];
   reviewsData: any[];
 }) {
   const { t } = useLanguage();
 
   const reviews = reviewsData || [];
+  const bestSellers = [...bestSellerProducts].sort((a, b) =>
+    Number(b.public_variations.some((v) => v.is_active && v.stock > 0)) - Number(a.public_variations.some((v) => v.is_active && v.stock > 0))
+  );
+  const shown = new Set(bestSellers.map((product) => product.id));
+  const featured = featuredProducts.filter((product) => !shown.has(product.id));
+  featured.forEach((product) => shown.add(product.id));
+  const promotions = latestPromos.filter((product) => !shown.has(product.id) && (cardPricing(product)?.discount ?? 0) > 0).slice(0, 4);
 
   return (
     <>
@@ -73,11 +80,10 @@ export default function HomePageClient({
         </section>
 
         <CategorySlider />
-        <BestSellingProducts products={bestSellerProducts} />
-        <ProductCompareSlider />
-        <FeaturedProducts products={featuredProducts} />
+        <BestSellingProducts products={bestSellers} />
+        <FeaturedProducts products={featured} />
 
-        <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-20">
+        {promotions.length > 0 && <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
           <div className="flex items-end justify-between mb-10">
             <div>
               <h2 className="text-slate-900 text-3xl md:text-4xl font-black tracking-tight mb-2">{t.home.latestPromos}</h2>
@@ -90,66 +96,16 @@ export default function HomePageClient({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {latestPromos.map((product: any) => {
-              const productName = product.name;
-              const price = product.variations?.[0]?.price;
-              const priceDisplay = product.variations?.[0]?.price_display || null;
-              const discount = priceDisplay && price && priceDisplay > price ? Math.round(((priceDisplay - price) / priceDisplay) * 100) : 0;
-
-              return (
-                <div key={product.id} className="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                  {discount > 0 && (
-                    <div className="absolute top-4 left-4 z-20 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">
-                      -{discount}%
-                    </div>
-                  )}
-                  <Link href={`/product/${product.slug || product.id}`} className="relative w-full aspect-[4/3] overflow-hidden block">
-                    {product.thumbnail_url ? (
-                      <Image
-                        src={ImageSizes.small(product.thumbnail_url || '')}
-                        alt={productName}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        className="object-contain group-hover:scale-110 transition-transform duration-500 p-4"
-
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-slate-200"></div>
-                    )}
-                  </Link>
-                  <div className="p-6 flex flex-col flex-grow gap-4">
-                    <div>
-                      <Link href={`/product/${product.slug || product.id}`}>
-                        <h3 className="text-slate-900 text-lg font-bold leading-snug line-clamp-2 hover:text-primary transition-colors mb-2">{productName}</h3>
-                      </Link>
-
-                    </div>
-                    <div className="flex flex-col gap-2 mt-auto">
-                      <div className="flex items-end gap-3">
-                        <span className="text-slate-900 font-black text-2xl tracking-tight">{price ? `${price} DH` : 'N/A'}</span>
-                        {discount > 0 && priceDisplay && (
-                          <span className="text-slate-400 line-through text-sm font-medium mb-1.5">{priceDisplay} DH</span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Star size={16} fill="currentColor" strokeWidth={0} className="text-amber-400" />
-                        <span className="text-slate-600 text-sm font-bold">{product.rating || '5.0'}</span>
-                        {/* <span className="text-slate-400 text-sm">({product.reviews || '0'})</span> */}
-                      </div>
-                    </div>
-                    <Link
-                      href={`/product/${product.slug || product.id}`}
-                      className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-transparent font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-2 cursor-pointer"
-                    >
-                      <ShoppingBag size={20} className="group-hover/btn:scale-110 transition-transform" />
-                      {t.product?.orderNow || t.home?.buy || 'Acheter maintenant'}
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+            {promotions.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                showRating
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              />
+            ))}
           </div>
-        </section>
+        </section>}
 
         <section className="bg-slate-50 border-y border-slate-200 py-20">
           <div className="max-w-[1440px] mx-auto px-4 lg:px-8">

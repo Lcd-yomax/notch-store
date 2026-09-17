@@ -1,36 +1,43 @@
-import { supabase } from '@/lib/supabase/client';
-import CategoryPageClient from '@/components/CategoryPageClient';
+import { supabasePublic as supabase } from '@/lib/supabase/public';
+import ProductListing from '@/components/listing/ProductListing';
+import { getListingFacets, listProducts, parseListingParams } from '@/lib/catalog/queries';
 
-// Enable ISR (revalidate every hour)
-export const revalidate = 3600;
+const SMARTPHONES_SLUG = 'smartphones';
 
-export default async function CategoryDetails({ params }: { params: Promise<{ id: string }> }) {
-  // Await params as required in Next 15+
-  const unwrappedParams = await params;
-  const id = decodeURIComponent(unwrappedParams.id);
-  
-  // Fetch data concurrently on server side
-  const [categoriesRes, productsRes] = await Promise.all([
-    supabase.from('categories').select('*'),
-    supabase
-      .from('products')
-      .select(`
-        *,
-        categories!inner(id, name, slug),
-        variations:product_variations(*),
-        images:product_images(*)
-      `)
-      .eq('is_active', true)
-      .eq('categories.slug', id)
+export default async function CategoryDetails({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const slug = decodeURIComponent((await params).id);
+  // The category comes from the route, never from the query string
+  const filters = { ...parseListingParams(await searchParams), category: '' };
+  const scope = { categorySlug: slug };
+
+  const [categoryRes, listing, facets] = await Promise.all([
+    supabase.from('categories').select('id, name, slug').eq('slug', slug).maybeSingle(),
+    listProducts(scope, filters),
+    getListingFacets(scope),
   ]);
 
-  const catData = categoriesRes.data || [];
-  const prodData = productsRes.data || [];
+  const categoryName =
+    categoryRes.data?.name ?? slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const isSmartphones = slug === SMARTPHONES_SLUG;
 
-  const matchedCategory = catData.find((c: any) => c.slug === id);
-  const categoryName = matchedCategory 
-    ? matchedCategory.name 
-    : id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-
-  return <CategoryPageClient categoryName={categoryName} initialProducts={prodData} />;
+  return (
+    <ProductListing
+      kind="category"
+      name={categoryName}
+      products={listing.products}
+      total={listing.total}
+      totalPages={listing.totalPages}
+      filters={filters}
+      facets={facets}
+      showPhoneFilters={facets.hasPhones}
+      showBrandFilter={facets.hasPhones}
+      brandLogos={isSmartphones ? facets.brands : undefined}
+    />
+  );
 }

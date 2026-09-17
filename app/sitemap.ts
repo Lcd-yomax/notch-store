@@ -1,8 +1,12 @@
 import { MetadataRoute } from 'next';
-import { supabase } from '@/lib/supabase/client';
+import { supabasePublic as supabase } from '@/lib/supabase/public';
+import { SITE_URL } from '@/lib/site';
+
+// Regenerated hourly so new products and brands show up without a rebuild
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.notch-tech.com';
+  const baseUrl = SITE_URL;
 
   // 1. Static Routes
   const staticRoutes = [
@@ -22,32 +26,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   try {
-    // 2. Fetch all active products
-    const { data: products } = await supabase
-      .from('products')
-      .select('slug, updated_at')
-      .eq('is_active', true);
+    // products has no updated_at column: selecting it made the whole query fail silently
+    const [productsRes, categoriesRes, brandsRes] = await Promise.all([
+      supabase.from('products').select('slug, created_at').eq('is_active', true),
+      supabase.from('categories').select('slug'),
+      supabase.from('brands').select('slug'),
+    ]);
 
-    const productRoutes = (products || []).map((product) => ({
+    const productRoutes = (productsRes.data ?? []).map((product) => ({
       url: `${baseUrl}/product/${product.slug}`,
-      lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
+      lastModified: product.created_at ? new Date(product.created_at) : new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
     }));
 
-    // 3. Fetch all categories
-    const { data: categories } = await supabase
-      .from('categories')
-      .select('slug');
-
-    const categoryRoutes = (categories || []).map((category) => ({
-      url: `${baseUrl}/categories/${category.slug}`,
+    const categoryRoutes = (categoriesRes.data ?? []).map((category) => ({
+      url: `${baseUrl}/categories/${encodeURIComponent(category.slug)}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }));
 
-    return [...staticRoutes, ...productRoutes, ...categoryRoutes];
+    const brandRoutes = (brandsRes.data ?? []).map((brand) => ({
+      url: `${baseUrl}/marque/${brand.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }));
+
+    return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...brandRoutes];
   } catch (error) {
     console.error('Error generating sitemap:', error);
     // Fallback to static routes if database fails

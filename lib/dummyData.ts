@@ -202,13 +202,23 @@ export const categorySliderData = [
 // Hero Slides Data
 export const heroSlides = [
   {
+    id: 0,
+    badge: "phoneDiscovery.nav",
+    title1: "phoneDiscovery.heroTitle1",
+    title2: "phoneDiscovery.heroTitle2",
+    desc: "phoneDiscovery.heroDescription",
+    buttonText: "phoneDiscovery.browse",
+    buttonLink: "/categories/smartphones",
+    image: "/images/smartphones-hero.png",
+  },
+  {
     id: 1,
     badge: "home.limitedOffer",
     title1: "home.slide1Title1",
     title2: "home.slide1Title2",
     desc: "home.heroDesc",
-    buttonText: "home.buyNow",
-    buttonLink: "/product/1",
+    buttonText: "phoneDiscovery.powerBanks",
+    buttonLink: "/categories/power%20bank",
     image: "/video/pb-vd.mp4",
   },
   {

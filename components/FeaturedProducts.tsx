@@ -4,8 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { ImageSizes } from '@/lib/imageUtils';
+import type { CardProduct } from '@/lib/catalog/types';
+import { cardPricing } from '@/lib/catalog/variants';
 
-export default function FeaturedProducts({ products }: { products: any[] }) {
+export default function FeaturedProducts({ products }: { products: CardProduct[] }) {
   const { t } = useLanguage();
 
   const largeProduct = products[0];
@@ -13,11 +15,22 @@ export default function FeaturedProducts({ products }: { products: any[] }) {
 
   if (!products.length) return null;
 
+  const priceLabel = (product: CardProduct) => {
+    if (product.hide_price) return t.phone.priceOnRequest;
+    const pricing = cardPricing(product);
+    return pricing ? `${pricing.price} DH` : 'N/A';
+  };
+
+  const title = (product: CardProduct) =>
+    product.hide_price && product.brands && !product.name.toLowerCase().startsWith(product.brands.name.toLowerCase())
+      ? `${product.brands.name} ${product.name}`
+      : product.name;
+
   return (
     <section className="max-w-[1440px] mx-auto px-4 lg:px-8 py-12">
       <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8">{t.home.featuredProducts}</h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={`grid grid-cols-1 ${smallProducts.length ? 'lg:grid-cols-2' : ''} gap-6`}>
         {largeProduct && (
           <Link
             href={`/product/${largeProduct.slug || largeProduct.id}`}
@@ -38,15 +51,13 @@ export default function FeaturedProducts({ products }: { products: any[] }) {
               )}
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-              <h3 className="font-bold text-white text-lg md:text-xl drop-shadow-md">{largeProduct.name}</h3>
-              <span className="font-medium text-white text-lg drop-shadow-md">
-                {largeProduct.variations?.[0]?.price ? `${largeProduct.variations[0].price} DH` : 'N/A'}
-              </span>
+              <h3 className="font-bold text-white text-lg md:text-xl drop-shadow-md">{title(largeProduct)}</h3>
+              <span className="font-medium text-white text-lg drop-shadow-md">{priceLabel(largeProduct)}</span>
             </div>
           </Link>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {smallProducts.length > 0 && <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {smallProducts.map((product) => (
             <Link
               key={product.id}
@@ -67,14 +78,12 @@ export default function FeaturedProducts({ products }: { products: any[] }) {
                 )}
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-end gap-1 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                <h3 className="font-bold text-white text-sm truncate max-w-full xl:max-w-[60%] drop-shadow-md">{product.name}</h3>
-                <span className="font-medium text-white text-sm drop-shadow-md">
-                  {product.variations?.[0]?.price ? `${product.variations[0].price} DH` : 'N/A'}
-                </span>
+                <h3 className="font-bold text-white text-sm truncate max-w-full xl:max-w-[60%] drop-shadow-md">{title(product)}</h3>
+                <span className="font-medium text-white text-sm drop-shadow-md">{priceLabel(product)}</span>
               </div>
             </Link>
           ))}
-        </div>
+        </div>}
       </div>
     </section>
   );
