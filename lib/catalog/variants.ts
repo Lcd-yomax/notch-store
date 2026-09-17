@@ -38,6 +38,9 @@ export function stockState(stock: number): StockState {
   return stock <= 3 ? 'low' : 'in';
 }
 
+/** Phones are sold from the storefront without relying on the mistaken IMEI stock feed. */
+export const variationIsAvailable = (variation: PublicVariation, phone = false) => phone || variation.stock > 0;
+
 export const totalStock = (variations: PublicVariation[]) =>
   variations.reduce((sum, v) => sum + Math.max(0, v.stock), 0);
 
@@ -81,7 +84,8 @@ export function optionsFor(
   variations: PublicVariation[],
   dimensions: Dimension[],
   selection: Selection,
-  index: number
+  index: number,
+  phone = false
 ): DimensionOption[] {
   const dimension = dimensions[index];
   const pool = variations.filter((v) =>
@@ -96,7 +100,7 @@ export function optionsFor(
   if (dimension === 'condition') values.sort((a, b) => CONDITIONS.indexOf(a as Condition) - CONDITIONS.indexOf(b as Condition));
   return values.map((value) => ({
     value,
-    inStock: pool.some((v) => v[dimension] === value && v.stock > 0),
+    inStock: pool.some((v) => v[dimension] === value && variationIsAvailable(v, phone)),
   }));
 }
 
@@ -108,11 +112,12 @@ export function resolveSelection(
   variations: PublicVariation[],
   dimensions: Dimension[],
   selection: Selection,
-  keepUpTo = -1
+  keepUpTo = -1,
+  phone = false
 ): Selection {
   const next: Selection = { ...selection };
   dimensions.forEach((dimension, index) => {
-    const options = optionsFor(variations, dimensions, next, index);
+    const options = optionsFor(variations, dimensions, next, index, phone);
     if (options.length === 0) {
       next[dimension] = null;
       return;
@@ -128,15 +133,15 @@ export function selectionOf(variation: PublicVariation, dimensions: Dimension[])
   return Object.fromEntries(dimensions.map((d) => [d, variation[d]]));
 }
 
-export function matchVariation(variations: PublicVariation[], dimensions: Dimension[], selection: Selection) {
+export function matchVariation(variations: PublicVariation[], dimensions: Dimension[], selection: Selection, phone = false) {
   const candidates = variations.filter((v) =>
     dimensions.every((d) => selection[d] == null || v[d] === selection[d])
   );
-  return candidates.find((v) => v.stock > 0) ?? candidates[0] ?? null;
+  return candidates.find((v) => variationIsAvailable(v, phone)) ?? candidates[0] ?? null;
 }
 
-export function defaultVariation(variations: PublicVariation[]) {
-  return variations.find((v) => v.stock > 0) ?? variations[0] ?? null;
+export function defaultVariation(variations: PublicVariation[], phone = false) {
+  return variations.find((v) => variationIsAvailable(v, phone)) ?? variations[0] ?? null;
 }
 
 // ─── Images & specs ──────────────────────────────────────────────────────────

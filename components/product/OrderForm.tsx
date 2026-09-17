@@ -10,10 +10,11 @@ import type { PublicVariation } from '@/lib/catalog/types';
 interface Props {
   variation: PublicVariation | null;
   formRef: RefObject<HTMLFormElement | null>;
+  phone?: boolean;
 }
 
 /** Quantity + cash-on-delivery order form, for products with a visible price. */
-export default function OrderForm({ variation, formRef }: Props) {
+export default function OrderForm({ variation, formRef, phone = false }: Props) {
   const { t, language } = useLanguage();
   const router = useRouter();
 
@@ -26,8 +27,8 @@ export default function OrderForm({ variation, formRef }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const price = Number(variation?.price ?? 0);
-  const outOfStock = !variation || variation.stock <= 0;
-  const maxQuantity = Math.max(1, Math.min(10, variation?.stock ?? 1));
+  const outOfStock = !variation || (!phone && variation.stock <= 0);
+  const maxQuantity = phone ? 10 : Math.max(1, Math.min(10, variation?.stock ?? 1));
   // Another variant may have less stock than the quantity already chosen
   if (quantity > maxQuantity) setQuantity(maxQuantity);
 

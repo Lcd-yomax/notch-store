@@ -27,7 +27,6 @@ import {
   resolveSelection,
   selectionOf,
   sortVariations,
-  stockState,
   type Selection,
 } from '@/lib/catalog/variants';
 
@@ -62,7 +61,7 @@ export default function ProductDetailView({ product, reviews, rating }: Props) {
   const dimensions = useMemo(() => dimensionsFor(phone), [phone]);
 
   const [state, setState] = useState(() => {
-    const variation = defaultVariation(variations);
+    const variation = defaultVariation(variations, phone);
     return {
       selection: variation ? selectionOf(variation, dimensions) : ({} as Selection),
       variationId: variation?.id ?? null,
@@ -91,8 +90,8 @@ export default function ProductDetailView({ product, reviews, rating }: Props) {
   }, [product.id, product.name, hidePrice, variations]);
 
   const selectOption = (index: number, value: string | number) => {
-    const selection = resolveSelection(variations, dimensions, { ...state.selection, [dimensions[index]]: value }, index);
-    const next = matchVariation(variations, dimensions, selection);
+    const selection = resolveSelection(variations, dimensions, { ...state.selection, [dimensions[index]]: value }, index, phone);
+    const next = matchVariation(variations, dimensions, selection, phone);
     setState({ selection, variationId: next?.id ?? null });
 
     if (phone && next) {
@@ -139,14 +138,11 @@ export default function ProductDetailView({ product, reviews, rating }: Props) {
   const stock = variation?.stock ?? 0;
   const stockBadge = (() => {
     if (phone) {
-      const level = stockState(stock);
-      if (level === 'out') return { ok: false, icon: 'error', text: t.phone.outOfStock };
-      if (level === 'low') return { ok: true, low: true, icon: 'schedule', text: fill(t.phone.lowStock, { n: stock }) };
-      return { ok: true, icon: 'check_circle', text: t.phone.inStock };
+      return { ok: true, low: false, icon: 'check_circle', text: t.phone.inStock };
     }
     return stock > 0
-      ? { ok: true, icon: 'check_circle', text: t.product.inStock }
-      : { ok: false, icon: 'error', text: t.product.outOfStock };
+      ? { ok: true, low: false, icon: 'check_circle', text: t.product.inStock }
+      : { ok: false, low: false, icon: 'error', text: t.product.outOfStock };
   })();
 
   return (
@@ -216,7 +212,7 @@ export default function ProductDetailView({ product, reviews, rating }: Props) {
 
                 {phone && <KeySpecs specs={product.product_specs} />}
 
-                <VariantPicker variations={variations} dimensions={dimensions} selection={state.selection} onSelect={selectOption} />
+                <VariantPicker variations={variations} dimensions={dimensions} selection={state.selection} onSelect={selectOption} phone={phone} />
 
                 <div className="flex items-end gap-4 mb-6">
                   {hidePrice ? (
@@ -234,7 +230,7 @@ export default function ProductDetailView({ product, reviews, rating }: Props) {
                 {hidePrice ? (
                   <WhatsAppPriceButton product={product} variation={variation} className="w-full text-lg sm:text-xl py-5 px-8 mb-4" />
                 ) : (
-                  <OrderForm variation={variation} formRef={formRef} />
+                  <OrderForm variation={variation} formRef={formRef} phone={phone} />
                 )}
                 {!hidePrice && !stockBadge.ok && (
                   <Link href="/shop?stock=1" className="text-center font-bold text-slate-900 underline underline-offset-4 py-3 mb-4">{t.phoneDiscovery.availableProducts}</Link>

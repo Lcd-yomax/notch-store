@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     // Real prices come from product_variations (server only, service role).
     const { data: variations, error: variationsError } = await supabase
       .from('product_variations')
-      .select('id, price, stock, is_active, products!inner(name, is_active, hide_price)')
+      .select('id, price, stock, storage_gb, is_active, products!inner(name, is_active, hide_price, categories(slug))')
       .in('id', Array.from(quantities.keys()));
 
     if (variationsError) throw variationsError;
@@ -71,7 +71,12 @@ export async function POST(request: Request) {
 
     for (const [variationId, quantity] of quantities) {
       const variation = (variations ?? []).find((v) => v.id === variationId);
-      const product = variation?.products as unknown as { name: string; is_active: boolean; hide_price: boolean } | undefined;
+      const product = variation?.products as unknown as {
+        name: string;
+        is_active: boolean;
+        hide_price: boolean;
+        categories?: { slug?: string | null } | null;
+      } | undefined;
 
       if (!variation || !product) return orderError(409, 'unavailable', (dict) => ({ name: dict.unknownProduct }));
       const name = () => ({ name: product.name });
@@ -79,7 +84,8 @@ export async function POST(request: Request) {
       if (product.hide_price) return orderError(409, 'priceOnRequest', name);
       // A variation without a price (price <= 0) can never be ordered
       if (!(Number(variation.price) > 0)) return orderError(409, 'unavailable', name);
-      if (variation.stock < quantity) {
+      const phone = variation.storage_gb != null || product.categories?.slug === 'smartphones';
+      if (!phone && variation.stock < quantity) {
         return orderError(409, 'outOfStock', () => ({ name: product.name, stock: Math.max(0, variation.stock) }));
       }
 

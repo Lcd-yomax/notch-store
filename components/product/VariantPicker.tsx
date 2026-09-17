@@ -10,9 +10,10 @@ interface Props {
   dimensions: Dimension[];
   selection: Selection;
   onSelect: (index: number, value: string | number) => void;
+  phone?: boolean;
 }
 
-export default function VariantPicker({ variations, dimensions, selection, onSelect }: Props) {
+export default function VariantPicker({ variations, dimensions, selection, onSelect, phone = false }: Props) {
   const { t } = useLanguage();
 
   const titles: Record<Dimension, string> = {
@@ -31,7 +32,7 @@ export default function VariantPicker({ variations, dimensions, selection, onSel
   return (
     <div className="flex flex-col gap-6 mb-8">
       {dimensions.map((dimension, index) => {
-        const options = optionsFor(variations, dimensions, selection, index);
+        const options = optionsFor(variations, dimensions, selection, index, phone);
         // Condition is only worth asking when there is a real choice
         if (options.length === 0 || (dimension === 'condition' && options.length < 2)) return null;
         const selected = selection[dimension];

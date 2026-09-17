@@ -10,7 +10,7 @@ import FeaturedProducts from '@/components/FeaturedProducts';
 import BestSellingProducts from '@/components/BestSellingProducts';
 import ProductCard from '@/components/ProductCard';
 import type { CardProduct } from '@/lib/catalog/types';
-import { cardPricing } from '@/lib/catalog/variants';
+import { cardPricing, isPhone } from '@/lib/catalog/variants';
 import { Star } from 'lucide-react';
 
 export default function HomePageClient({
@@ -28,7 +28,8 @@ export default function HomePageClient({
 
   const reviews = reviewsData || [];
   const bestSellers = [...bestSellerProducts].sort((a, b) =>
-    Number(b.public_variations.some((v) => v.is_active && v.stock > 0)) - Number(a.public_variations.some((v) => v.is_active && v.stock > 0))
+    Number(isPhone(b.public_variations) || b.public_variations.some((v) => v.is_active && v.stock > 0)) -
+    Number(isPhone(a.public_variations) || a.public_variations.some((v) => v.is_active && v.stock > 0))
   );
   const shown = new Set(bestSellers.map((product) => product.id));
   const featured = featuredProducts.filter((product) => !shown.has(product.id));
