@@ -17,7 +17,7 @@ export default function CategorySlider() {
       try {
         const res = await fetch('/api/categories');
         const data = await res.json();
-        setCategories(data || []);
+        setCategories((data || []).sort((a: { slug: string }, b: { slug: string }) => Number(b.slug === 'smartphones') - Number(a.slug === 'smartphones')));
       } catch (err) {
         console.error('Failed to load categories', err);
       } finally {
@@ -77,7 +77,7 @@ export default function CategorySlider() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-slate-200">
-                      <span className="material-symbols-outlined text-4xl text-slate-400">image</span>
+                      <span aria-hidden="true" className="material-symbols-outlined text-4xl text-slate-400">{category.slug === 'smartphones' ? 'smartphone' : 'image'}</span>
                     </div>
                   )}
                 </div>

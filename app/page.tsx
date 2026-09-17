@@ -1,5 +1,7 @@
-import { supabase } from '@/lib/supabase/client';
+import { supabasePublic as supabase } from '@/lib/supabase/public';
 import HomePageClient from '@/components/HomePageClient';
+import { CARD_FIELDS } from '@/lib/catalog/queries';
+import type { CardProduct } from '@/lib/catalog/types';
 
 export const revalidate = 300;
 
@@ -7,22 +9,25 @@ export default async function Home() {
   const [featuredRes, bestSellersRes, latestPromosRes, reviewsRes] = await Promise.all([
     supabase
       .from('products')
-      .select('id, name, slug, thumbnail_url, variations:product_variations(id, price, price_display)')
+      .select(`${CARD_FIELDS}, reviews(stars)`)
+      .eq('reviews.is_approved', true)
       .eq('is_active', true)
       .eq('is_featured', true)
       .limit(5),
     supabase
       .from('products')
-      .select('id, name, slug, thumbnail_url, variations:product_variations(id, price, price_display)')
+      .select(`${CARD_FIELDS}, reviews(stars)`)
+      .eq('reviews.is_approved', true)
       .eq('is_active', true)
       .eq('is_best_seller', true)
       .limit(4),
     supabase
       .from('products')
-      .select('id, name, slug, thumbnail_url, variations:product_variations(id, price, price_display)')
+      .select(`${CARD_FIELDS}, reviews(stars)`)
+      .eq('reviews.is_approved', true)
       .eq('is_active', true)
       .order('created_at', { ascending: false })
-      .limit(4),
+      .limit(16),
     supabase
       .from('reviews')
       .select('id, full_name, stars, comment, products(name)')
@@ -33,9 +38,9 @@ export default async function Home() {
 
   return (
     <HomePageClient
-      featuredProducts={featuredRes.data ?? []}
-      bestSellerProducts={bestSellersRes.data ?? []}
-      latestPromos={latestPromosRes.data ?? []}
+      featuredProducts={(featuredRes.data ?? []) as unknown as CardProduct[]}
+      bestSellerProducts={(bestSellersRes.data ?? []) as unknown as CardProduct[]}
+      latestPromos={(latestPromosRes.data ?? []) as unknown as CardProduct[]}
       reviewsData={reviewsRes.data ?? []}
     />
   );

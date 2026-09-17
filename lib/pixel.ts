@@ -45,6 +45,15 @@ export function pixelViewContent(product: {
   });
 }
 
+/** Fired when a user asks for a hidden price on WhatsApp */
+export function pixelContact(product: { id: string; name: string; sku?: string }) {
+  fbqEvent('Contact', {
+    content_ids: [product.sku || product.id],
+    content_name: product.name,
+    content_type: 'product',
+  });
+}
+
 /** Fired when a user clicks "Add to Cart" */
 export function pixelAddToCart(product: {
   id: string | number;

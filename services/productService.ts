@@ -14,7 +14,7 @@ const mapToUIProduct = (dbProduct: any) => {
   const secondaryImage = images.find((i: any) => !i.is_primary)?.url || primaryImage;
   
   // Extract pricing from the first variation (simplification for UI)
-  const mainVariation = dbProduct.product_variations?.[0] || { price: 0 };
+  const mainVariation = dbProduct.public_variations?.[0] || { price: 0 };
   
   // Extract numeric discount if available (discount_label might be "30% OFF")
   let discountNum = 0;
@@ -48,7 +48,7 @@ export const getShopProducts = async () => {
     .from('products')
     .select(`
       *,
-      product_variations (*),
+      public_variations (*),
       product_images (*)
     `)
     .eq('is_active', true);
@@ -66,7 +66,7 @@ export const getFeaturedProducts = async () => {
     .from('products')
     .select(`
       *,
-      product_variations (*),
+      public_variations (*),
       product_images (*)
     `)
     .eq('is_active', true)
@@ -86,7 +86,7 @@ export const getBestSellingProducts = async () => {
     .from('products')
     .select(`
       *,
-      product_variations (*),
+      public_variations (*),
       product_images (*)
     `)
     .eq('is_active', true)
@@ -106,7 +106,7 @@ export const getProductById = async (id: string) => {
     .from('products')
     .select(`
       *,
-      product_variations (*),
+      public_variations (*),
       product_images (*)
     `)
     .eq('id', id)
