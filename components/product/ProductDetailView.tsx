@@ -194,13 +194,15 @@ export default function ProductDetailView({ product, reviews, rating }: Props) {
                         <span dir="ltr">{fill(t.phone.ramValue, { size: formatStorage(variation.ram_gb, t.phone.units) })}</span>
                       </span>
                     )}
-                    <span
-                      className={`px-3 py-1.5 rounded-full text-sm font-bold ${
-                        variation.condition === 'neuf' ? 'bg-emerald-50 text-emerald-700' : variation.condition === 'reconditionne' ? 'bg-sky-50 text-sky-700' : 'bg-amber-50 text-amber-700'
-                      }`}
-                    >
-                      {t.phone.conditions[variation.condition]}
-                    </span>
+                    {variation.condition !== 'neuf' && (
+                      <span
+                        className={`px-3 py-1.5 rounded-full text-sm font-bold ${
+                          variation.condition === 'reconditionne' ? 'bg-sky-50 text-sky-700' : 'bg-amber-50 text-amber-700'
+                        }`}
+                      >
+                        {t.phone.conditions[variation.condition]}
+                      </span>
+                    )}
                     {variation.warranty_months != null && variation.warranty_months > 0 && (
                       <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-sm font-bold">
                         <span className="material-symbols-outlined text-base">verified_user</span>

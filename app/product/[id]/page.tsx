@@ -4,7 +4,6 @@ import ProductDetailView from '@/components/product/ProductDetailView';
 import { getApprovedReviews, getProductDetail } from '@/lib/catalog/queries';
 import type { ProductDetail, PublicReview } from '@/lib/catalog/types';
 import {
-  CONDITIONS,
   cardPricing,
   defaultVariation,
   formatStorage,
@@ -13,6 +12,7 @@ import {
   ramsOf,
   storagesOf,
   totalStock,
+  CONDITIONS,
 } from '@/lib/catalog/variants';
 import { SITE_URL } from '@/lib/site';
 
