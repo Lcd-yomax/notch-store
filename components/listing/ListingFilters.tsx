@@ -84,7 +84,7 @@ export default function ListingFilters({ filters, facets, categories, showPhoneF
 
       {showBrandFilter && facets.brands.length > 0 && (
         <Section title={t.listing.brand}>
-          <div className="flex flex-col gap-3">
+          <div className="flex max-h-48 flex-col gap-3 overflow-y-auto overscroll-contain pr-2 [scrollbar-color:#cbd5e1_transparent] [scrollbar-width:thin]">
             {facets.brands.map((brand) => (
               <CheckboxRow
                 key={brand.id}

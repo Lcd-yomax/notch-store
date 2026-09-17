@@ -23,7 +23,7 @@ export default function WhatsAppPriceButton({ product, variation, className = ''
       variation?.storage_gb != null ? `${m.storage}: ${formatStorage(variation.storage_gb, t.phone.units)}` : null,
       variation?.ram_gb != null ? `${m.ram}: ${formatStorage(variation.ram_gb, t.phone.units)}` : null,
       variation?.color ? `${m.color}: ${variation.color}` : null,
-      variation ? `${m.condition}: ${t.phone.conditions[variation.condition]}` : null,
+      variation && variation.condition !== 'neuf' ? `${m.condition}: ${t.phone.conditions[variation.condition]}` : null,
       `${m.link}: ${pageUrl}`,
     ].filter(Boolean);
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
