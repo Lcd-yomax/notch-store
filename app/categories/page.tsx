@@ -54,7 +54,7 @@ export default function Categories() {
                   
                   <div className="relative z-20 flex flex-col items-center justify-center h-full p-8 text-center">
                     <h2 className="text-3xl font-black text-white mb-3 group-hover:text-primary transition-colors duration-300 tracking-tight drop-shadow-lg">{category.name}</h2>
-                    <p className="text-white/90 font-medium leading-relaxed mb-6 max-w-sm drop-shadow-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">Découvrez nos produits dans cette catégorie.</p>
+                    <p className="text-white/90 font-medium leading-relaxed mb-6 max-w-sm drop-shadow-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">{t.misc.categoryCardDesc}</p>
                     
                     <div className="flex items-center gap-2 bg-white/20 hover:bg-primary text-white backdrop-blur-md border border-white/30 font-bold px-6 py-3 rounded-full transition-all duration-300 transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 delay-200 shadow-lg">
                       {t.categories.explore}

@@ -2,26 +2,29 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/client';
 import { fr } from '@/lib/i18n/dictionaries/fr';
 import { ar } from '@/lib/i18n/dictionaries/ar';
+import { en } from '@/lib/i18n/dictionaries/en';
 import { fill } from '@/lib/i18n/format';
+import { LANGUAGES, type Language } from '@/lib/i18n/languages';
 
 type ErrorKey = keyof typeof fr.orderErrors;
 
-/** Errors carry both languages; the storefront shows the one currently selected. */
+const DICTIONARIES: Record<Language, typeof fr.orderErrors> = {
+  fr: fr.orderErrors,
+  ar: ar.orderErrors,
+  en: en.orderErrors,
+};
+
+/** Errors carry every language; the storefront shows the one currently selected. */
 function orderError(
   status: number,
   key: ErrorKey,
   values: (dict: typeof fr.orderErrors) => Record<string, string | number> = () => ({})
 ) {
-  return NextResponse.json(
-    {
-      error: key,
-      message: {
-        fr: fill(fr.orderErrors[key], values(fr.orderErrors)),
-        ar: fill(ar.orderErrors[key], values(ar.orderErrors)),
-      },
-    },
-    { status }
-  );
+  const message = Object.fromEntries(
+    LANGUAGES.map((lang) => [lang, fill(DICTIONARIES[lang][key], values(DICTIONARIES[lang]))])
+  ) as Record<Language, string>;
+
+  return NextResponse.json({ error: key, message }, { status });
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

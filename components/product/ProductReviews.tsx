@@ -46,7 +46,7 @@ export default function ProductReviews({ productId, reviews }: { productId: stri
       setIsReviewSubmitted(true);
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert("Une erreur est survenue lors de l'envoi de votre avis. Veuillez réessayer.");
+      alert(t.common.reviewError);
     } finally {
       setIsSubmitting(false);
     }
@@ -106,7 +106,7 @@ export default function ProductReviews({ productId, reviews }: { productId: stri
                 onClick={() => setIsReviewSubmitted(false)}
                 className="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold transition-colors cursor-pointer"
               >
-                Ajouter un autre avis
+                {t.common.addAnotherReview}
               </button>
             </div>
           ) : (

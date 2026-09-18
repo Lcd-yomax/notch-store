@@ -99,7 +99,7 @@ export default function Contact() {
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{t.contact.emailTitle}</h3>
                   <p className="text-slate-500 leading-relaxed mb-2">
-                    Nous vous répondrons dans les 24 heures.
+                    {t.misc.contactReply}
                   </p>
                   <a href="mailto:contact@notch-tech.com" className="text-lg font-bold text-primary hover:underline">contact@notch-tech.com</a>
                 </div>
@@ -120,7 +120,7 @@ export default function Contact() {
               {isError && (
                 <div className="mb-6 bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl flex items-center gap-3">
                   <span className="material-symbols-outlined">error</span>
-                  <p className="font-medium">Une erreur s'est produite. Veuillez réessayer plus tard ou nous contacter directement par email.</p>
+                  <p className="font-medium">{t.misc.contactError}</p>
                 </div>
               )}
 
@@ -156,7 +156,7 @@ export default function Contact() {
                       : 'hover:bg-amber-500 shadow-[0_8px_30px_rgb(254,165,29,0.3)] hover:shadow-[0_8px_30px_rgb(254,165,29,0.5)]'
                   }`}
                 >
-                  {isSubmitting ? 'Envoi en cours...' : t.contact.sendButton}
+                  {isSubmitting ? t.common.sending : t.contact.sendButton}
                   {!isSubmitting && <span className="material-symbols-outlined rtl:rotate-180">send</span>}
                 </button>
               </form>

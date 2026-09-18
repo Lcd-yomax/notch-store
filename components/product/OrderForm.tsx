@@ -122,7 +122,7 @@ export default function OrderForm({ variation, formRef, phone = false }: Props) 
               required
               dir="ltr"
               pattern="^0[678][0-9]{8}$"
-              title="Le numéro doit commencer par 06, 07 ou 08 et contenir 10 chiffres (ex: 0612345678)"
+              title={t.common.phoneFormatHint}
               value={orderPhone}
               onChange={(e) => setOrderPhone(e.target.value)}
               className={`${inputClass} rtl:text-right`}
@@ -151,7 +151,7 @@ export default function OrderForm({ variation, formRef, phone = false }: Props) 
             className="btn-glow-shake flex-1 w-full bg-primary hover:bg-amber-500 disabled:opacity-70 disabled:cursor-not-allowed text-white font-bold text-xl py-5 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer"
           >
             {isSubmitting ? <span className="material-symbols-outlined animate-spin">progress_activity</span> : <ShoppingBag size={24} />}
-            {isSubmitting ? 'Envoi en cours...' : outOfStock ? t.product.outOfStock : t.product.orderNow || 'Acheter maintenant'}
+            {isSubmitting ? t.common.sending : outOfStock ? t.product.outOfStock : t.product.orderNow || 'Acheter maintenant'}
           </button>
         </div>
       </form>

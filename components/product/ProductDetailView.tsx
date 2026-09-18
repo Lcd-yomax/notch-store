@@ -252,7 +252,7 @@ export default function ProductDetailView({ product, reviews, rating }: Props) {
                   <div className="mb-10">
                     <h3 className="text-lg font-bold text-slate-900 mb-4">{t.product.features}</h3>
                     <ul className="space-y-3">
-                      {['Haute qualité', 'Design moderne'].map((feature) => (
+                      {t.common.defaultFeatures.map((feature) => (
                         <li key={feature} className="flex items-start gap-3 text-slate-600">
                           <span className="material-symbols-outlined text-primary mt-0.5 text-xl">check</span>
                           <span>{feature}</span>

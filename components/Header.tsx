@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 import SearchModal from './SearchModal';
 
 export default function Header({ showPromo = true }: { showPromo?: boolean }) {
-  const { t, language, setLanguage } = useLanguage();
+  const { t } = useLanguage();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
@@ -98,11 +99,11 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                           <p className="font-bold text-slate-900 group-hover/item:text-primary transition-colors">
                             {category.name}
                           </p>
-                          <p className="text-xs text-slate-500 mt-0.5">{category.products?.[0]?.count || 0} {((t as any).products) || 'Produits'}</p>
+                          <p className="text-xs text-slate-500 mt-0.5">{category.products?.[0]?.count || 0} {t.categories.products}</p>
                         </div>
                       </Link>
                     )) : (
-                      <div className="col-span-3 text-slate-500 p-4">Chargement des catégories...</div>
+                      <div className="col-span-3 text-slate-500 p-4">{t.misc.loadingCategories}</div>
                     )}
                   </div>
                 </div>
@@ -126,15 +127,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                 <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border-2 border-white">{totalItems}</span>
               )}
             </Link> */}
-            <select
-              aria-label="Choisir la langue"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value as 'fr' | 'ar')}
-              className="bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer border-none"
-            >
-              <option value="fr">Français</option>
-              <option value="ar">العربية</option>
-            </select>
+            <LanguageSwitcher />
             <button
               aria-label={t.phoneDiscovery.menu}
               aria-expanded={isMobileMenuOpen}

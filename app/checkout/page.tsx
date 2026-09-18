@@ -58,7 +58,7 @@ export default function Checkout() {
                       id="phone"
                       required
                       pattern="^0[678][0-9]{8}$"
-                      title="Le numéro doit commencer par 06, 07 ou 08 et contenir 10 chiffres (ex: 0612345678)"
+                      title={t.common.phoneFormatHint}
                       className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                       placeholder="06 XX XX XX XX"
                     />

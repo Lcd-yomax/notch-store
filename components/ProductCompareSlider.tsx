@@ -1,8 +1,10 @@
 "use client"
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
 import { useState, useEffect } from 'react'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function ProductCompareSlider() {
+  const { t } = useLanguage()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -13,10 +15,10 @@ export default function ProductCompareSlider() {
     <section className="w-full py-20 bg-white border-t border-slate-100">
       <div className="text-center mb-12">
         <p className="text-sm uppercase font-extrabold tracking-widest text-primary mb-3">
-          Nos Coloris
+          {t.misc.compareEyebrow}
         </p>
         <h2 className="text-slate-900 text-3xl md:text-4xl font-black tracking-tight">
-          Explorez Nos Variantes
+          {t.misc.compareTitle}
         </h2>
       </div>
 

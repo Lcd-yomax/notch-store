@@ -44,39 +44,17 @@ export default function HomePageClient({
 
         <section className="max-w-[1440px] mx-auto px-4 lg:px-8 mt-10 relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 p-2 bg-white/50 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl">
-            <div className="flex items-center gap-4 bg-white p-6 rounded-xl border border-slate-100 hover:border-primary/30 transition-colors group">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform flex-shrink-0">
-                <span className="material-symbols-outlined text-3xl">local_shipping</span>
+            {t.homeInfo.trust.map((item) => (
+              <div key={item.icon} className="flex items-center gap-4 bg-white p-6 rounded-xl border border-slate-100 hover:border-primary/30 transition-colors group">
+                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform flex-shrink-0">
+                  <span className="material-symbols-outlined text-3xl">{item.icon}</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-slate-900 text-lg font-bold">{item.title}</h2>
+                  <p className="text-slate-500 text-sm font-medium leading-relaxed">{item.desc}</p>
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-slate-900 text-lg font-bold">Livraison Rapide</h2>
-                <p className="text-slate-500 text-sm font-medium leading-relaxed">
-                  Recevez votre commande en 24/48h partout au Maroc. Casablanca, Rabat, Marrakech, Fès, Tanger, Dakhla — nous livrons dans toute la région.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white p-6 rounded-xl border border-slate-100 hover:border-primary/30 transition-colors group">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform flex-shrink-0">
-                <span className="material-symbols-outlined text-3xl">payments</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-slate-900 text-lg font-bold">Paiement à la Livraison</h2>
-                <p className="text-slate-500 text-sm font-medium leading-relaxed">
-                  Payez cash à la réception de votre colis. Aucune carte bancaire requise. 100% sécurisé et sans risque pour vous.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white p-6 rounded-xl border border-slate-100 hover:border-primary/30 transition-colors group">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform flex-shrink-0">
-                <span className="material-symbols-outlined text-3xl">verified</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-slate-900 text-lg font-bold">Garantie Qualité</h2>
-                <p className="text-slate-500 text-sm font-medium leading-relaxed">
-                  Tous nos produits sont 100% originaux et testés avant expédition. Retours acceptés sous 7 jours sans questions.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -142,9 +120,7 @@ export default function HomePageClient({
                 ))}
               </div>
             ) : (
-              <div className="text-center text-slate-500 italic">
-                Aucun avis disponible pour le moment.
-              </div>
+              <div className="text-center text-slate-500 italic">{t.homeInfo.noReviews}</div>
             )}
           </div>
         </section>
@@ -153,72 +129,20 @@ export default function HomePageClient({
         <section className="bg-white py-24 border-t border-slate-100">
           <div className="max-w-[1000px] mx-auto px-4 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-slate-900 text-3xl md:text-4xl font-black tracking-tight mb-4">Questions Fréquentes</h2>
-              <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">
-                Tout ce que vous devez savoir sur nos produits et services.
-              </p>
+              <h2 className="text-slate-900 text-3xl md:text-4xl font-black tracking-tight mb-4">{t.homeInfo.faqTitle}</h2>
+              <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.homeInfo.faqDesc}</p>
             </div>
 
             <div className="flex flex-col gap-4">
-              <details className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
-                <summary className="flex items-center justify-between font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                  Comment passer une commande ?
-                  <span className="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
-                </summary>
-                <div className="text-slate-600 px-6 pb-6 pt-0 leading-relaxed border-t border-slate-100/50 mt-2">
-                  Choisissez simplement le produit que vous souhaitez, ajoutez-le au panier et laissez-vous guider. Vous pourrez finaliser votre commande en quelques clics en renseignant votre adresse de livraison complète.
-                </div>
-              </details>
-
-              <details className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
-                <summary className="flex items-center justify-between font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                  Quels sont les délais de livraison au Maroc ?
-                  <span className="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
-                </summary>
-                <div className="text-slate-600 px-6 pb-6 pt-0 leading-relaxed border-t border-slate-100/50 mt-2">
-                  Nos délais de livraison habituels sont de 24 à 48 heures ouvrées selon votre ville. Nous expédions rapidement pour que votre commande puisse vous satisfaire le plus vite possible.
-                </div>
-              </details>
-
-              <details className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
-                <summary className="flex items-center justify-between font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                  Est-ce que vous livrez partout au Maroc ?
-                  <span className="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
-                </summary>
-                <div className="text-slate-600 px-6 pb-6 pt-0 leading-relaxed border-t border-slate-100/50 mt-2">
-                  Oui, absolument. Nous assurons la livraison vers toutes les régions et villes du Maroc, de Casablanca jusqu`aux régions les plus éloignées de Tanger et Dakhla.
-                </div>
-              </details>
-
-              <details className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
-                <summary className="flex items-center justify-between font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                  Comment suivre ma commande ?
-                  <span className="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
-                </summary>
-                <div className="text-slate-600 px-6 pb-6 pt-0 leading-relaxed border-t border-slate-100/50 mt-2">
-                  Dès que votre colis est expédié, vous pouvez suivre son état sur l&apos;interface ou via notre équipe Support sur WhatsApp qui est là pour vous assister.
-                </div>
-              </details>
-
-              <details className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
-                <summary className="flex items-center justify-between font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                  Quelle est votre politique de retour ?
-                  <span className="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
-                </summary>
-                <div className="text-slate-600 px-6 pb-6 pt-0 leading-relaxed border-t border-slate-100/50 mt-2">
-                  Nous proposons des retours acceptés sous 7 jours sans questions si le produit ne correspond pas ou présente une anomalie. Les articles doivent nous être retournés intacts.
-                </div>
-              </details>
-
-              <details className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
-                <summary className="flex items-center justify-between font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                  Acceptez-vous le paiement à la livraison ?
-                  <span className="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
-                </summary>
-                <div className="text-slate-600 px-6 pb-6 pt-0 leading-relaxed border-t border-slate-100/50 mt-2">
-                  Oui ! Pour vous offrir une expérience d&apos;achat sécurisée, vous pouvez payer votre commande en espèces (Cash on Delivery) et sans carte bancaire de main en main au livreur.
-                </div>
-              </details>
+              {t.homeInfo.faq.map((item) => (
+                <details key={item.q} className="group bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
+                  <summary className="flex items-center justify-between gap-4 font-bold text-slate-900 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    {item.q}
+                    <span className="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+                  </summary>
+                  <div className="text-slate-600 px-6 pb-6 pt-0 leading-relaxed border-t border-slate-100/50 mt-2">{item.a}</div>
+                </details>
+              ))}
             </div>
           </div>
         </section>
