@@ -209,7 +209,7 @@ export const heroSlides = [
     desc: "phoneDiscovery.heroDescription",
     buttonText: "phoneDiscovery.browse",
     buttonLink: "/categories/smartphones",
-    image: "/images/smartphones-hero.png",
+    image: "/images/smartphones-hero.webp",
   },
   {
     id: 1,

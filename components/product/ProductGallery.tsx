@@ -22,8 +22,8 @@ export default function ProductGallery({ images, alt, discount }: { images: stri
             src={ImageSizes.full(active)}
             alt={alt}
             fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            preload
+            sizes="(max-width: 1024px) 100vw, 640px"
             className="object-contain mix-blend-multiply"
           />
         ) : (

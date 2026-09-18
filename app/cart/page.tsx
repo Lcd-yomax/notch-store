@@ -3,6 +3,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCart } from '@/lib/CartContext';
 
@@ -34,8 +35,10 @@ export default function Cart() {
               ) : (
                 cartItems.map((item) => (
                   <div key={item.id} className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm flex flex-col sm:flex-row items-center gap-6">
-                    <div className="w-full sm:w-32 aspect-square bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center border border-slate-200">
-                      <div className="w-full h-full bg-contain bg-center bg-no-repeat mix-blend-multiply" style={{ backgroundImage: `url('${item.image}')` }}></div>
+                    <div className="relative w-full sm:w-32 aspect-square bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center border border-slate-200">
+                      {item.image && (
+                        <Image src={item.image} alt={item.name} fill sizes="(min-width: 640px) 128px, 100vw" className="object-contain mix-blend-multiply" />
+                      )}
                     </div>
                     <div className="flex-grow flex flex-col gap-2 w-full">
                       <div className="flex justify-between items-start gap-4">

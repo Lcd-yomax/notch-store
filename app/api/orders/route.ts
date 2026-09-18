@@ -49,6 +49,11 @@ export async function POST(request: Request) {
     return orderError(400, 'invalid');
   }
 
+  // Pack order: only the pack id and quantity are trusted, prices come from the database
+  if (body?.pack_id !== undefined) {
+    return createPackOrder(body, { full_name, city, address, phone, email, notes });
+  }
+
   // Client prices and totals are ignored: only variation ids and quantities are trusted.
   const quantities = new Map<string, number>();
   for (const item of Array.isArray(body?.items) ? body.items : []) {
@@ -97,27 +102,107 @@ export async function POST(request: Request) {
       orderItems.push({ variation_id: variationId, quantity, unit_price: unitPrice });
     }
 
-    const { data: order, error: orderInsertError } = await supabase
-      .from('orders')
-      .insert([{ full_name, city, address, phone, email, notes, total_amount: Math.round(total * 100) / 100, status: 'pending' }])
-      .select()
-      .single();
-
-    if (orderInsertError) throw orderInsertError;
-
-    const { error: itemsError } = await supabase
-      .from('order_items')
-      .insert(orderItems.map((item) => ({ ...item, order_id: order.id })));
-
-    if (itemsError) {
-      // Do not leave an order without items behind
-      await supabase.from('orders').delete().eq('id', order.id);
-      throw itemsError;
-    }
-
+    const order = await saveOrder({ full_name, city, address, phone, email, notes }, orderItems, total);
     return NextResponse.json({ success: true, order });
   } catch (error) {
     console.error('Order Creation Endpoint Error:', error);
+    return orderError(500, 'generic');
+  }
+}
+
+interface Customer {
+  full_name: string;
+  city: string;
+  address: string;
+  phone: string;
+  email: string | null;
+  notes: string | null;
+}
+
+interface OrderLine {
+  variation_id: string;
+  quantity: number;
+  unit_price: number;
+  pack_id?: string;
+}
+
+/** Inserts the order then its lines; the order is removed if the lines fail. */
+async function saveOrder(customer: Customer, orderItems: OrderLine[], total: number) {
+  const { data: order, error: orderInsertError } = await supabase
+    .from('orders')
+    .insert([{ ...customer, total_amount: Math.round(total * 100) / 100, status: 'pending' }])
+    .select()
+    .single();
+
+  if (orderInsertError) throw orderInsertError;
+
+  const { error: itemsError } = await supabase
+    .from('order_items')
+    .insert(orderItems.map((item) => ({ ...item, order_id: order.id })));
+
+  if (itemsError) {
+    // Do not leave an order without items behind
+    await supabase.from('orders').delete().eq('id', order.id);
+    throw itemsError;
+  }
+
+  return order;
+}
+
+/**
+ * Pack order: each product of the pack becomes an order line with the pack discount
+ * applied to its unit price (same rounding as the public_packs view).
+ */
+async function createPackOrder(body: any, customer: Customer) {
+  const packQuantity = Number(body?.quantity ?? 1);
+  if (typeof body?.pack_id !== 'string' || !UUID.test(body.pack_id) || !Number.isInteger(packQuantity) || packQuantity < 1 || packQuantity > 5) {
+    return orderError(400, 'invalid');
+  }
+
+  try {
+    const { data: pack, error } = await supabase
+      .from('packs')
+      .select(`
+        id, name, discount_percent, is_active,
+        pack_items(quantity, variation_id, product_variations(id, price, stock, storage_gb, is_active, products(name, is_active, hide_price, categories(slug))))
+      `)
+      .eq('id', body.pack_id)
+      .maybeSingle();
+
+    if (error) throw error;
+    const packName = () => ({ name: pack?.name ?? '' });
+    if (!pack || !pack.is_active || !pack.pack_items?.length) {
+      return orderError(409, 'unavailable', (dict) => ({ name: pack?.name ?? dict.unknownProduct }));
+    }
+
+    const discount = Number(pack.discount_percent) || 0;
+    let total = 0;
+    const orderItems: OrderLine[] = [];
+
+    for (const item of pack.pack_items as any[]) {
+      const variation = item.product_variations;
+      const product = variation?.products;
+      if (!variation || !product || !variation.is_active || !product.is_active) return orderError(409, 'unavailable', packName);
+      // A pack must never reveal or sell a hidden price: ordered via WhatsApp instead
+      if (product.hide_price) return orderError(409, 'priceOnRequest', packName);
+      if (!(Number(variation.price) > 0)) return orderError(409, 'unavailable', packName);
+
+      const quantity = item.quantity * packQuantity;
+      const isPhone = variation.storage_gb != null || product.categories?.slug === 'smartphones';
+      if (!isPhone && variation.stock < quantity) {
+        return orderError(409, 'outOfStock', () => ({ name: product.name, stock: Math.max(0, variation.stock) }));
+      }
+
+      const unitPrice = Math.round(Number(variation.price) * (1 - discount / 100) * 100) / 100;
+      total += unitPrice * quantity;
+      orderItems.push({ variation_id: variation.id, quantity, unit_price: unitPrice, pack_id: pack.id });
+    }
+
+    const notes = [`Pack : ${pack.name} x${packQuantity} (-${discount}%)`, customer.notes].filter(Boolean).join(' | ');
+    const order = await saveOrder({ ...customer, notes }, orderItems, total);
+    return NextResponse.json({ success: true, order });
+  } catch (error) {
+    console.error('Pack Order Creation Error:', error);
     return orderError(500, 'generic');
   }
 }

@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/about',
     '/contact',
     '/shop',
+    '/packs',
     '/categories',
     '/politique-confidentialite',
     '/politique-expedition',
@@ -63,7 +64,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
-    return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...brandRoutes];
+    // Packs view only exists after the add_packs_and_popups migration: ignore errors
+    const { data: packs } = await supabase.from('public_packs').select('slug');
+    const packRoutes = (packs ?? []).map((pack) => ({
+      url: `${baseUrl}/packs/${encodeURIComponent(pack.slug)}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }));
+
+    return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...brandRoutes, ...packRoutes];
   } catch (error) {
     console.error('Error generating sitemap:', error);
     // Fallback to static routes if database fails

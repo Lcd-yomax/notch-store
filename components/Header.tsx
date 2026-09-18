@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -49,21 +50,13 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
       <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8 h-28 flex items-center justify-between">
           <Link href="/" className="flex items-center shrink-0">
-            {/* Light mode logo */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/logo/logo-light.png"
+            <Image
+              src="/images/logo/logo-light.webp"
               alt="Notch Logo"
-              style={{ height: '120px', width: 'auto' }}
+              width={120}
+              height={120}
+              sizes="120px"
               className="object-contain block"
-            />
-            {/* Dark mode logo */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/logo/logo-dark.png"
-              alt="Notch Logo"
-              style={{ height: '120px', width: 'auto' }}
-              className="object-contain hidden"
             />
           </Link>
 
@@ -90,7 +83,7 @@ export default function Header({ showPromo = true }: { showPromo?: boolean }) {
                       <Link key={category.id} href={`/categories/${category.slug}`} className="flex items-center gap-4 group/item p-2 rounded-xl hover:bg-slate-50 transition-colors">
                         <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center">
                           {category.image_url ? (
-                            <img src={category.image_url} alt={category.name} width={48} height={48} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
+                            <Image src={category.image_url} alt={category.name} width={48} height={48} sizes="48px" className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
                           ) : (
                             <span className="material-symbols-outlined text-slate-400">image</span>
                           )}
