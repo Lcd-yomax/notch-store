@@ -7,6 +7,7 @@ import AnnouncementPopup from '@/components/AnnouncementPopup';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import Script from 'next/script';
 import { META_PIXEL_ID } from '@/lib/pixel';
+import { MATERIAL_SYMBOLS_URL } from '@/lib/icons';
 import './globals.css';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
@@ -70,10 +71,8 @@ export default function RootLayout({
     <html lang="fr" className={`${manrope.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/logo/logo-head.ico" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href={MATERIAL_SYMBOLS_URL} rel="stylesheet" />
         <style>{`
           .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
