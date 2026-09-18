@@ -11,7 +11,17 @@ export const LISTING_PAGE_SIZE = 12;
 
 // ─── Product page ────────────────────────────────────────────────────────────
 
-export const getProductDetail = cache(async (idOrSlug: string): Promise<ProductDetail | null> => {
+/** Route params arrive URL-encoded ("%C3%89couteurs-…") while slugs are stored decoded ("Écouteurs-…"). */
+function decodeParam(value: string) {
+  try {
+    return decodeURIComponent(value).normalize('NFC');
+  } catch {
+    return value; // malformed escape sequence: look it up as-is
+  }
+}
+
+export const getProductDetail = cache(async (rawIdOrSlug: string): Promise<ProductDetail | null> => {
+  const idOrSlug = decodeParam(rawIdOrSlug);
   const { data, error } = await supabase
     .from('products')
     .select(

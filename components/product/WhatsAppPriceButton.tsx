@@ -31,7 +31,7 @@ export default function WhatsAppPriceButton({ product, variation, className = ''
 
   // Rendered with the canonical URL (same on server and client); the click swaps in
   // the real address bar URL, which carries the selected variant (?v=SKU).
-  const canonical = `${SITE_URL}/product/${product.slug}${variation ? `?v=${encodeURIComponent(variation.sku)}` : ''}`;
+  const canonical = `${SITE_URL}/product/${encodeURIComponent(product.slug)}${variation ? `?v=${encodeURIComponent(variation.sku)}` : ''}`;
 
   return (
     <a
