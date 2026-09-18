@@ -76,14 +76,15 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     description = text.length > 160 ? `${text.substring(0, 157)}...` : text;
   }
 
+  const path = `/product/${encodeURIComponent(product.slug)}`;
   const image = galleryFor(product.product_images, null, product.thumbnail_url)[0] ?? product.thumbnail_url;
   const images = image ? [image] : [];
 
   return {
     title,
     description,
-    alternates: { canonical: `/product/${product.slug}` },
-    openGraph: { title, description, images, type: 'website', url: `/product/${product.slug}` },
+    alternates: { canonical: path },
+    openGraph: { title, description, images, type: 'website', url: path },
     twitter: { card: 'summary_large_image', title, description, images },
   };
 }
@@ -95,7 +96,7 @@ export default async function ProductPage({ params }: { params: Params }) {
   const reviews = await getApprovedReviews(product.id);
   const rating = ratingOf(reviews);
 
-  const url = `${SITE_URL}/product/${product.slug}`;
+  const url = `${SITE_URL}/product/${encodeURIComponent(product.slug)}`;
   const phone = isPhone(product.public_variations);
   const availability = phone || totalStock(product.public_variations) > 0
     ? 'https://schema.org/InStock'
