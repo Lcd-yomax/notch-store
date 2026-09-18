@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -nE \"^\\\\s+[A-ZÀ-Üa-z][^<>{}=]*[a-zà-ü][^<>{}=]*$|>[^<>{}]*[A-Za-z]{3,}[^<>{}]*<\" components/HomePageClient.tsx components/ProductCompareSlider.tsx)",
+      "Bash(grep -v \"className=\\\\|import\\\\|t\\\\.\\\\|material-symbols\\\\|^\\\\S*:\\\\s*//\\\\|=>\\\\|return\\\\|export\\\\|const \")",
+      "Bash(node -e 'let s=\"\";process.stdin.on\\(\"data\",d=>s+=d\\).on\\(\"end\",\\(\\)=>{for\\(const f of JSON.parse\\(s\\)\\)for\\(const m of f.messages\\)console.log\\(f.filePath.split\\(\"notch-store\"\\)[1],m.line,m.ruleId,\"|\",m.message.split\\(\"\\\\n\"\\)[0].slice\\(0,90\\)\\)}\\)')"
+    ]
+  }
+}

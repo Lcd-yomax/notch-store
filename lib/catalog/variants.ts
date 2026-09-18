@@ -1,5 +1,6 @@
 // Pure helpers shared by server pages and client components (no Supabase, no React).
 import type { CardProduct, Condition, ProductImage, ProductSpec, PublicVariation } from './types';
+import type { Language } from '@/lib/i18n/languages';
 
 export const CONDITIONS: Condition[] = ['neuf', 'reconditionne', 'occasion'];
 
@@ -157,7 +158,8 @@ export function galleryFor(images: ProductImage[], variationId: string | null, t
   return thumbnail ? [thumbnail] : [];
 }
 
-export function localizeSpec(spec: ProductSpec, language: 'fr' | 'ar') {
+/** Only Arabic has its own spec columns; other languages fall back to the French value. */
+export function localizeSpec(spec: ProductSpec, language: Language) {
   return {
     label: language === 'ar' && spec.label_ar ? spec.label_ar : spec.label,
     value: language === 'ar' && spec.value_ar ? spec.value_ar : spec.value,

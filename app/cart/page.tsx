@@ -25,10 +25,10 @@ export default function Cart() {
               {cartItems.length === 0 ? (
                 <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
                   <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">shopping_cart</span>
-                  <h2 className="text-xl font-bold text-slate-900 mb-2">Votre panier est vide</h2>
-                  <p className="text-slate-500 mb-6">Découvrez nos produits et commencez vos achats.</p>
+                  <h2 className="text-xl font-bold text-slate-900 mb-2">{t.cart.empty}</h2>
+                  <p className="text-slate-500 mb-6">{t.common.emptyCartDesc}</p>
                   <Link href="/categories" className="inline-block bg-primary hover:bg-amber-500 text-white font-bold py-3 px-8 rounded-xl transition-colors">
-                    Continuer mes achats
+                    {t.cart.continueShopping}
                   </Link>
                 </div>
               ) : (

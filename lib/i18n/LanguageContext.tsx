@@ -3,9 +3,14 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { fr } from './dictionaries/fr';
 import { ar } from './dictionaries/ar';
+import { en } from './dictionaries/en';
+import { dirOf, isLanguage, type Language } from './languages';
 
-type Language = 'fr' | 'ar';
+export { LANGUAGES, LANGUAGE_LABELS, type Language } from './languages';
+
 type Dictionary = typeof fr;
+
+const DICTIONARIES: Record<Language, Dictionary> = { fr, ar, en };
 
 interface LanguageContextType {
   language: Language;
@@ -21,12 +26,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const storedLang = localStorage.getItem('language') as Language;
-    if (storedLang && (storedLang === 'fr' || storedLang === 'ar')) {
+    const storedLang = localStorage.getItem('language');
+    if (isLanguage(storedLang)) {
       // eslint-disable-next-line
       setLanguageState(storedLang);
       document.documentElement.lang = storedLang;
-      document.documentElement.dir = storedLang === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.dir = dirOf(storedLang);
     } else {
       document.documentElement.lang = 'fr';
       document.documentElement.dir = 'ltr';
@@ -38,11 +43,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
     document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = dirOf(lang);
   };
 
-  const t = language === 'ar' ? ar : fr;
-  const dir = language === 'ar' ? 'rtl' : 'ltr';
+  const t = DICTIONARIES[language];
+  const dir = dirOf(language);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, dir }}>

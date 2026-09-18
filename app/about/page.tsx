@@ -32,8 +32,8 @@ export default function About() {
               <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/Contactez-nous.png')" }}></div>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
               <div className="absolute bottom-8 left-8 right-8">
-                <h3 className="text-white text-2xl font-bold mb-2">L&apos;équipe Notch</h3>
-                <p className="text-slate-300 font-medium">Dédiée à vous offrir la meilleure expérience technologique.</p>
+                <h3 className="text-white text-2xl font-bold mb-2">{t.misc.aboutTeamTitle}</h3>
+                <p className="text-slate-300 font-medium">{t.misc.aboutTeamDesc}</p>
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@ export default function About() {
           <div className="bg-white rounded-3xl border border-slate-200 p-12 lg:p-20 shadow-sm mb-24">
             <div className="text-center mb-16">
               <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-4">{t.about.valuesTitle}</h2>
-              <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">Les principes qui guident chaque décision que nous prenons.</p>
+              <p className="text-slate-500 text-lg font-medium max-w-2xl mx-auto">{t.misc.aboutValuesDesc}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               <div className="flex flex-col items-center text-center gap-6">
