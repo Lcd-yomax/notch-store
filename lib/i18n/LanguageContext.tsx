@@ -23,7 +23,6 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>('fr');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const storedLang = localStorage.getItem('language');
@@ -36,7 +35,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       document.documentElement.lang = 'fr';
       document.documentElement.dir = 'ltr';
     }
-    setMounted(true);
   }, []);
 
   const setLanguage = (lang: Language) => {
@@ -51,7 +49,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, dir }}>
-      <div className={`transition-opacity duration-300 ${!mounted ? 'opacity-0' : 'opacity-100'}`}>
+      <div>
         {children}
       </div>
     </LanguageContext.Provider>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Pause, Play } from 'lucide-react';
@@ -8,10 +8,62 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 import { heroSlides as slides } from '@/lib/dummyData';
 
+/** Muted looping video that only plays (and buffers fully) while its slide is on screen. */
+function HeroVideo({ src, poster, active }: { src: string; poster: string; active: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    if (active) {
+      video.muted = true; // required for script-started playback
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [active]);
+
+  return (
+    <video
+      ref={ref}
+      loop
+      muted
+      playsInline
+      preload={active ? 'auto' : 'metadata'}
+      poster={poster}
+      className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  );
+}
+
 export default function HeroSlider() {
   const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [paused, setPaused] = useState(false);
+  // Media is only mounted for slides already shown, plus the next one once the page has loaded.
+  // Hidden slides sit on top of the visible one, so lazy loading alone would still fetch them all at once.
+  const [shownSlides, setShownSlides] = useState<Set<number>>(() => new Set([0]));
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const nextSlide = (currentSlide + 1) % slides.length;
+
+  const goToSlide = useCallback((index: number) => {
+    setCurrentSlide(index);
+    setShownSlides((prev) => (prev.has(index) ? prev : new Set(prev).add(index)));
+  }, []);
+
+  // Warm up the next slide only after the page (and its hero image) finished loading
+  useEffect(() => {
+    const markLoaded = () => setPageLoaded(true);
+    if (document.readyState === 'complete') {
+      const id = window.setTimeout(markLoaded, 0);
+      return () => window.clearTimeout(id);
+    }
+    window.addEventListener('load', markLoaded, { once: true });
+    return () => window.removeEventListener('load', markLoaded);
+  }, []);
+
   // Starts false so the first slide text begins in its "hidden" state and
   // transitions in — the same entrance animation used for every slide change.
   const [textVisible, setTextVisible] = useState(false);
@@ -28,11 +80,9 @@ export default function HeroSlider() {
   useEffect(() => {
     if (paused) return;
     const delay = slides[currentSlide].id === 0 || slides[currentSlide].image.endsWith('.mp4') ? 15000 : 10000;
-    const timer = setTimeout(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, delay);
+    const timer = setTimeout(() => goToSlide((currentSlide + 1) % slides.length), delay);
     return () => clearTimeout(timer);
-  }, [currentSlide, paused]);
+  }, [currentSlide, paused, goToSlide]);
 
   const getTranslation = (keyPath: string) => {
     const keys = keyPath.split('.');
@@ -49,6 +99,8 @@ export default function HeroSlider() {
       <h1 className="sr-only">Notch — {t.phoneDiscovery.eyebrow}</h1>
       {slides.map((slide, index) => {
         const isPhoneSlide = slide.id === 0;
+        const isActive = index === currentSlide;
+        const hasMedia = shownSlides.has(index) || (pageLoaded && index === nextSlide);
         // Text is shown when this slide is active AND the entrance delay has passed
         const textShown = index === currentSlide && textVisible;
 
@@ -65,39 +117,39 @@ export default function HeroSlider() {
             {/* Media */}
             {slide.image.endsWith('.mp4') ? (
               <div className="absolute inset-0 w-full h-full">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  // @ts-ignore — fetchPriority is valid HTML but not yet in React types
-                  fetchPriority="high"
-                  poster="/images/1.webp"
-                  className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
-                >
-                  <source src={slide.image} type="video/mp4" />
-                </video>
+                {hasMedia && <HeroVideo src={slide.image} poster="/images/1.webp" active={isActive} />}
                 <div className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
               </div>
             ) : isPhoneSlide ? (
               <div className="absolute inset-0 bg-[#080909]">
                 <div className="absolute bottom-0 end-0 h-[370px] w-full sm:h-[420px] sm:w-[85%] lg:h-full lg:w-auto lg:aspect-[3/2]">
-                  <Image src={slide.image} alt="" fill priority sizes="(min-width: 1024px) 930px, 100vw" quality={85} className="object-cover object-[78%_center] sm:object-right lg:object-contain lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] rtl:-scale-x-100" />
+                  {hasMedia && (
+                    <Image
+                      src={slide.image}
+                      alt=""
+                      fill
+                      preload={index === 0}
+                      sizes="(min-width: 1024px) 930px, 100vw"
+                      quality={80}
+                      className="object-cover object-[78%_center] sm:object-right lg:object-contain lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] rtl:-scale-x-100"
+                    />
+                  )}
                 </div>
                 <div className="absolute inset-x-0 top-0 h-[330px] bg-gradient-to-b from-[#080909] from-70% to-transparent lg:hidden" />
               </div>
             ) : (
               <div className="absolute inset-0 w-full h-full transition-transform duration-1000 hover:scale-105">
-                <Image
-                  src={slide.image}
-                  alt="Banner Image"
-                  fill
-                  priority={index === 0}
-                  sizes="100vw"
-                  quality={80}
-                  className="object-cover"
-                />
+                {hasMedia && (
+                  <Image
+                    src={slide.image}
+                    alt=""
+                    fill
+                    preload={index === 0}
+                    sizes="100vw"
+                    quality={80}
+                    className="object-cover"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
               </div>
             )}
@@ -156,7 +208,7 @@ export default function HeroSlider() {
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrentSlide(index)}
+            onClick={() => goToSlide(index)}
             className="h-10 px-2 flex items-center justify-center cursor-pointer focus-visible:outline-2 focus-visible:outline-white rounded-full"
             aria-label={`${t.phoneDiscovery.slide} ${index + 1}`}
             aria-pressed={index === currentSlide}

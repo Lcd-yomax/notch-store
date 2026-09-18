@@ -3,6 +3,7 @@ import { cache } from 'react';
 import { supabasePublic as supabase } from '@/lib/supabase/public';
 import type { Brand, CardProduct, Condition, ProductDetail, PublicReview } from './types';
 import { CONDITIONS, cardPricing, isUuid, ramsOf, storagesOf } from './variants';
+import { isStorefrontCategoryVisible } from './categoryVisibility';
 
 export const CARD_FIELDS =
   'id, name, slug, thumbnail_url, hide_price, is_best_seller, created_at, brands(id, name, slug, logo_url), public_variations(*)';
@@ -53,6 +54,34 @@ export const getBrand = cache(async (slug: string): Promise<Brand | null> => {
   const { data } = await supabase.from('brands').select('id, name, slug, logo_url').eq('slug', slug).maybeSingle();
   return (data as Brand) ?? null;
 });
+
+export interface StorefrontCategory {
+  id: string;
+  name: string;
+  slug: string;
+  image_url: string | null;
+  products: { count: number }[];
+}
+
+/** Categories shown to customers, with their active product count (anon key: RLS hides inactive products). */
+export async function getStorefrontCategories(): Promise<StorefrontCategory[]> {
+  let { data, error } = await supabase
+    .from('categories')
+    .select('id, name, slug, image_url, is_active, products(count)')
+    .order('name');
+
+  // Keep the storefront usable while the category visibility migration is being deployed.
+  if (error && /is_active/i.test(error.message)) {
+    const fallback = await supabase.from('categories').select('id, name, slug, image_url, products(count)').order('name');
+    data = (fallback.data ?? []).map((category) => ({ ...category, is_active: true }));
+    error = fallback.error;
+  }
+  if (error) throw error;
+
+  return ((data ?? []) as (StorefrontCategory & { is_active: boolean | null })[])
+    .filter(isStorefrontCategoryVisible)
+    .map(({ is_active: _isActive, ...category }) => category);
+}
 
 // ─── Listings (shop, category, brand) ────────────────────────────────────────
 

@@ -3,6 +3,7 @@ import { Manrope } from 'next/font/google';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 import { CartProvider } from '@/lib/CartContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import AnnouncementPopup from '@/components/AnnouncementPopup';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import Script from 'next/script';
 import { META_PIXEL_ID } from '@/lib/pixel';
@@ -148,6 +149,7 @@ export default function RootLayout({
           <CartProvider>
             {children}
             <WhatsAppButton />
+            <AnnouncementPopup />
           </CartProvider>
         </LanguageProvider>
         <GoogleAnalytics />

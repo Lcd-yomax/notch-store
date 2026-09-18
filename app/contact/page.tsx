@@ -3,6 +3,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -59,7 +60,7 @@ export default function Contact() {
           </div>
           
           <div className="w-full relative aspect-[21/9] sm:aspect-[3/1] rounded-3xl overflow-hidden mb-12 shadow-md">
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/Contactez-nous.png')" }}></div>
+            <Image src="/images/contactez-nous.webp" alt="" fill preload sizes="(min-width: 1440px) 1376px, 100vw" className="object-cover" />
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">

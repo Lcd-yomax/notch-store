@@ -3,6 +3,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function About() {
@@ -29,7 +30,7 @@ export default function About() {
               </p>
             </div>
             <div className="relative w-full aspect-[4/3] bg-slate-200 rounded-3xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/Contactez-nous.png')" }}></div>
+              <Image src="/images/contactez-nous.webp" alt="" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
               <div className="absolute bottom-8 left-8 right-8">
                 <h3 className="text-white text-2xl font-bold mb-2">{t.misc.aboutTeamTitle}</h3>

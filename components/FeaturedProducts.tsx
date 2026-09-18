@@ -42,8 +42,7 @@ export default function FeaturedProducts({ products }: { products: CardProduct[]
                   src={ImageSizes.large(largeProduct.thumbnail_url)}
                   alt={largeProduct.name}
                   fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  sizes={smallProducts.length ? '(max-width: 1024px) 100vw, 50vw' : '(max-width: 1440px) 100vw, 1376px'}
                   className="object-contain group-hover:scale-105 transition-transform duration-500 p-8"
                 />
               ) : (

@@ -15,10 +15,11 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center mb-6">
               <Image
-                src="/images/logo/logo-dark.png"
+                src="/images/logo/logo-dark.webp"
                 alt="Notch Logo"
                 width={160}
                 height={120}
+                sizes="170px"
                 style={{ height: '170px', width: 'auto' }}
                 className="w-auto object-contain"
               />

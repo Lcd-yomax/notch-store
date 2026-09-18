@@ -5,7 +5,18 @@
       "Bash(grep -v \"className=\\\\|import\\\\|t\\\\.\\\\|material-symbols\\\\|^\\\\S*:\\\\s*//\\\\|=>\\\\|return\\\\|export\\\\|const \")",
       "Bash(node -e 'let s=\"\";process.stdin.on\\(\"data\",d=>s+=d\\).on\\(\"end\",\\(\\)=>{for\\(const f of JSON.parse\\(s\\)\\)for\\(const m of f.messages\\)console.log\\(f.filePath.split\\(\"notch-store\"\\)[1],m.line,m.ruleId,\"|\",m.message.split\\(\"\\\\n\"\\)[0].slice\\(0,90\\)\\)}\\)')",
       "Bash(node \"C:/Users/Ultrapc/AppData/Local/Temp/claude/c--Users-Ultrapc-Desktop-coding-notch-store/a07655bb-14bb-436c-9cd8-247733407dea/scratchpad/probe5.mjs\")",
-      "Bash(grep -n \"product/\\\\${product.slug}\\\\|/product/\\\\${\" app/sitemap.ts \"app/product/[id]/page.tsx\" components/product/WhatsAppPriceButton.tsx)"
+      "Bash(grep -n \"product/\\\\${product.slug}\\\\|/product/\\\\${\" app/sitemap.ts \"app/product/[id]/page.tsx\" components/product/WhatsAppPriceButton.tsx)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/sharp/package.json'\\).version\\)\")",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/next/package.json'\\).version\\)\")",
+      "Bash(awk -F'\\\\t' '{printf \"%8.0f KB  %s\\\\n\", $1/1024, $2}')",
+      "Bash(sed -n '/export const heroSlides/,/^];/p' lib/dummyData.ts)",
+      "Bash(grep -v \"^\\\\s*//\")",
+      "Bash(node -e ' *)",
+      "Bash(grep -v \"fetchPriority\\\\|//\")",
+      "Bash(node -e 'let s=\"\";process.stdin.on\\(\"data\",d=>s+=d\\).on\\(\"end\",\\(\\)=>{for\\(const f of JSON.parse\\(s\\)\\)for\\(const m of f.messages\\)console.log\\(f.filePath.split\\(\"notch-store\"\\)[1],m.line,m.ruleId,\"|\",m.message.split\\(\"\\\\n\"\\)[0].slice\\(0,110\\)\\)}\\)')",
+      "Bash(curl -s -o /dev/null -w '%{http_code} %{content_type} %{size_download}B' https://vjglogcahlggqvzlvlrx.supabase.co/storage/v1/object/public/product-images/products/4763a748-2ac1-42b7-b6da-445a27a76737.jpg)",
+      "Bash(curl -s -o /dev/null -w '%{http_code} %{content_type} %{size_download}B' -H 'Accept: image/webp' 'https://vjglogcahlggqvzlvlrx.supabase.co/storage/v1/render/image/public/product-images/products/4763a748-2ac1-42b7-b6da-445a27a76737.jpg?width=400&quality=75&resize=contain')",
+      "Bash(curl -s 'https://vjglogcahlggqvzlvlrx.supabase.co/storage/v1/render/image/public/product-images/products/4763a748-2ac1-42b7-b6da-445a27a76737.jpg?width=400&quality=75')"
     ]
   }
 }
