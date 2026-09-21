@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+import { cache } from 'react';
 import { supabasePublic as supabase } from '@/lib/supabase/public';
 import ProductListing from '@/components/listing/ProductListing';
 import { getListingFacets, listProducts, parseListingParams } from '@/lib/catalog/queries';
@@ -6,7 +8,7 @@ import { notFound } from 'next/navigation';
 
 const SMARTPHONES_SLUG = 'smartphones';
 
-async function getCategory(slug: string) {
+const getCategory = cache(async (slug: string) => {
   const result = await supabase
     .from('categories')
     .select('id, name, slug, is_active')
@@ -14,6 +16,30 @@ async function getCategory(slug: string) {
     .maybeSingle();
   if (!result.error || !/is_active/i.test(result.error.message)) return result;
   return supabase.from('categories').select('id, name, slug').eq('slug', slug).maybeSingle();
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const slug = decodeURIComponent((await params).id);
+  const { data: category } = await getCategory(slug);
+  if (!category || !isStorefrontCategoryVisible(category)) notFound();
+
+  const title = `${category.name} au Maroc`;
+  const description = slug === SMARTPHONES_SLUG
+    ? 'Découvrez nos smartphones Apple, Samsung, Honor, Huawei, Oppo et Redmi chez Notch-Tech. Renseignez-vous sur les modèles et les prix. Livraison partout au Maroc.'
+    : `Découvrez notre sélection ${category.name} chez Notch-Tech. Livraison partout au Maroc et paiement à la livraison.`;
+  const url = `/categories/${encodeURIComponent(category.slug)}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, type: 'website' },
+    twitter: { title, description },
+  };
 }
 
 export default async function CategoryDetails({
