@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { Facebook, Instagram } from 'lucide-react';
+import { CONTACT_EMAIL } from '@/lib/site';
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -67,7 +68,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-slate-400">
                 <span className="material-symbols-outlined text-primary">mail</span>
-                <span>contact@notch-tech.com</span>
+                <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="min-w-0 break-words hover:text-primary transition-colors focus-visible:underline">{CONTACT_EMAIL}</a>
               </li>
             </ul>
           </div>

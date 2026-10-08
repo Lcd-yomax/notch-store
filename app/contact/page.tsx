@@ -2,10 +2,10 @@
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { CONTACT_EMAIL } from '@/lib/site';
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -97,12 +97,12 @@ export default function Contact() {
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
                   <span className="material-symbols-outlined text-3xl">mail</span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{t.contact.emailTitle}</h3>
                   <p className="text-slate-500 leading-relaxed mb-2">
                     {t.misc.contactReply}
                   </p>
-                  <a href="mailto:contact@notch-tech.com" className="text-lg font-bold text-primary hover:underline">contact@notch-tech.com</a>
+                  <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="inline-block max-w-full break-words text-lg font-bold text-primary hover:underline focus-visible:underline">{CONTACT_EMAIL}</a>
                 </div>
               </div>
             </div>
@@ -121,7 +121,10 @@ export default function Contact() {
               {isError && (
                 <div className="mb-6 bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl flex items-center gap-3">
                   <span className="material-symbols-outlined">error</span>
-                  <p className="font-medium">{t.misc.contactError}</p>
+                  <p className="font-medium">
+                    {t.misc.contactError}{' '}
+                    <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="inline-block max-w-full break-words underline">{CONTACT_EMAIL}</a>
+                  </p>
                 </div>
               )}
 
