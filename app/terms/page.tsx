@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { CONTACT_EMAIL } from '@/lib/site';
 
 export default function TermsPage() {
   const { t } = useLanguage();
@@ -61,9 +62,12 @@ export default function TermsPage() {
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
                 <span className="material-symbols-outlined text-3xl">support_agent</span>
               </div>
-              <div className="text-center sm:text-start">
+              <div className="min-w-0 text-center sm:text-start">
                 <h3 className="text-lg font-bold text-slate-900 mb-1">{s.ctaTitle}</h3>
                 <p className="text-slate-500 text-sm">{s.ctaDesc}</p>
+                <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="mt-2 inline-block max-w-full break-all text-sm font-semibold text-slate-900 underline decoration-primary/50 underline-offset-4 hover:text-primary transition-colors">
+                  {CONTACT_EMAIL}
+                </a>
               </div>
               <Link href="/contact" className="sm:ms-auto flex-shrink-0 inline-flex items-center gap-2 bg-primary hover:bg-amber-500 text-white font-bold px-6 py-3 rounded-xl transition-all duration-300">
                 {lp.contactUs}

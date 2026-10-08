@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { CONTACT_EMAIL } from '@/lib/site';
 
 export default function About() {
   const { t } = useLanguage();
@@ -61,6 +62,9 @@ export default function About() {
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-3">{t.about.value2Title}</h3>
                   <p className="text-slate-600 leading-relaxed">{t.about.value2Desc}</p>
+                  <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="mt-3 inline-block max-w-full break-all text-sm font-semibold text-slate-900 underline decoration-primary/50 underline-offset-4 hover:text-primary transition-colors">
+                    {CONTACT_EMAIL}
+                  </a>
                 </div>
               </div>
               <div className="flex flex-col items-center text-center gap-6">

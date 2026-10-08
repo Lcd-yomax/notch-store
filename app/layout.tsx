@@ -9,6 +9,7 @@ import Script from 'next/script';
 import { META_PIXEL_ID } from '@/lib/pixel';
 import { MATERIAL_SYMBOLS_URL } from '@/lib/icons';
 import './globals.css';
+import { CONTACT_EMAIL } from '@/lib/site';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-display' });
 
@@ -90,6 +91,7 @@ export default function RootLayout({
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+212-667-018042",
+                "email": CONTACT_EMAIL,
                 "contactType": "customer service",
                 "areaServed": "MA",
                 "availableLanguage": ["French", "Arabic"]
@@ -106,7 +108,7 @@ export default function RootLayout({
               "name": "Notch-Tech",
               "url": "https://www.notch-tech.com",
               "telephone": "+212-667-018042",
-              "email": "contact@notch-tech.com",
+              "email": CONTACT_EMAIL,
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "Boulevard Hassan II",

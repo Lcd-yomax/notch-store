@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { CONTACT_EMAIL } from '@/lib/site';
 
 export default function ShippingPolicyPage() {
   const { t } = useLanguage();
@@ -111,7 +112,10 @@ export default function ShippingPolicyPage() {
                 <p>{s.s4p1}</p>
                 <ul className="list-none space-y-2">
                   <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">chat</span> WhatsApp : +212 667-018042</li>
-                  <li className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base">mail</span> contact@notch-tech.com</li>
+                  <li className="flex items-center gap-2">
+                    <span aria-hidden="true" className="material-symbols-outlined shrink-0 text-primary text-base">mail</span>
+                    <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="min-w-0 break-all underline decoration-primary/50 underline-offset-4 hover:text-primary transition-colors">{CONTACT_EMAIL}</a>
+                  </li>
                 </ul>
               </div>
             </section>
